@@ -5,7 +5,9 @@
     align-items: center;
     justify-self: center;
     gap: 10px;
-    grid-template-columns: repeat(6, 200px);
+    grid-template-columns: repeat(5, 200px) auto;
+
+    height: 80px;
 
 }
 
@@ -15,6 +17,11 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+}
+
+.header div:last-child{
+    justify-content: flex-end;
+    margin-right: 50px;
 }
 
 .header p{

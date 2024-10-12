@@ -8,7 +8,9 @@ interface MenuButtonProps{
 
 const MenuButton:FC<MenuButtonProps> = ({menuText, logoPath}) => {
     return (
-        <div className={styles.menuButton}>
+        <div 
+            className={styles.menuButton}
+        >
             <img src={logoPath} alt="menulogo" />
             <p>{menuText}</p>
         </div>
