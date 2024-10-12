@@ -1,8 +1,8 @@
 import styles from './header.module.css'
 import MenuButton from '../menuButton/menuButton'
 import menu from './menuList';
-import logo from '../../assets/icons/radarIco.svg'
-import userIco from '../../assets/icons/defaultUserIco.svg'
+import logo from '@icons/radarIco.svg'
+import userIco from '@icons/defaultUserIco.svg'
 
 const Header = () => {
     return (

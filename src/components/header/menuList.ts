@@ -1,7 +1,7 @@
-import stateIco from '../../assets/icons/stateIco.svg'
-import measureIco from '../../assets/icons/measureIco.svg'
-import taskIco from '../../assets/icons/taskIco.svg'
-import settingIco from '../../assets/icons/settingIco.svg'
+import stateIco from '@icons/stateIco.svg'
+import measureIco from '@icons/measureIco.svg'
+import taskIco from '@icons/taskIco.svg'
+import settingIco from '@icons/settingIco.svg'
 
 interface MenuButtonProps{
     menuText: string
