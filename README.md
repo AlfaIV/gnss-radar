@@ -7,6 +7,6 @@
 ## Полезные ссылки
 
 * [Ссылка на репозиторий бэкенда проекта](https://github.com/Gokert/gnss-radar)
-* [Ссылка на дизайн UI]()
+* [Ссылка на дизайн UI](https://pixso.net/app/editor/KlCBZl5kvYozzxsx0V57Qw?icon_type=1&page-id=14%3A177 Приглашаем вас присоединиться к Pixso Файл дизайна  "ПИШ")
 
 ## Описание проекта
