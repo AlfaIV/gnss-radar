@@ -8,16 +8,16 @@
     grid-template-columns: repeat(5, 200px) auto;
 
     height: 80px;
-
+    div:first-child,
+    div:last-child{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+    }
 }
 
-.header div:first-child,
-.header div:last-child{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
 
 .header div:last-child{
     justify-content: flex-end;

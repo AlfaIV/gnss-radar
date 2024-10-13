@@ -1,14 +1,11 @@
 import './App.css'
-import Header from '@components/header/header'
-import Footer from '@components/footer/footer'
+import Layout from '@components/layout/layout'
 
 function App() {
   return (
-    <div className='App'>
-      <Header/>
-      <div className='body'></div>
-      <Footer/>
-    </div>
+    <Layout>
+      <p>Привет!</p>
+    </Layout>
   )
 }
 

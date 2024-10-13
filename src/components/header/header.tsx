@@ -1,4 +1,4 @@
-import styles from './header.module.css'
+import styles from './header.module.scss'
 import MenuButton from '../menuButton/menuButton'
 import menu from './menuList';
 import logo from '@icons/radarIco.svg'
