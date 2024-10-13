@@ -7,7 +7,7 @@ import userIco from '@icons/defaultUserIco.svg'
 const Header = () => {
     return (
         <div className={styles.header}>
-            <div className='header__logo'>
+            <div className={styles.header__logo}>
                 <img src={logo} alt="menulogo" />
                 <p>ГНСС Радар</p>
             </div>
@@ -18,7 +18,7 @@ const Header = () => {
                     logoPath={item.logoPath}
                 ></MenuButton>
             ))}
-            <div className='header__user'>
+            <div className={styles.header__user}>
                 <p>defaultUser</p>
                 <img src={userIco} alt="userlogo" />
             </div>

@@ -1,4 +1,4 @@
-import styles from './menuButton.module.css';
+import styles from './menuButton.module.scss';
 import { FC } from 'react';
 
 interface MenuButtonProps{
@@ -11,8 +11,14 @@ const MenuButton:FC<MenuButtonProps> = ({menuText, logoPath}) => {
         <div 
             className={styles.menuButton}
         >
-            <img src={logoPath} alt="menulogo" />
-            <p>{menuText}</p>
+            <img
+                className={styles.menuButton__img}
+                src={logoPath}
+                alt="menulogo"
+            />
+            <p
+                className={styles.menuButton__text}
+            >{menuText}</p>
         </div>
     )
 }

@@ -8,8 +8,8 @@
     grid-template-columns: repeat(5, 200px) auto;
 
     height: 80px;
-    div:first-child,
-    div:last-child{
+    .header__logo,
+    .header__user{
         display: flex;
         justify-content: center;
         align-items: center;
@@ -19,7 +19,7 @@
 }
 
 
-.header div:last-child{
+.header__user{
     justify-content: flex-end;
     margin-right: 50px;
 }
