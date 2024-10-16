@@ -16,13 +16,23 @@
         gap: 10px;
         transition: all 0.3s;
     }
+    .header__user{
+        justify-content: flex-end;
+        margin-right: 50px;
+    }
+
+    .header__logo:hover{
+        transform: translate(0px, -10px);
+    }
+
+    .header__user:hover{
+        transform: translate(0px, -10px);
+    }
 }
 
 
-.header__user{
-    justify-content: flex-end;
-    margin-right: 50px;
-}
+
+
 
 .header p{
     /* Montserrat Medium */

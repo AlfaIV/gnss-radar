@@ -1,3 +1,5 @@
+@import '@scss/variables';
+
 .menuButton{
     width: 160px;
     height: 40px;
@@ -16,11 +18,11 @@
 }
 
 .menuButton_active{
-    background-color: #FF9966;
+    background-color: $header-button-color;
 }
 
 .menuButton:hover{
-    border: 2px solid #C5AF74;
+    border: 2px solid $header-button-border;
 }
 
 .menuButton__img{
