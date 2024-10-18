@@ -1,0 +1,93 @@
+@import '@scss/mixins';
+@import '@scss/variables';
+
+.radar{
+    display: grid;
+    
+    gap: 50px;
+    justify-content: center;
+    grid-template-columns: 40% 40%;
+    
+    
+}
+
+.radar__table{
+    padding: 100px 20px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+    width: 600px;
+
+    @include text-header(20px, 24px);
+}
+
+.radar__table__status{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+
+    width: 450px;
+    height: 40px;
+    padding: 10px 0px 10px 10px;
+
+    box-sizing: border-box;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 6px;
+ 
+    & div{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 180px;
+        height: 40px;
+
+        box-sizing: border-box;
+        
+        border: 1px solid rgb(255, 255, 255);
+        border-radius: 6px;
+        background: rgba(107, 166, 85, 0.79);
+    }
+}
+
+.radar__table__task{
+    width: 600px;
+
+    box-sizing: border-box;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 6px;
+
+    display: grid;
+    grid-template-columns: 300px 250px;
+    grid-template-rows: 60px 80px;
+    justify-content: flex-end;
+    justify-self: center;
+    gap: 20px;
+}
+
+.radar__table__task_p{
+    grid-row: span 2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px;
+
+
+    
+    box-sizing: border-box;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 6px;
+    
+    background: rgba(0, 0, 0, 0.21);
+    
+    & p{
+        @include text-header(14px, 17px);
+        margin: 0px;
+    }
+}

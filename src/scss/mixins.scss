@@ -1,0 +1,12 @@
+@import '@scss/variables';
+
+@mixin text-header($size, $height, $align: left) {
+  
+  color: $text-color-main;
+  font-family: Montserrat;
+  font-size: $size;
+  font-weight: 500;
+  line-height: $height;
+  letter-spacing: 0px;
+  text-align: $align;
+}
