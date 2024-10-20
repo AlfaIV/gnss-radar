@@ -2,7 +2,6 @@ import gnssTable from "./table.config.tsx";
 import style from "./table.module.scss";
 
 const TableSatellite = () => {
-  console.log(gnssTable);
   return (
     <div>
       <table className={style.table}>

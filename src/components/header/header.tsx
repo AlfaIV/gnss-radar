@@ -16,6 +16,7 @@ const Header = () => {
                     key={item.menuText}
                     menuText={item.menuText}
                     logoPath={item.logoPath}
+                    link={item.link}
                 ></MenuButton>
             ))}
             <div className={styles.header__user}>
