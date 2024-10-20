@@ -1,0 +1,31 @@
+.cardMeasure {
+  width: 200px;
+  height: 200px;
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10;
+
+  padding: 20px 10px 20px 10px;
+
+  box-sizing: border-box;
+  /* navBar-color_hover */
+  border: 1px solid rgb(197, 175, 116);
+  border-radius: 30px;
+  /* white */
+  background: rgb(255, 255, 255);
+}
+
+.cardMeasure__text {
+  color: rgb(0, 0, 0);
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0px;
+  text-align: center;
+  text-transform: capitalize;
+  margin: 3px;
+}

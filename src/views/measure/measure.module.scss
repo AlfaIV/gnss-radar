@@ -1,0 +1,42 @@
+@import '@scss/variables';
+
+$container-border-radius: 20px;
+
+
+.measure{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 50px;
+    // justify-content: stretch;
+    padding: 50px;
+}
+
+.filters{
+    grid-column: span 2;
+    background-color: $base-background-color;
+    border-radius: $container-border-radius;
+}
+
+.log{
+    grid-column: span 4;
+    background-color: $base-background-color;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 50px;
+    
+    border-radius: $container-border-radius;
+
+
+    & .log__heasder{
+        width: 100%;
+    }
+}
+
+.plots{
+    grid-column: span 6;
+    background-color: $base-background-color;
+
+    border-radius: $container-border-radius;
+}
