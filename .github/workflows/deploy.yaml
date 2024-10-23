@@ -29,7 +29,7 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
-  
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -38,12 +38,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: appleboy/ssh-action@v0.1.5
+      - name: Run remote command via SSH
+        uses: D3rHase/ssh-command-action@latest
         with:
-          host: ${{ secrets.IP_SERVER }}  # IP-адрес или доменное имя вашего сервера
-          username: ${{ secrets.USERNAME_SERVER }}  # Имя пользователя для SSH
-          key: ${{ secrets.PASSWORD_SERVER }}  # Приватный SSH ключ
-          port: 22  # Порт SSH, по умолчанию 22
-          script: |
-            pwd
+          host: ${{ secrets.IP_SERVER }}
+          port: 22
+          user: ${{ secrets.USERNAME_SERVER }}
+          private_key: ${{ secrets.PASSWORD_SERVER }}
+          command: echo 'Hello, World!'
