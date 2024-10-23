@@ -35,14 +35,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - id: server
-        name: SSH connection
-        uses: invi5H/ssh-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: appleboy/ssh-action@v0.1.5
         with:
-          NAME: server
-          SSH_HOST: ${{ secrets.IP_SERVER }}
-          SSH_PORT: 22
-          SSH_USER: ${{ secrets.USERNAME_SERVER }}
-          SSH_KEY: ${{ secrets.PASSWORD_SERVER }}
-      - run: ssh ${{ steps.server.outputs.SERVER }} pwd 
-      # - run: ssh ${{ steps.server.outputs.SERVER }} cd /home/gnss-radar && git pull origin main && make docker
+          host: ${{ secrets.IP_SERVER }}  # IP-адрес или доменное имя вашего сервера
+          username: ${{ secrets.USERNAME_SERVER }}  # Имя пользователя для SSH
+          key: ${{ secrets.PASSWORD_SERVER }}  # Приватный SSH ключ
+          port: 22  # Порт SSH, по умолчанию 22
+          script: |
+            pwd
