@@ -1,12 +1,13 @@
-name: "deploy and lint"
+name: deploy and lint
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "gitflow"]
   workflow_dispatch:
 
 jobs:
-  build:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,3 +29,19 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
+  
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: server
+        name: SSH connection
+        uses: invi5H/ssh-action@v1
+        with:
+          NAME: server
+          SSH_HOST: ${{ secrets.IP_SERVER }}
+          SSH_PORT: 22
+          SSH_USER: git-hub-action
+          SSH_KEY: ${{ secrets.PASSWORD_SERVER }}
+      - run: ssh ${{ steps.server.outputs.SERVER }} pwd
