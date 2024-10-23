@@ -6,16 +6,16 @@ import Footer from "@components/footer/footer";
 
 import style from "./layout.module.scss";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+// interface LayoutProps {
+//   children: React.ReactNode;
+// }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout = () => {
   return (
     <div className={style.app}>
       <Header />
       <div className={style.body}>
-        <Outlet className={style.body} />
+        <Outlet />
         {/* {children} */}
       </div>
       <Footer />

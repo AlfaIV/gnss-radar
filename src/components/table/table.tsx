@@ -1,4 +1,4 @@
-import gnssTable from "./table.config.tsx";
+import gnssTable from "./table.config";
 import style from "./table.module.scss";
 
 const TableSatellite = () => {

@@ -1,4 +1,6 @@
-const plotConfig = {
+import { PlotParams } from 'react-plotly.js';
+
+const plotConfig: PlotParams = {
   data: [
     {
       type: "scatterpolar",
@@ -46,3 +48,4 @@ const plotConfig = {
 };
 
 export default plotConfig;
+
