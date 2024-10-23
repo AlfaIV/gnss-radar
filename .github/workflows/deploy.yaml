@@ -42,7 +42,6 @@ jobs:
         uses: D3rHase/ssh-command-action@latest
         with:
           host: ${{ secrets.IP_SERVER }}
-          port: 22
           user: ${{ secrets.USERNAME_SERVER }}
           private_key: ${{ secrets.PASSWORD_SERVER }}
           command: echo 'Hello, World!'
