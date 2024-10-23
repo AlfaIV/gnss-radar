@@ -1,4 +1,5 @@
 import { PlotParams } from 'react-plotly.js';
+import { Data, Layout } from 'plotly.js';
 
 const plotConfig: PlotParams = {
   data: [
@@ -26,7 +27,7 @@ const plotConfig: PlotParams = {
         color: "red",
       },
     },
-  ],
+  ] as Data[],
   layout: {
     title: "ГНСС радар",
     plot_bgcolor: "rgba(255, 255, 255, 0.0)", // Цвет фона графика
@@ -44,7 +45,7 @@ const plotConfig: PlotParams = {
       },
     },
     showlegend: true,
-  },
+  } as Layout,
 };
 
 export default plotConfig;
