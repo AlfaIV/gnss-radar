@@ -9,4 +9,19 @@
 * [Ссылка на репозиторий бэкенда проекта](https://github.com/Gokert/gnss-radar)
 * [Ссылка на дизайн UI](https://pixso.net/app/editor/KlCBZl5kvYozzxsx0V57Qw?icon_type=1&page-id=14%3A177 Приглашаем вас присоединиться к Pixso Файл дизайна  "ПИШ")
 
+## Запуск проекта
+
+Поднимаем докер контейнер и запускаем.
+
+```bash
+	docker build -t gnss-radar .
+	docker run -p 1000:80 gnss-radar
+```
+
+В поисковой строке браузера вводим:
+
+```
+  localhost:1000
+```
+
 ## Описание проекта
