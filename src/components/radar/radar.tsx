@@ -1,17 +1,10 @@
 import style from "./radar.module.scss";
-import { useState } from "react";
 import Plot from "react-plotly.js";
 import Button from "@components/button/button";
 import plotConfig from "./plot.config";
 import TableSatellite from "@components/table/table";
 
 const Radar = () => {
-  const [state, setState] = useState({
-    taskNumber: "",
-    value2: "",
-    value3: "",
-  });
-
   return (
     <div className={style.radar}>
       <div className={style.radar__plot}>

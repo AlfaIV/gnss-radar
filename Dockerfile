@@ -14,7 +14,7 @@ RUN pnpm run build
 FROM nginx:latest
 
 COPY --from=builder /app/gnss-radar/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/gnss-radar/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
