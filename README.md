@@ -24,4 +24,18 @@
   localhost:1000
 ```
 
+Для подключения переменных среды
+
+```bash
+source env.sh
+```
+Для публикации Docker образа
+
+```bash
+docker build -t gnss-radar .
+docker tag gnss-radar:latest alfaiv/gnss-radar:latest
+docker push alfaiv/gnss-radar
+```
+
+
 ## Описание проекта

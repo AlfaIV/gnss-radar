@@ -1,0 +1,61 @@
+name: deploy and lint
+
+on:
+  push:
+    branches: ["main", "gitflow", "readPage"]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: latest
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm run lint
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Notify Command Success
+        run: echo "Command executed on ${{ secrets.HOST }} successfully!"
+
+      - name: Run remote command via SSH
+        uses: D3rHase/ssh-command-action@latest
+        with:
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          user: ${{ secrets.USER }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+          command: |
+            echo 'run deploy'
+            cd /home/backend/gnss-radar
+            docker-compose down
+            # docker-compose up &
+
+
+            # docker pull alfaiv/gnss-radar:latest
+            # docker-compose up &
+            # command: echo 'Hello, World!'
+      

@@ -1,2 +1,5 @@
 dist
 node_modules
+.env.sh
+env.sh
+id_rsa

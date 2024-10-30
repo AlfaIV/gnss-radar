@@ -16,7 +16,8 @@
       "@components/*": ["components/*"],
       "@views/*": ["views/*"],
       "@assets/*": ["assets/*"],
-      "@icons/*": ["assets/icons/*"]
+      "@icons/*": ["assets/icons/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["src/**/*"],

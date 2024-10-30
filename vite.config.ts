@@ -13,6 +13,19 @@ export default defineConfig({
         "@views": resolve(__dirname, './src/views'),
         "@icons": resolve(__dirname, 'src/assets/icons'),
         "@scss": resolve(__dirname, 'src/scss'),
+        "@utils": resolve(__dirname, 'src/utils'),
+    },
+  },
+  build: {
+    // chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        },
+      },
     },
   },
 })
