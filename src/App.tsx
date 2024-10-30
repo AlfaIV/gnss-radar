@@ -21,6 +21,14 @@ const router = createBrowserRouter([
         path: '/measure/',
         element: <Measure/>,
       },
+      {
+        path: '/task/',
+        element: <p>task</p>,
+      },
+      {
+        path: '/setting/',
+        element: <p>setting</p>,
+      },
     ],
   },
 ]);
