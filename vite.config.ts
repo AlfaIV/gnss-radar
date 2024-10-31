@@ -15,4 +15,7 @@ export default defineConfig({
         "@scss": resolve(__dirname, 'src/scss'),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+  },
 })
