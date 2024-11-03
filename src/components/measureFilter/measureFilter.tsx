@@ -12,8 +12,9 @@ import { useState, ChangeEvent, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import moment, { Moment } from "moment";
 import { debounce } from "lodash";
+import filters from "./measureFilter.types";
+import moment from "moment";
 
 // todo
 // сделать чтобы параметры поиска были сохранны и при перезагрузке страницы они были восстановлены
@@ -27,22 +28,7 @@ const MeasureFilter = () => {
     });
   };
 
-  interface filters {
-    satelliteType: {
-      GPS: boolean;
-      Glonass: boolean;
-      Galileo: boolean;
-      Baidou: boolean;
-    };
-    signalType: {
-      L1: boolean;
-      L2: boolean;
-      L3: boolean;
-    };
-    startData: Moment | null;
-    endData: Moment | null;
-    timeRange: number[];
-  }
+  
 
   const [filters, setFilters] = useState<filters>({
     satelliteType: {
@@ -264,6 +250,7 @@ const MeasureFilter = () => {
           />
         </FormGroup>
         <FormHelperText></FormHelperText>
+        <Typography variant="body1" color="initial">Время поиска записи с {filters.timeRange[0]} часов по {filters.timeRange[1]} часов</Typography>
       </FormControl>
     </>
   );
