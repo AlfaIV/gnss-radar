@@ -17,33 +17,12 @@ $container-border-radius: 20px;
     border-radius: $container-border-radius;
     border: solid 1px black;
     padding: 20px 10px;
-
-
-    &.filters__title{
-        color: white;
-        background-color: wheat;
-        border-radius: $container-border-radius;
-        padding: 20px;
-    }   
-
-    &.filters__group{
-        margin: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    
 }
-
-.filters__group__header{
-    color: white;
-}
-
 
 .log{
     grid-column: span 4;
-    background-color: $base-background-color;
+    // background-color: $base-background-color;
+    background-color: white;
 
     display: flex;
     justify-content: center;
@@ -52,9 +31,14 @@ $container-border-radius: 20px;
     
     border-radius: $container-border-radius;
 
+    padding: 20px 10px;
+
 
     & .log__heasder{
         width: 100%;
+        text-align: center;
+        font-size: 3rem;
+        margin: 0;
     }
 }
 

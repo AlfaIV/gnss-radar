@@ -9,7 +9,7 @@ const theme = createTheme({
       main: '#dc004e',
     },
     text: {
-      primary: 'black',
+      // primary: 'black',
     },
   },
   typography: {

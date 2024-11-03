@@ -8,7 +8,7 @@ import {
   Checkbox,
   Slider,
 } from "@mui/material";
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect, FC } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -20,32 +20,18 @@ import moment from "moment";
 // сделать чтобы параметры поиска были сохранны и при перезагрузке страницы они были восстановлены
 // а также отображались в URL для передачи параметров поиска
 
-const MeasureFilter = () => {
+interface MeasureFilterProps{
+  filters: filters;
+  setFilters: (filters: filters) => void;
+}
+
+const MeasureFilter: FC<MeasureFilterProps> = ({filters, setFilters}) => {
   const timeChange = (event: Event, newValue: number | number[]) => {
     setFilters({
       ...filters,
       timeRange: newValue as number[],
     });
   };
-
-  
-
-  const [filters, setFilters] = useState<filters>({
-    satelliteType: {
-      GPS: true,
-      Glonass: true,
-      Galileo: false,
-      Baidou: false,
-    },
-    signalType: {
-      L1: true,
-      L2: true,
-      L3: false,
-    },
-    startData: moment().subtract(1, "days"),
-    endData: moment(),
-    timeRange: [0, 24],
-  });
 
   const filterChange = (event: ChangeEvent<HTMLInputElement>) => {
     switch (event.target.name) {
@@ -117,21 +103,13 @@ const MeasureFilter = () => {
     }
   };
 
-  useEffect(() => {
-    const debouncedHandleChange = debounce((queryParams: filters) => {
-      console.log(queryParams);
-    }, 1000);
-    debouncedHandleChange(filters);
-  }, [filters]);
-
-
   return (
     <>
       <Typography align="center" variant="h3">
         Фильтры
       </Typography>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Тип спутниковой группировки:</FormLabel>
+      <FormControl component="fieldset" sx={{padding: "20px" , display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <FormLabel sx={{ margin: "20px 0" }} component="legend">Тип спутниковой группировки:</FormLabel>
         <FormGroup>
           <FormControlLabel
             control={
@@ -175,10 +153,10 @@ const MeasureFilter = () => {
             label="Beidou"
             disabled
           />
-        </FormGroup>
+        </FormGroup >
         <FormHelperText></FormHelperText>
-        <FormLabel component="legend">Диапазон сигнала:</FormLabel>
-        <FormGroup>
+        <FormLabel sx={{ margin: "20px 0" }} component="legend">Диапазон сигнала:</FormLabel>
+        <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -212,8 +190,8 @@ const MeasureFilter = () => {
           />
         </FormGroup>
         <FormHelperText></FormHelperText>
-        <FormLabel component="legend">Время и дата записи:</FormLabel>
-        <FormGroup>
+        <FormLabel sx={{ margin: "20px 0" }}  component="legend">Время и дата записи:</FormLabel>
+        <FormGroup sx={{ display: "flex", flexDirection: "column", gap: 3}}>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
               name="startData"
