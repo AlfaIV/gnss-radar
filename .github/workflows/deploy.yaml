@@ -51,11 +51,10 @@ jobs:
           command: |
             echo 'run deploy'
             cd /home/backend/gnss-radar
-            pwd
-            docker-compose up &
+            docker-compose down
+            # docker-compose up &
 
 
-            # docker-compose down
             # docker pull alfaiv/gnss-radar:latest
             # docker-compose up &
             # command: echo 'Hello, World!'
