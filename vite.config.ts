@@ -13,6 +13,7 @@ export default defineConfig({
         "@views": resolve(__dirname, './src/views'),
         "@icons": resolve(__dirname, 'src/assets/icons'),
         "@scss": resolve(__dirname, 'src/scss'),
+        "@utils": resolve(__dirname, 'src/utils'),
     },
   },
   build: {

@@ -3,12 +3,13 @@ import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import axios from "axios";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
+import getGrqlData from "../../utils/grql";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const navigate = useNavigate();
 
   const ip = "localhost";
   // const ip = "85.198.109.43";
@@ -19,7 +20,7 @@ const Login = () => {
           signin(input: { login: "${username}", password:"${password}" }) {
               _empty
           }
-      }fet
+      }
     }
 `;
 
@@ -115,7 +116,7 @@ const Login = () => {
           variant="contained"
           color="primary"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => navigate("/signin/")}
+          onClick={() => navigate("/signup/")}
         >
           Регистрация
         </Button>

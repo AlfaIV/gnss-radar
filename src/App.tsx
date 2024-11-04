@@ -3,7 +3,7 @@ import Layout from "@components/layout/layout";
 import Radar from "@components/radar/radar";
 import Measure from "@views/measure/measure";
 import Login from "@views/login/login";
-import SignIn from "@views/signin/signin";
+import SignUp from "@views/signup/signup";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 const client = new QueryClient();
@@ -37,8 +37,8 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/signin/",
-    element: <SignIn />,
+    path: "/signup/",
+    element: <SignUp />,
   },
 ]);
 
