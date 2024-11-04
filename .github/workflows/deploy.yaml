@@ -49,9 +49,9 @@ jobs:
           user: ${{ secrets.USER }}
           private_key: ${{ secrets.PRIVATE_KEY }}
           command: |
+            echo 'run deploy'
             cd /home/backend/gnss-radar
             docker-compose up
-            # echo 'Hello, World!'
             # docker-compose down
             # docker pull alfaiv/gnss-radar:latest
             # docker-compose up &
