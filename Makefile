@@ -22,5 +22,16 @@ docker_login:
 	docker login -u $$DOCKER_USERNAME -p $$DOCKER_TOKEN
 
 docker_build: dev_build
-	docker build --no-cache -t gnss-radar .
+	docker build -t gnss-radar .
+	# docker build --no-cache -t gnss-radar .
 	docker tag gnss-radar:latest alfaiv/gnss-radar:latest
+
+help:
+	@echo "make docker_run" - запускт и сборка контейнера
+	@echo "make docker_push" - публикация образа
+	@echo "make docker_pull" - получение образа
+	@echo "make docker_connect" - подключение к собранному докер образу
+	@echo "make docker_login" - подключение к докер хабу
+	@echo "make docker_build" - pnpm сборка проекта
+	@echo "make dev_start" - старт pnpm dev
+	@echo "make dev_build" - старт pnpm build

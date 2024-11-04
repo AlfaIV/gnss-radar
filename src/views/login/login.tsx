@@ -3,7 +3,7 @@ import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import axios from "axios";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-import getGrqlData from "../../utils/grql";
+import grqlFetch from "../../utils/grql";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,9 +11,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const ip = "localhost";
-  // const ip = "85.198.109.43";
-  const endpoint = `http://${ip}:1000/query/`;
   const FILMS_QUERY = `
     mutation Authorization {
       authorization {
@@ -25,21 +22,14 @@ const Login = () => {
 `;
 
   const postData = async () => {
-    const response = await axios({
-      url: endpoint,
-      method: "POST",
-      data: {
-        query: FILMS_QUERY,
-      },
-    });
-    return response.data;
+    return grqlFetch(FILMS_QUERY);
   };
 
   const mutation = useMutation(postData, {
     onSuccess: (data) => {
       console.log("Данные успешно отправлены:", data);
       setErrorMsg("");
-      navigate("/state/");
+      // navigate("/state/");
     },
     onError: (error) => {
       console.error("Ошибка при отправке данных:", error);
@@ -66,10 +56,7 @@ const Login = () => {
         }}
       >
         <Typography component="h1" variant="h2">
-          ГНСС Радар
-        </Typography>
-        <Typography component="h1" variant="h5">
-          Вас приветсвует система мониторинга ГНСС Сигналов!
+          Авторизация
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField

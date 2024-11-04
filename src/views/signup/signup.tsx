@@ -50,9 +50,7 @@ const SignUp = () => {
   });
 
   const handleSubmit = () => {
-
     // todo добавить проверки на пустые поля
-    if (user.surname)
     console.log("signin");
     mutation.mutate();
   };
@@ -69,13 +67,13 @@ const SignUp = () => {
 
   const getGrqlData = async () => {
     return grqlFetch(signUp_query);
-  }
+  };
 
   const mutation = useMutation(getGrqlData, {
     onSuccess: (data) => {
       console.log("Данные успешно отправлены:", data);
       setErrorMsg("");
-      navigate("/measure/");
+      // navigate("/measure/");
     },
     onError: (error) => {
       console.error("Ошибка при отправке данных:", error);
