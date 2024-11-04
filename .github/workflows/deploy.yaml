@@ -49,6 +49,7 @@ jobs:
           user: ${{ secrets.USER }}
           private_key: ${{ secrets.PRIVATE_KEY }}
           command: |
+            echo 'Hello, World!'
             cd /home/backend/gnss-radar
             docker-compose down
             docker pull alfaiv/gnss-radar:latest
