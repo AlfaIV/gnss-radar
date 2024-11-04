@@ -26,6 +26,9 @@ docker_build: dev_build
 	# docker build --no-cache -t gnss-radar .
 	docker tag gnss-radar:latest alfaiv/gnss-radar:latest
 
+server_connect:
+	ssh -i id_rsa root@$$SERVER_IP
+
 help:
 	@echo "make docker_run" - запускт и сборка контейнера
 	@echo "make docker_push" - публикация образа

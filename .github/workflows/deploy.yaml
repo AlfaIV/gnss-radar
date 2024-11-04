@@ -1,0 +1,47 @@
+name: deploy and lint
+
+on:
+  push:
+    branches: ["main", "gitflow", "readPage"]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: latest
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm run lint
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run remote command via SSH
+        uses: D3rHase/ssh-command-action@latest
+        with:
+          host: ${{ secrets.IP_SERVER }}
+          user: ${{ secrets.USERNAME_SERVER }}
+          private_key: ${{ secrets.RSA_KEY }}
+          command: echo 'Hello, World!'
