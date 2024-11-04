@@ -37,6 +37,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Notify Command Success
+        run: echo "Command executed on ${{ secrets.HOST }} successfully!"
 
       - name: Run remote command via SSH
         uses: D3rHase/ssh-command-action@latest
@@ -52,5 +55,3 @@ jobs:
           #   docker pull alfaiv/gnss-radar:latest
           #   docker-compose up
       
-      - name: Notify Command Success
-        run: echo "Command executed on ${{ secrets.HOST }} successfully!"
