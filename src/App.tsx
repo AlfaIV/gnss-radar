@@ -1,9 +1,13 @@
 import "./App.css";
+
 import Layout from "@components/layout/layout";
 import Radar from "@components/radar/radar";
 import Measure from "@views/measure/measure";
 import Login from "@views/login/login";
 import SignUp from "@views/signup/signup";
+import Task from "@views/task/task";
+
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 const client = new QueryClient();
@@ -24,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/task/",
-        element: <p>task</p>,
+        element: <Task />,
       },
       {
         path: "/setting/",

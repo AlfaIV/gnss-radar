@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const ip = "localhost";
-// const ip = "85.198.109.43";
+// const ip = "localhost";
+const ip = "85.198.109.43";
 const endpoint = `http://${ip}:1000/query`;
 
 const grqlFetch = async (query: any) => {

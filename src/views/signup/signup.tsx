@@ -10,9 +10,8 @@ import {
   Checkbox,
   Switch,
 } from "@mui/material";
-import axios from "axios";
 import { useMutation } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import grqlFetch from "../../utils/grql";
 
 const SignUp = () => {
