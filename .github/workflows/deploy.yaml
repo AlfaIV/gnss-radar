@@ -41,12 +41,16 @@ jobs:
       - name: Run remote command via SSH
         uses: D3rHase/ssh-command-action@latest
         with:
-          host: ${{ secrets.IP_SERVER }}
-          port: 22
-          user: ${{ secrets.USERNAME_SERVER }}
-          private_key: ${{ secrets.RSA_KEY }}
-          command: |
-            cd /home/backend/gnss-radar
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          user: ${{ secrets.USER }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+          command: echo 'Hello, World!'
+          # command: |
+          #   cd /home/backend/gnss-radar
           #   docker-compose down
           #   docker pull alfaiv/gnss-radar:latest
           #   docker-compose up
+      
+      - name: Notify Command Success
+        run: echo "Command executed on ${{ secrets.HOST }} successfully!"
