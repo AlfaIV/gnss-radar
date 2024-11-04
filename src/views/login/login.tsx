@@ -15,7 +15,7 @@ const Login = () => {
     mutation Authorization {
       authorization {
           signin(input: { login: "${username}", password:"${password}" }) {
-              _empty
+              userInfo
           }
       }
     }

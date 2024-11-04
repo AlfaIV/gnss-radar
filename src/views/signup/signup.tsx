@@ -58,7 +58,7 @@ const SignUp = () => {
   mutation Authorization {
       authorization {
           signup(input: { login: "${user.login}", password:"${user.password}" }) {
-          userId
+          userInfo
           }
       }
 }
