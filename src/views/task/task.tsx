@@ -17,10 +17,12 @@ import {
   Paper,
 } from "@mui/material";
 
+import TimelineChart from "@components/timeline/timeline";
+
 const Task = () => {
   return (
-    <Container maxWidth="lg">
-      <Paper elevation={0}  sx={{ mt: 10, md: 5, padding: "20px 10px" }}>
+    <Container maxWidth="xl">
+      <Paper elevation={1}  sx={{ mt: 5, md: 5, padding: "20px 10px" }}>
         <Typography variant="h3">Планируемые задачи</Typography>
         <Stack spacing={2} direction="row" sx={{ m: 2 }}>
           <Button variant="contained">Создать задачу</Button>
@@ -43,6 +45,7 @@ const Task = () => {
             </Select>
           </FormControl>
         </Stack>
+        <TimelineChart/>
       </Paper>
     </Container>
   );
