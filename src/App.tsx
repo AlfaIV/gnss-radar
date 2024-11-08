@@ -6,6 +6,7 @@ import Measure from "@views/measure/measure";
 import Login from "@views/login/login";
 import SignUp from "@views/signup/signup";
 import Task from "@views/task/task";
+import Setting from "@views/setting/setting";
 
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/setting/",
-        element: <p>setting</p>,
+        element: <Setting/>
       },
     ],
   },
