@@ -1,51 +1,61 @@
-import { FC } from 'react';
-import Chart from 'react-apexcharts';
+import { FC } from "react";
+import Chart from "react-apexcharts";
+import ApexOptions from "react-apexcharts";
 import { linearChartInterface } from "@components/linearChart/linearChart.interface";
 
-const LinearChart: FC<linearChartInterface> = ({ title, xData, xLabel, yData, yLabel }) => {
-
-  const plotConfig = {
+const LinearChart: FC<linearChartInterface> = ({
+  title,
+  xData,
+  xLabel,
+  yData,
+  yLabel,
+}) => {
+  const plotConfig:ApexOptions = {
     series: [
       {
         name: title,
-        data: xData,
-      }
+        data: yData,
+      },
     ],
     options: {
       chart: {
-        type: 'line',
+        type: 'line' as const,
         height: 350,
       },
       stroke: {
-        curve: 'smooth',
+        curve: "smooth",
       },
       title: {
         text: title,
-        align: 'center',
+        align: "center",
       },
       xaxis: {
-        // categories: yData.map((element) => `${element} Гц`),
+        categories: xData,
         title: {
           text: xLabel,
-        }
+        },
       },
       yaxis: {
         title: {
           text: yLabel,
-        }
+        },
       },
       tooltip: {
         shared: true,
         intersect: false,
-      }
-    }
+      },
+    },
   };
 
   return (
-    <div>
-      <Chart options={plotConfig.options} series={plotConfig.series} type="line" height={350} />
-    </div>
+    <Chart
+      options={plotConfig.options}
+      series={plotConfig.series}
+      type="line"
+      height={350}
+    />
   );
 };
 
 export default LinearChart;
+
