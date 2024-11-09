@@ -7,9 +7,34 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import { debounce } from "lodash";
 import CardMeasureProps from "@components/cardMeasure/cardMeasure.type";
+import {
+  Drawer,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+} from "@mui/material";
 
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Measure = () => {
+  const [open, setOpen] = useState(true);
+
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        (event as React.KeyboardEvent).key === "Tab"
+      ) {
+        return;
+      }
+      setOpen(open);
+    };
+
   const [filters, setFilters] = useState<filters>({
     satelliteType: {
       GPS: true,
@@ -59,7 +84,7 @@ const Measure = () => {
       startTime: "08:00",
       endTime: "09:00",
       endData: "2024-01-01",
-      dataLink: "https://example.com/data1"
+      dataLink: "https://example.com/data1",
     },
     {
       id: 2,
@@ -69,7 +94,7 @@ const Measure = () => {
       startTime: "09:00",
       endTime: "10:00",
       endData: "2024-01-02",
-      dataLink: "https://example.com/data2"
+      dataLink: "https://example.com/data2",
     },
     {
       id: 3,
@@ -79,7 +104,7 @@ const Measure = () => {
       startTime: "10:00",
       endTime: "11:00",
       endData: "2024-01-03",
-      dataLink: "https://example.com/data3"
+      dataLink: "https://example.com/data3",
     },
     {
       id: 4,
@@ -89,7 +114,7 @@ const Measure = () => {
       startTime: "11:00",
       endTime: "12:00",
       endData: "2024-01-04",
-      dataLink: "https://example.com/data4"
+      dataLink: "https://example.com/data4",
     },
     {
       id: 5,
@@ -99,14 +124,48 @@ const Measure = () => {
       startTime: "12:00",
       endTime: "13:00",
       endData: "2024-01-05",
-      dataLink: "https://example.com/data5"
-    }
+      dataLink: "https://example.com/data5",
+    },
   ];
 
   return (
     <div className={style.measure}>
+      <div style={{ display: "flex" }}>
+        {/* <AppBar position="fixed">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleDrawer(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6">Мое Приложение</Typography>
+          </Toolbar>
+        </AppBar> */}
+        {/* <Drawer
+          anchor="left"
+          open={open}
+          onClose={toggleDrawer(false)}
+          variant="persistent" // Используем постоянный вариант
+          sx={{
+            "& .MuiDrawer-paper": {
+              width: 250, // Ширина панели
+              height: "100%", // Высота панели
+            },
+          }}
+        >
+          <MeasureFilter filters={filters} setFilters={setFilters} />
+        </Drawer> */}
+        {/* <main style={{ marginLeft: 250, padding: "16px", flexGrow: 1 }}>
+          <Typography paragraph>
+            Здесь будет основное содержимое вашего приложения.
+          </Typography>
+        </main> */}
+      </div>
       <div className={style.filters}>
-      <MeasureFilter filters={filters} setFilters={setFilters} />
+        <MeasureFilter filters={filters} setFilters={setFilters} />
       </div>
       <div className={style.log}>
         <h1 className={style.log__heasder}>Записи</h1>
