@@ -1,50 +1,53 @@
-@import '@scss/variables';
+@import "@scss/variables";
 
 $container-border-radius: 20px;
 
+.left_menu {
+  background-color: white;
+  border-radius: 0 $container-border-radius $container-border-radius 0;
+  border: solid 1px black;
+  padding: 20px 10px;
 
-.measure{
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 50px;
-    // justify-content: stretch;
-    padding: 50px;
+  position: fixed;
+  left: 0;
+
+  width: 50px;
 }
 
-.filters{
-    grid-column: span 3;
-    background-color: white;
-    border-radius: $container-border-radius;
-    border: solid 1px black;
-    padding: 20px 10px;
+.measure {
+//   display: grid;
+//   grid-template-columns: repeat(12, 1fr);
+//   gap: 50px;
+  padding: 50px 100px;
 }
 
-.log{
-    grid-column: span 4;
-    // background-color: $base-background-color;
-    background-color: white;
-
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 50px;
-    
-    border-radius: $container-border-radius;
-
-    padding: 20px 10px;
-
-
-    & .log__heasder{
-        width: 100%;
-        text-align: center;
-        font-size: 3rem;
-        margin: 0;
-    }
+.filters {
+  grid-column: span 3;
+  background-color: white;
+  border-radius: $container-border-radius;
+  border: solid 1px black;
+  padding: 20px 10px;
 }
 
-.plots{
-    grid-column: span 6;
-    background-color: $base-background-color;
+.log {
+  grid-column: span 6;
+  // background-color: $base-background-color;
+  background-color: white;
+  
+  display: flex;
+  grid-template-columns: repeat(2, 1fr);
+//   justify-content: center;
+  flex-wrap: wrap;
+  gap: 50px;
 
-    border-radius: $container-border-radius;
+  border-radius: $container-border-radius;
+
+  padding: 20px 10px;
+}
+
+.plots {
+  grid-column: span 6;
+  background-color: $base-background-color;
+
+  border-radius: $container-border-radius;
 }

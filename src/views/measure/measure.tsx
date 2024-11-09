@@ -5,22 +5,15 @@ import MeasureFilter from "@components/measureFilter/measureFilter";
 import filters from "@components/measureFilter/measureFilter.types";
 import moment from "moment";
 import { useState, useEffect } from "react";
+import { measure } from "@views/measure/data";
 import { debounce } from "lodash";
-import CardMeasureProps from "@components/cardMeasure/cardMeasure.type";
+import TuneIcon from "@mui/icons-material/Tune";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import { Stack, IconButton, Typography, Grid, Box } from "@mui/material";
 
 const Measure = () => {
-  // const [open, setOpen] = useState(true);
-
-  // const toggleDrawer =
-  //   (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-  //     if (
-  //       event.type === "keydown" &&
-  //       (event as React.KeyboardEvent).key === "Tab"
-  //     ) {
-  //       return;
-  //     }
-  //     setOpen(open);
-  //   };
+  const [openFilter, setOpenFilter] = useState(false);
+  const [openGraph, setOpenGraph] = useState(false);
 
   const [filters, setFilters] = useState<filters>({
     satelliteType: {
@@ -61,120 +54,91 @@ const Measure = () => {
   //     keepPreviousData: true, // Сохраняем предыдущие данные во время загрузки
   //   }
   // );
-
-  const measure: CardMeasureProps[] = [
-    {
-      id: 1,
-      name: "Измерение 1",
-      comment: "Первое измерение",
-      startData: "2024-01-01",
-      startTime: "08:00",
-      endTime: "09:00",
-      endData: "2024-01-01",
-      dataLink: "https://example.com/data1",
-    },
-    {
-      id: 2,
-      name: "Измерение 2",
-      comment: "Второе измерение",
-      startData: "2024-01-02",
-      startTime: "09:00",
-      endTime: "10:00",
-      endData: "2024-01-02",
-      dataLink: "https://example.com/data2",
-    },
-    {
-      id: 3,
-      name: "Измерение 3",
-      comment: "Третье измерение",
-      startData: "2024-01-03",
-      startTime: "10:00",
-      endTime: "11:00",
-      endData: "2024-01-03",
-      dataLink: "https://example.com/data3",
-    },
-    {
-      id: 4,
-      name: "Измерение 4",
-      comment: "Четвертое измерение",
-      startData: "2024-01-04",
-      startTime: "11:00",
-      endTime: "12:00",
-      endData: "2024-01-04",
-      dataLink: "https://example.com/data4",
-    },
-    {
-      id: 5,
-      name: "Измерение 5",
-      comment: "Пятое измерение",
-      startData: "2024-01-05",
-      startTime: "12:00",
-      endTime: "13:00",
-      endData: "2024-01-05",
-      dataLink: "https://example.com/data5",
-    },
-  ];
-
   return (
     <div className={style.measure}>
-      <div style={{ display: "flex" }}>
-        {/* <AppBar position="fixed">
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={toggleDrawer(true)}
+      <div className={style.left_menu}>
+        <Stack>
+          <IconButton
+            onClick={() => {setOpenFilter(!openFilter); setOpenGraph(false)}}
+            aria-label="add to favorites"
+          >
+            <TuneIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => {setOpenGraph(!openGraph); setOpenFilter(false)} }
+            aria-label="add to favorites"
+          >
+            <TimelineIcon />
+          </IconButton>
+        </Stack>
+      </div>
+      <Grid container spacing={2}>
+        {openFilter && (
+          <Grid item xs={3}>
+            <div className={style.filters}>
+              <MeasureFilter filters={filters} setFilters={setFilters} />
+            </div>
+          </Grid>
+        )}
+        {openGraph && (
+          <Grid item xs={6}>
+            <div className={style.plots}>
+              <Typography variant="h3">Графики</Typography>
+            </div>
+          </Grid>
+        )}
+        <Grid item xs={openFilter ? 9 : openGraph ? 6 : 12}>
+          {/* <Grid item xs={12} > */}
+          <div className={style.log}>
+            <Typography
+              variant="h3"
+              sx={{ width: "100%", textAlign: "center" }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6">Мое Приложение</Typography>
-          </Toolbar>
-        </AppBar> */}
-        {/* <Drawer
-          anchor="left"
-          open={open}
-          onClose={toggleDrawer(false)}
-          variant="persistent" // Используем постоянный вариант
-          sx={{
-            "& .MuiDrawer-paper": {
-              width: 250, // Ширина панели
-              height: "100%", // Высота панели
-            },
-          }}
-        >
-          <MeasureFilter filters={filters} setFilters={setFilters} />
-        </Drawer> */}
-        {/* <main style={{ marginLeft: 250, padding: "16px", flexGrow: 1 }}>
-          <Typography paragraph>
-            Здесь будет основное содержимое вашего приложения.
-          </Typography>
-        </main> */}
-      </div>
-      <div className={style.filters}>
-        <MeasureFilter filters={filters} setFilters={setFilters} />
-      </div>
-      <div className={style.log}>
-        <h1 className={style.log__heasder}>Записи</h1>
-        {measure.map((item) => (
-          <CardMeasure
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            comment={item.comment}
-            startData={item.startData}
-            startTime={item.startTime}
-            endTime={item.endTime}
-            endData={item.endData}
-            dataLink={item.dataLink}
-          ></CardMeasure>
-        ))}
-      </div>
-      <div className={style.plots}>
-        <h1>Графики</h1>
-      </div>
+              Записи
+            </Typography>
+            {measure.map((item) => (
+              <CardMeasure
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                comment={item.comment}
+                startData={item.startData}
+                startTime={item.startTime}
+                endTime={item.endTime}
+                endData={item.endData}
+                dataLink={item.dataLink}
+              ></CardMeasure>
+            ))}
+          </div>
+        </Grid>
+      </Grid>
     </div>
   );
 };
 
 export default Measure;
+
+{
+  /* <div className={style.filters}>
+  <MeasureFilter filters={filters} setFilters={setFilters} />
+</div>
+<div className={style.log}>
+  <Typography variant="h3">Записи</Typography>
+  {measure.map((item) => (
+    <CardMeasure
+      key={item.id}
+      id={item.id}
+      name={item.name}
+      comment={item.comment}
+      startData={item.startData}
+      startTime={item.startTime}
+      endTime={item.endTime}
+      endData={item.endData}
+      dataLink={item.dataLink}
+    ></CardMeasure>
+  ))}
+</div>
+<div className={style.plots}>
+  <h1>Графики</h1>
+</div> */
+}
