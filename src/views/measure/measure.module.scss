@@ -51,4 +51,8 @@ $container-border-radius: 20px;
   background-color: white;
   border-radius: $container-border-radius;
   padding: 20px 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }

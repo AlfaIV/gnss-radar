@@ -21,6 +21,7 @@ import {
 
 import LinearChart from "@components/linearChart/linearChart";
 import { linearChartInterface } from "@components/linearChart/linearChart.interface";
+import RinexTable from "@components/rinexTable/rinexTable";
 
 const Measure = () => {
   const [openFilter, setOpenFilter] = useState(false);
@@ -126,20 +127,23 @@ const Measure = () => {
           <Grid item xs={6}>
             <div className={style.plots}>
               <Typography variant="h3" sx={{width: "100%", textAlign: "center"}}>Графики</Typography>
-              <Select
+              {/* <Select
                 value={currentVisualizationType}
                 label="Тип информации"
                 onChange={(event) => setCurrentVisualizationType(event.target.value as visualizationType)}
                 autoWidth
                 // defaultValue={visualizationType.power}
-                sx={{minWidth: 120, m: 2}}
+                sx={{minWidth: 120, m: 2 }}
 
               >
                 <MenuItem value={visualizationType.spectrum}>Спектр</MenuItem>
                 <MenuItem value={visualizationType.power}>Мощность</MenuItem>
                 <MenuItem value={visualizationType.rinex}>RINEX</MenuItem>
-              </Select>
+              </Select> */}
+
+
               
+              <RinexTable/>
               <LinearChart {...queryData}/>
               <LinearChart {...queryData2}/>
             </div>
