@@ -5,61 +5,36 @@ const TimelineChart: FC = () => {
   const options: ApexCharts.ApexOptions = {
     series: [
       {
-        name: 'Устройство 1',
+        name: "Устройство 1",
         data: [
           {
-            x: 'G13',
+            x: "G13",
             y: [
-              new Date('2019-03-05T5:00:00').getTime(),
-              new Date('2019-03-05T9:00:00').getTime()
-            ]
+              new Date("2019-03-05T05:00:00").getTime(), // Начало задачи в 5:00
+              new Date("2019-03-05T09:00:00").getTime(), // Конец задачи в 9:00
+            ],
           },
           {
-            x: 'G14',
+            x: "G14",
             y: [
-              new Date('2019-03-08').getTime(),
-              new Date('2019-03-09').getTime()
-            ]
+              new Date("2019-03-05T10:00:00").getTime(), // Начало задачи в 10:00
+              new Date("2019-03-05T12:00:00").getTime(), // Конец задачи в 12:00
+            ],
           },
           {
-            x: 'G5',
+            x: "G5",
             y: [
-              new Date('2019-03-11').getTime(),
-              new Date('2019-03-16').getTime()
-            ]
-          }
-        ]
+              new Date("2019-03-05T13:00:00").getTime(), // Начало задачи в 13:00
+              new Date("2019-03-05T16:00:00").getTime(), // Конец задачи в 16:00
+            ],
+          },
+        ],
       },
-      // {
-      //   name: 'Устройство 2',
-      //   data: [
-      //     {
-      //       x: 'G13',
-      //       y: [
-      //         new Date('2019-03-02').getTime(),
-      //         new Date('2019-03-05').getTime()
-      //       ]
-      //     },
-      //     {
-      //       x: 'G14',
-      //       y: [
-      //         new Date('2019-03-06').getTime(),
-      //         new Date('2019-03-09').getTime()
-      //       ]
-      //     },
-      //     {
-      //       x: 'G2',
-      //       y: [
-      //         new Date('2019-03-10').getTime(),
-      //         new Date('2019-03-19').getTime()
-      //       ]
-      //     }
-      //   ]
-      // }
+      // Добавьте другие устройства по аналогии
     ],
     chart: {
       type: "rangeBar",
-      height: 100,
+      height: 300, // Увеличьте высоту для лучшего отображения
     },
     plotOptions: {
       bar: {
@@ -72,7 +47,7 @@ const TimelineChart: FC = () => {
       },
     },
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       title: {
         text: "Дата",
         style: {
@@ -80,17 +55,18 @@ const TimelineChart: FC = () => {
           fontWeight: "bold",
         },
       },
-    labels: {
-      formatter: (value: string): string => {
-        return new Date(value).toLocaleDateString("ru-RU", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "2-digit",
-          // minute: "2-digit",
-        });
+      labels: {
+        formatter: (value: string): string => {
+          return new Date(value).toLocaleString("ru-RU", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        },
       },
-    },
+      tickAmount: 5,
     },
     title: {
       text: "Временная шкала задач",
@@ -98,120 +74,29 @@ const TimelineChart: FC = () => {
     },
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'left',
+      position: "top",
+      horizontalAlign: "left",
+    },
+    tooltip: {
+      enabled: false,
+      shared: true,
+      intersect: false,
+      x: {
+        show: false,
+      },
     },
   };
 
-  
   return (
     <div>
-      <Chart options={options} series={options.series} type={'rangeBar'} height={400}/>
+      <Chart
+        options={options}
+        series={options.series}
+        type={"rangeBar"}
+        height={400}
+      />
     </div>
   );
 };
 
 export default TimelineChart;
-
-// const options: ApexCharts.ApexOptions = {
-//   series: [
-//     {
-//       name: 'Bob',
-//       data: [
-//         {
-//           x: 'Design',
-//           y: [
-//             new Date('2019-03-05').getTime(),
-//             new Date('2019-03-08').getTime()
-//           ]
-//         },
-//         {
-//           x: 'Code',
-//           y: [
-//             new Date('2019-03-08').getTime(),
-//             new Date('2019-03-11').getTime()
-//           ]
-//         },
-//         {
-//           x: 'Test',
-//           y: [
-//             new Date('2019-03-11').getTime(),
-//             new Date('2019-03-16').getTime()
-//           ]
-//         }
-//       ]
-//     },
-//     {
-//       name: 'Joe',
-//       data: [
-//         {
-//           x: 'Design',
-//           y: [
-//             new Date('2019-03-02').getTime(),
-//             new Date('2019-03-05').getTime()
-//           ]
-//         },
-//         {
-//           x: 'Code',
-//           y: [
-//             new Date('2019-03-06').getTime(),
-//             new Date('2019-03-09').getTime()
-//           ]
-//         },
-//         {
-//           x: 'Test',
-//           y: [
-//             new Date('2019-03-10').getTime(),
-//             new Date('2019-03-19').getTime()
-//           ]
-//         }
-//       ]
-//     }
-//   ],
-//   chart: {
-//     type: "rangeBar",
-//     height: 300,
-//   },
-//   plotOptions: {
-//     bar: {
-//       horizontal: true,
-//       rangeBarGroupRows: true,
-//       distributed: true,
-//       dataLabels: {
-//         hideOverflowingLabels: false,
-//       },
-//     },
-//   },
-//   legend: {
-//     show: true,
-//     showForSingleSeries: true,
-//     position: "top",
-//     horizontalAlign: "left",
-//   },
-//   xaxis: {
-//     type: "datetime",
-//     // labels: {
-//     //   formatter: (value: string): string => {
-//     //     return new Date(value).toLocaleDateString("ru-RU", {
-//     //       year: "numeric",
-//     //       month: "numeric",
-//     //       day: "numeric",
-//     //       hour: "2-digit",
-//     //       minute: "2-digit",
-//     //     });
-//     //   },
-//     // },
-//     title: {
-//       text: "Дата",
-//       style: {
-//         fontSize: "14px",
-//         fontWeight: "bold",
-//         color: undefined,
-//       },
-//     },
-//   },
-//   title: {
-//     text: "Временная шкала задач",
-//     align: "left",
-//   },
-// };
