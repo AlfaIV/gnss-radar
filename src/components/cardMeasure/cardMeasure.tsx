@@ -11,8 +11,6 @@ import CardMeasureProps from "./cardMeasure.type";
 
 //toDo подумать как сделать загрузку данных
 
-
-
 const CardMeasure: FC<CardMeasureProps> = ({
   id,
   name,
@@ -21,7 +19,7 @@ const CardMeasure: FC<CardMeasureProps> = ({
   startTime,
   endTime,
   endData,
-  dataLink, 
+  dataLink,
 }) => {
   return (
     <Card sx={{ width: 350, padding: "10px" }}>
@@ -38,11 +36,14 @@ const CardMeasure: FC<CardMeasureProps> = ({
         </Typography>
       </CardContent>
       <CardActions>
-        <a href={dataLink}>
-          <Button size="small" variant="contained">
-            Скачать
-          </Button>
-        </a>
+        {/* <a href={dataLink}> */}
+        <Button size="small" variant="contained">
+          Скачать
+        </Button>
+        {/* </a> */}
+        <Button size="small" variant="contained">
+          Исследовать
+        </Button>
       </CardActions>
     </Card>
   );
