@@ -4,14 +4,12 @@ import {
   Button,
   Container,
   Typography,
-  Box,
   FormGroup,
   FormControlLabel,
-  Checkbox,
   Switch,
 } from "@mui/material";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import grqlFetch from "../../utils/grql";
 
 const SignUp = () => {
@@ -30,7 +28,7 @@ const SignUp = () => {
     };
   }
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState("");
   const [user, setUser] = useState<User>({

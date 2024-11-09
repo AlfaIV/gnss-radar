@@ -8,13 +8,11 @@ import {
   Checkbox,
   Slider,
 } from "@mui/material";
-import { useState, ChangeEvent, useEffect, FC } from "react";
+import { ChangeEvent, FC } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { debounce } from "lodash";
 import filters from "./measureFilter.types";
-import moment from "moment";
 
 // todo
 // сделать чтобы параметры поиска были сохранны и при перезагрузке страницы они были восстановлены

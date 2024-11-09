@@ -7,33 +7,20 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import { debounce } from "lodash";
 import CardMeasureProps from "@components/cardMeasure/cardMeasure.type";
-import {
-  Drawer,
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  IconButton,
-  List,
-  ListItem,
-} from "@mui/material";
-
-import MenuIcon from "@mui/icons-material/Menu";
 
 const Measure = () => {
-  const [open, setOpen] = useState(true);
+  // const [open, setOpen] = useState(true);
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        (event as React.KeyboardEvent).key === "Tab"
-      ) {
-        return;
-      }
-      setOpen(open);
-    };
+  // const toggleDrawer =
+  //   (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+  //     if (
+  //       event.type === "keydown" &&
+  //       (event as React.KeyboardEvent).key === "Tab"
+  //     ) {
+  //       return;
+  //     }
+  //     setOpen(open);
+  //   };
 
   const [filters, setFilters] = useState<filters>({
     satelliteType: {

@@ -1,4 +1,3 @@
-import style from "./cardMeasure.module.scss";
 import {
   Card,
   CardHeader,

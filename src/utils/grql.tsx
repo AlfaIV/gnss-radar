@@ -4,9 +4,9 @@ import axios from "axios";
 const ip = "85.198.109.43";
 const endpoint = `http://${ip}:1000/query`;
 
-const grqlFetch = async (query: any) => {
-  const response = await axios.post(endpoint, {
-    query: query,
+const grqlFetch = async (query: string) => {
+  const response = await axios.post<string>(endpoint, {
+    query,
     operationName: "Authorization",
   }, {
     headers: {

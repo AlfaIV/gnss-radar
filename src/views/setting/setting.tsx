@@ -12,26 +12,26 @@ import {
   Alert,
 } from "@mui/material";
 
-import { useState } from "react";
+// import { useState } from "react";
 
 const Setting = () => {
-  const [token, setToken] = useState("ВашТокен12345");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  // const [token, setToken] = useState("ВашТокен12345");
+  // const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(token)
-      .then(() => {
-        setOpenSnackbar(true);
-      })
-      .catch((err) => {
-        console.error("Ошибка копирования: ", err);
-      });
-  };
+  // const handleCopy = () => {
+  //   navigator.clipboard
+  //     .writeText(token)
+  //     .then(() => {
+  //       setOpenSnackbar(true);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Ошибка копирования: ", err);
+  //     });
+  // };
 
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
-  };
+  // const handleCloseSnackbar = () => {
+  //   setOpenSnackbar(false);
+  // };
 
   return (
     <Container maxWidth="lg">
@@ -39,7 +39,7 @@ const Setting = () => {
         <Typography variant="h3" color="initial">
           Настройки аппаратных комплексов
         </Typography>
-        <Stack direction="row" spacing={2} margin={4} >
+        <Stack direction="row" spacing={2} margin={4}>
           <Select
             // value={age}
             // label="Age"
@@ -54,28 +54,38 @@ const Setting = () => {
         </Stack>
         <Box sx={{ padding: "20px" }}>
           <Stack spacing={4}>
-            <Typography variant="body1">В данном разделе можно редактировать параметры уже ранее добавленных устройств или добавлять новые для хранения данных с них.</Typography>
+            <Typography variant="body1">
+              В данном разделе можно редактировать параметры уже ранее
+              добавленных устройств или добавлять новые для хранения данных с
+              них.
+            </Typography>
             <TextField label="Название устройства" variant="outlined" />
             <TextField variant="outlined" label="Точка стояния" />
             <Stack direction="row" spacing={2}>
               <TextField
                 label="Токен"
                 variant="outlined"
-                value={token}
+                // value={token}
                 sx={{ width: "500px" }}
                 InputProps={{
                   readOnly: true,
                 }}
               />
-              <Button variant="contained" onClick={handleCopy}>
+              <Button
+                variant="contained"
+                //  onClick={handleCopy}
+              >
                 Скопировать
               </Button>
               <Snackbar
-                open={openSnackbar}
+                // open={openSnackbar}
                 autoHideDuration={3000}
-                onClose={handleCloseSnackbar}
+                // onClose={handleCloseSnackbar}
               >
-                <Alert onClose={handleCloseSnackbar} severity="success">
+                <Alert
+                  // onClose={handleCloseSnackbar}
+                  severity="success"
+                >
                   Токен скопирован в буфер обмена!
                 </Alert>
               </Snackbar>
@@ -87,10 +97,13 @@ const Setting = () => {
               rows={4}
             />
             <Stack direction={"row"} spacing={2}>
-            <Button variant="contained" sx={{ width: "150px" }}>Сохраинить</Button>
-            <Button variant="outlined" sx={{ width: "150px" }}>Отменить</Button>
+              <Button variant="contained" sx={{ width: "150px" }}>
+                Сохраинить
+              </Button>
+              <Button variant="outlined" sx={{ width: "150px" }}>
+                Отменить
+              </Button>
             </Stack>
-            
           </Stack>
         </Box>
       </Paper>
