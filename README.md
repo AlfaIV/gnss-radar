@@ -39,3 +39,23 @@ docker push alfaiv/gnss-radar
 
 
 ## Описание проекта
+
+
+
+query listGnss {
+  listGnss(filter: { Coordinates: { x: "0", y: "0", z: "0" } }){
+    items {
+      Id
+    }
+  }
+}
+
+query listTask{
+  listTask(filter:{}){
+    items{
+      id
+    }
+  }
+}
+
+

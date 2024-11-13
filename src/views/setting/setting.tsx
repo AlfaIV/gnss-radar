@@ -12,26 +12,56 @@ import {
   Alert,
 } from "@mui/material";
 
-// import { useState } from "react";
+import { useQuery } from "react-query";
+import grqlFetch from "@utils/grql";
+import { ChangeEvent, useState } from "react";
 
 const Setting = () => {
-  // const [token, setToken] = useState("ВашТокен12345");
-  // const [openSnackbar, setOpenSnackbar] = useState(false);
+  interface Device {
+    id: number;
+    name: string;
+    token: string;
+    description: string;
+  }
 
-  // const handleCopy = () => {
-  //   navigator.clipboard
-  //     .writeText(token)
-  //     .then(() => {
-  //       setOpenSnackbar(true);
-  //     })
-  //     .catch((err) => {
-  //       console.error("Ошибка копирования: ", err);
-  //     });
-  // };
+  const query = `query listDevice{
+    listDevice(filter:{}){
+      items{
+        id
+        name
+        token
+        description
+        
+        }
+        }
+        }`;
 
-  // const handleCloseSnackbar = () => {
-  //   setOpenSnackbar(false);
-  // };
+  async function getGrqlData() {
+    const responce = await grqlFetch(query);
+    setCurrentDevice(responce?.data?.listDevice?.items[0]);
+    return responce?.data?.listDevice?.items;
+  }
+
+  const { data, error, isLoading } = useQuery("getGrqlData", getGrqlData);
+  const [currentDevice, setCurrentDevice] = useState<Device | null>(data?.[0]);
+
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+    setCurrentDevice(
+      data?.find((device: Device) => device.id === event.target.value)
+    );
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>error</div>;
+  }
+
+  if (!data && !currentDevice) {
+    return <div>no data</div>;
+  }
 
   return (
     <Container maxWidth="lg">
@@ -41,14 +71,17 @@ const Setting = () => {
         </Typography>
         <Stack direction="row" spacing={2} margin={4}>
           <Select
-            // value={age}
-            // label="Age"
-            // onChange={handleChange}
+            defaultValue={currentDevice?.id}
+            value={currentDevice?.id}
+            onChange={handleChange}
             autoWidth={true}
             sx={{ minWidth: 300 }}
           >
-            <MenuItem value={10}>Устройство 1</MenuItem>
-            <MenuItem value={20}>Устройство 2</MenuItem>
+            {data?.map((device: Device) => (
+              <MenuItem key={device.id} value={device.id}>
+                {device.name}
+              </MenuItem>
+            ))}
           </Select>
           <Button variant="outlined">Добавить устройство</Button>
         </Stack>
@@ -59,17 +92,26 @@ const Setting = () => {
               добавленных устройств или добавлять новые для хранения данных с
               них.
             </Typography>
-            <TextField label="Название устройства" variant="outlined" />
-            <TextField variant="outlined" label="Точка стояния" />
+            <TextField
+              label="Название устройства"
+              value={currentDevice?.name}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setCurrentDevice({
+                  ...currentDevice,
+                  name: event.currentTarget.value,
+                })
+              }
+              variant="outlined"
+              autoComplete="off"
+            />
+            <TextField label="Точка стояния" variant="outlined" />
             <Stack direction="row" spacing={2}>
               <TextField
                 label="Токен"
                 variant="outlined"
-                // value={token}
                 sx={{ width: "500px" }}
-                InputProps={{
-                  readOnly: true,
-                }}
+                value={currentDevice?.token}
+                autoComplete="off"
               />
               <Button
                 variant="contained"
@@ -91,16 +133,40 @@ const Setting = () => {
               </Snackbar>
             </Stack>
             <TextField
-              label="Описание устройства"
               variant="outlined"
+              label="Описание устройства"
               multiline
               rows={4}
+              value={currentDevice?.description}
+              autoFocus={true}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setCurrentDevice({
+                  ...currentDevice,
+                  description: event.currentTarget.value,
+                });
+              }}
             />
             <Stack direction={"row"} spacing={2}>
-              <Button variant="contained" sx={{ width: "150px" }}>
+              <Button
+                onClick={() => {
+                  console.log(currentDevice);
+                }}
+                variant="contained"
+                sx={{ width: "150px" }}
+              >
                 Сохраинить
               </Button>
-              <Button variant="outlined" sx={{ width: "150px" }}>
+              <Button
+                onClick={() => {
+                  setCurrentDevice(
+                    data?.find(
+                      (device: Device) => device.id === currentDevice?.id
+                    )
+                  );
+                }}
+                variant="outlined"
+                sx={{ width: "150px" }}
+              >
                 Отменить
               </Button>
             </Stack>
@@ -112,3 +178,23 @@ const Setting = () => {
 };
 
 export default Setting;
+
+// const mutation = useMutation("getGrqlData", getGrqlData);
+
+// const [token, setToken] = useState("ВашТокен12345");
+// const [openSnackbar, setOpenSnackbar] = useState(false);
+
+// const handleCopy = () => {
+//   navigator.clipboard
+//     .writeText(token)
+//     .then(() => {
+//       setOpenSnackbar(true);
+//     })
+//     .catch((err) => {
+//       console.error("Ошибка копирования: ", err);
+//     });
+// };
+
+// const handleCloseSnackbar = () => {
+//   setOpenSnackbar(false);
+// };
