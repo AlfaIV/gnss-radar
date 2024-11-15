@@ -12,9 +12,11 @@ import {
   Alert,
 } from "@mui/material";
 
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import grqlFetch from "@utils/grql";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, ReactNode } from "react";
+
+//to do - сделать точку стояния
 
 const Setting = () => {
   interface Device {
@@ -22,32 +24,64 @@ const Setting = () => {
     name: string;
     token: string;
     description: string;
+    coordinates: {
+      x: string;
+      y: string;
+      z: string;
+    };
   }
 
-  const query = `query listDevice{
+  const getDevices = `query listDevice{
     listDevice(filter:{}){
       items{
         id
         name
         token
         description
-        
+        Coords{
+          x
+          y
+          z
+        }
         }
         }
         }`;
 
-  async function getGrqlData() {
-    const responce = await grqlFetch(query);
-    setCurrentDevice(responce?.data?.listDevice?.items[0]);
+  async function updateGrqlDevice(updateDevices: Device) {
+    const updateDevice = `mutation updateDevice {
+      gnss {
+        updateDevice(
+          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Token: "${updateDevices.token}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices.Coords.z}"}}
+        ){
+          device {
+            id
+          }
+        }
+      }
+    }`;
+    // console.log(updateDevice);
+    const responce: any = await grqlFetch(updateDevice);
+    return responce?.data?.gnss?.updateDevice;
+  }
+
+  async function getGrqlDevices() {
+    const responce: any = await grqlFetch(getDevices);
+    if (!currentDevice) {
+      setCurrentDevice(responce?.data?.listDevice?.items[0]);
+    }
     return responce?.data?.listDevice?.items;
   }
 
-  const { data, error, isLoading } = useQuery("getGrqlData", getGrqlData);
-  const [currentDevice, setCurrentDevice] = useState<Device | null>(data?.[0]);
+  const { data, error, isLoading, refetch } = useQuery(
+    "getGrqlData",
+    getGrqlDevices
+  );
+  const mutation = useMutation("updateGrqlDevice", updateGrqlDevice);
+  const [currentDevice, setCurrentDevice] = useState<Device>(data?.[0]);
 
-  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+  function handleChange(event: ChangeEvent<number>, child: ReactNode) {
     setCurrentDevice(
-      data?.find((device: Device) => device.id === event.target.value)
+      data?.find((device: Device) => device.id === event?.target?.value)
     );
   }
 
@@ -63,22 +97,30 @@ const Setting = () => {
     return <div>no data</div>;
   }
 
+  // console.log(mutation)
+
   return (
     <Container maxWidth="lg">
-      <Paper elevation={0} sx={{ mt: 5, md: 5, padding: "20px 10px" }}>
+      <Paper
+        elevation={0}
+        sx={{ mt: 5, md: 5, padding: "20px 10px", minHeight: "90vh" }}
+      >
         <Typography variant="h3" color="initial">
           Настройки аппаратных комплексов
         </Typography>
-        <Stack direction="row" spacing={2} margin={4}>
+        <Stack direction="row" spacing={2} m={3}>
           <Select
-            defaultValue={currentDevice?.id}
             value={currentDevice?.id}
             onChange={handleChange}
             autoWidth={true}
             sx={{ minWidth: 300 }}
           >
             {data?.map((device: Device) => (
-              <MenuItem key={device.id} value={device.id}>
+              <MenuItem
+                sx={{ minWidth: 300 }}
+                key={device.id}
+                value={device.id}
+              >
                 {device.name}
               </MenuItem>
             ))}
@@ -104,7 +146,12 @@ const Setting = () => {
               variant="outlined"
               autoComplete="off"
             />
-            <TextField label="Точка стояния" variant="outlined" />
+            <TextField
+              // value={`${currentDevice?.Coords.x}.${currentDevice?.Coords.y}.${currentDevice?.Coords.z}`}
+              // value={currentDevice?.Coords.x}
+              label="Точка стояния"
+              variant="outlined"
+            />
             <Stack direction="row" spacing={2}>
               <TextField
                 label="Токен"
@@ -146,15 +193,24 @@ const Setting = () => {
                 });
               }}
             />
+            {mutation.isSuccess && mutation.data && (
+              <Alert severity="success">Изменения сохранены</Alert>
+            )}
+            {mutation.isError || mutation.error ? (
+              <Alert severity="error">{mutation.error.message}</Alert>
+            ) : null}
             <Stack direction={"row"} spacing={2}>
               <Button
                 onClick={() => {
-                  console.log(currentDevice);
+                  // console.log(currentDevice);
+                  mutation.mutate(currentDevice);
+                  refetch();
+                  // console.log(mutation);
                 }}
                 variant="contained"
                 sx={{ width: "150px" }}
               >
-                Сохраинить
+                Сохранить
               </Button>
               <Button
                 onClick={() => {
@@ -168,6 +224,9 @@ const Setting = () => {
                 sx={{ width: "150px" }}
               >
                 Отменить
+              </Button>
+              <Button variant="outlined" color="error" sx={{ width: "150px" }}>
+                Удалить
               </Button>
             </Stack>
           </Stack>
