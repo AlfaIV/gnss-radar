@@ -10,17 +10,21 @@ import {
   TextField,
   Snackbar,
   Alert,
+  SelectChangeEvent,
 } from "@mui/material";
 
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import grqlFetch from "@utils/grql";
-import { ChangeEvent, useState, ReactNode } from "react";
+import { ChangeEvent, useState, ReactNode, useEffect } from "react";
 
 //to do - сделать точку стояния
+//to do - решить  вопрос с id
 
 const Setting = () => {
+  const queryClient = useQueryClient();
+
   interface Device {
-    id: number;
+    id: string;
     name: string;
     token: string;
     description: string;
@@ -31,44 +35,87 @@ const Setting = () => {
     };
   }
 
-  const getDevices = `query listDevice{
-    listDevice(filter:{}){
-      items{
-        id
-        name
-        token
-        description
-        Coords{
-          x
-          y
-          z
-        }
-        }
-        }
-        }`;
+  interface MutationError {
+    message: string;
+    // Вы можете добавить другие поля, если они есть
+  }
 
   async function updateGrqlDevice(updateDevices: Device) {
-    const updateDevice = `mutation updateDevice {
+    const updateDeviceRequest = `mutation updateDevice {
       gnss {
         updateDevice(
-          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Token: "${updateDevices.token}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices.Coords.z}"}}
+          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Token: "${updateDevices.token}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.coordinates.x}", y: "${updateDevices.coordinates.y}", z: "${updateDevices?.coordinates.z}"}}
         ){
           device {
             id
+            name
+            token
+            description
+            Coords{
+              x
+              y
+              z
+            }
           }
         }
       }
     }`;
     // console.log(updateDevice);
-    const responce: any = await grqlFetch(updateDevice);
+    const responce: any = await grqlFetch(updateDeviceRequest);
     return responce?.data?.gnss?.updateDevice;
   }
 
   async function getGrqlDevices() {
-    const responce: any = await grqlFetch(getDevices);
-    if (!currentDevice) {
-      setCurrentDevice(responce?.data?.listDevice?.items[0]);
-    }
+    const getDevicesRequest = `query listDevice{
+      listDevice(filter:{}){
+        items{
+          id
+          name
+          token
+          description
+          Coords{
+            x
+            y
+            z
+          }
+        }
+      }
+    }`;
+    const responce: any = await grqlFetch(getDevicesRequest);
+    // !dataMutated ? setCurrentDevice(responce?.data?.listDevice?.items[0]) : setDataMutated(false);
+    setCurrentDevice(responce?.data?.listDevice?.items[0]);
+    return responce?.data?.listDevice?.items;
+  }
+
+  async function addDevice() {
+    const addDeviceRequest = `mutation addDevice {
+      gnss {
+        createDevice(
+          input: {Name: "test", Token: "test", Description: "test", Coords: {x: "test", y: "test", z: "test"}}
+        ){
+          device {
+            id
+            name
+            token
+            description
+            Coords{
+              x
+              y
+              z
+            }
+          }
+        }
+      }
+    }`;
+    data?.push({
+      id: "test",
+      name: "test",
+      token: "test",
+      description: "test",
+      coordinates: { x: "test", y: "test", z: "test" },
+    });
+    setCurrentDevice(data?.[data?.length - 1]);
+    const responce: any = await grqlFetch(addDeviceRequest);
     return responce?.data?.listDevice?.items;
   }
 
@@ -76,14 +123,34 @@ const Setting = () => {
     "getGrqlData",
     getGrqlDevices
   );
-  const mutation = useMutation("updateGrqlDevice", updateGrqlDevice);
+  const changeDeviceMutation = useMutation<string, MutationError, Device>(
+    "updateGrqlDevice",
+    updateGrqlDevice,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getGrqlData");
+        // setDataMutated(true)
+      },
+    }
+  );
+
+  const createDeviceMutation = useMutation<string, any, Device>(
+    "createGrqlDevice",
+    addDevice,
+    {}
+  );
+
   const [currentDevice, setCurrentDevice] = useState<Device>(data?.[0]);
 
-  function handleChange(event: ChangeEvent<number>, child: ReactNode) {
+  function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setCurrentDevice(
       data?.find((device: Device) => device.id === event?.target?.value)
     );
   }
+
+  // useEffect(() => {
+  //   setCurrentDevice(responce?.data?.listDevice?.items[0]);
+  // }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -98,6 +165,7 @@ const Setting = () => {
   }
 
   // console.log(mutation)
+  // console.log(createDeviceMutation.isError, createDeviceMutation?.data?.data);
 
   return (
     <Container maxWidth="lg">
@@ -110,7 +178,7 @@ const Setting = () => {
         </Typography>
         <Stack direction="row" spacing={2} m={3}>
           <Select
-            value={currentDevice?.id}
+            value={currentDevice.id}
             onChange={handleChange}
             autoWidth={true}
             sx={{ minWidth: 300 }}
@@ -125,7 +193,9 @@ const Setting = () => {
               </MenuItem>
             ))}
           </Select>
-          <Button variant="outlined">Добавить устройство</Button>
+          <Button onClick={() => {createDeviceMutation.mutate()}} variant="outlined">
+            Добавить устройство
+          </Button>
         </Stack>
         <Box sx={{ padding: "20px" }}>
           <Stack spacing={4}>
@@ -163,6 +233,7 @@ const Setting = () => {
               <Button
                 variant="contained"
                 //  onClick={handleCopy}
+                disabled={true}
               >
                 Скопировать
               </Button>
@@ -193,18 +264,27 @@ const Setting = () => {
                 });
               }}
             />
-            {mutation.isSuccess && mutation.data && (
+            {changeDeviceMutation.isSuccess && changeDeviceMutation.data && (
               <Alert severity="success">Изменения сохранены</Alert>
             )}
-            {mutation.isError || mutation.error ? (
-              <Alert severity="error">{mutation.error.message}</Alert>
+            {!changeDeviceMutation.isIdle && (changeDeviceMutation.isError || changeDeviceMutation?.data === undefined) ? (
+              <Alert severity="error">
+                {changeDeviceMutation.error?.message || "Ошибка"}
+              </Alert>
             ) : null}
+            {!createDeviceMutation.isIdle && (createDeviceMutation.isError || createDeviceMutation?.data === undefined) ? (
+              <Alert severity="error">
+                {createDeviceMutation.error?.message  || "Ошибка создания нового устройства"}
+              </Alert>
+            ) : null}
+            {createDeviceMutation.isSuccess && createDeviceMutation.data && (
+              <Alert severity="success">Новое устройство добавлено. Измените параметры в соответствующих полях и нажмите кнопку сохранить</Alert>
+            )}
             <Stack direction={"row"} spacing={2}>
               <Button
                 onClick={() => {
                   // console.log(currentDevice);
-                  mutation.mutate(currentDevice);
-                  refetch();
+                  changeDeviceMutation.mutate(currentDevice);
                   // console.log(mutation);
                 }}
                 variant="contained"
