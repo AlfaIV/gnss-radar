@@ -6,9 +6,15 @@
     
     gap: 50px;
     justify-content: center;
-    grid-template-columns: 40% 40%;
+    grid-template-columns: 1fr 1fr;  
     
-    
+    min-height: 90wh;
+}
+
+@media (max-width: 1520px) {
+    .container {
+        grid-template-columns: 1fr; /* 2 колонки для планшетов */
+    }
 }
 
 .radar__table{
