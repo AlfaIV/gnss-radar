@@ -22,7 +22,7 @@ const Task = () => {
 
   return (
     <Container maxWidth="xl">
-      <Paper elevation={1}  sx={{ mt: 5, md: 5, padding: "20px 10px" }}>
+      <Paper elevation={1}  sx={{ mt: 5, md: 5, padding: "20px 10px", minHeight: "90vh" }}>
         <Typography variant="h3">Планируемые задачи</Typography>
         <Stack spacing={2} direction="row" sx={{ m: 2 }}>
           <Button onClick={() => setOpenCreateTask(true)} variant="contained">Создать задачу</Button>
