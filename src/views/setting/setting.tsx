@@ -24,11 +24,11 @@ const Setting = () => {
   const queryClient = useQueryClient();
 
   interface Device {
-    id: string;
+    id: number;
     name: string;
     token: string;
     description: string;
-    coordinates: {
+    Coords: {
       x: string;
       y: string;
       z: string;
@@ -37,14 +37,13 @@ const Setting = () => {
 
   interface MutationError {
     message: string;
-    // Вы можете добавить другие поля, если они есть
   }
 
   async function updateGrqlDevice(updateDevices: Device) {
     const updateDeviceRequest = `mutation updateDevice {
       gnss {
         updateDevice(
-          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Token: "${updateDevices.token}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.coordinates.x}", y: "${updateDevices.coordinates.y}", z: "${updateDevices?.coordinates.z}"}}
+          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Token: "${updateDevices.token}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices?.Coords.z}"}}
         ){
           device {
             id
@@ -60,7 +59,6 @@ const Setting = () => {
         }
       }
     }`;
-    // console.log(updateDevice);
     const responce: any = await grqlFetch(updateDeviceRequest);
     return responce?.data?.gnss?.updateDevice;
   }
@@ -84,6 +82,8 @@ const Setting = () => {
     const responce: any = await grqlFetch(getDevicesRequest);
     // !dataMutated ? setCurrentDevice(responce?.data?.listDevice?.items[0]) : setDataMutated(false);
     setCurrentDevice(responce?.data?.listDevice?.items[0]);
+    // console.log(responce?.data?.listDevice?.items[0].id);
+    console.log(BigInt(responce?.data?.listDevice?.items[0].id.replace(/\D/g, '')));
     return responce?.data?.listDevice?.items;
   }
 
@@ -129,12 +129,11 @@ const Setting = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("getGrqlData");
-        // setDataMutated(true)
       },
     }
   );
 
-  const createDeviceMutation = useMutation<string, any, Device>(
+  const createDeviceMutation = useMutation<string, MutationError, void>(
     "createGrqlDevice",
     addDevice,
     {}
@@ -148,10 +147,6 @@ const Setting = () => {
     );
   }
 
-  // useEffect(() => {
-  //   setCurrentDevice(responce?.data?.listDevice?.items[0]);
-  // }, []);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -163,9 +158,6 @@ const Setting = () => {
   if (!data && !currentDevice) {
     return <div>no data</div>;
   }
-
-  // console.log(mutation)
-  // console.log(createDeviceMutation.isError, createDeviceMutation?.data?.data);
 
   return (
     <Container maxWidth="lg">

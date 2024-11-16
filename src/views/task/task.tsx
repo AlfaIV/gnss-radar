@@ -10,20 +10,27 @@ import {
   Paper,
 } from "@mui/material";
 
+import CreateTask from "@components/createTask/createTask";
+
+import { useState } from "react";
+
 import TimelineChart from "@components/timeline/timeline";
 
 const Task = () => {
+  
+  const [openCreateTask, setOpenCreateTask] = useState(false);
+
   return (
     <Container maxWidth="xl">
       <Paper elevation={1}  sx={{ mt: 5, md: 5, padding: "20px 10px" }}>
         <Typography variant="h3">Планируемые задачи</Typography>
         <Stack spacing={2} direction="row" sx={{ m: 2 }}>
-          <Button variant="contained">Создать задачу</Button>
+          <Button onClick={() => setOpenCreateTask(true)} variant="contained">Создать задачу</Button>
           <FormControl sx={{ m: 1, minWidth: 200 }}>
             <InputLabel
             // id="demo-simple-select-autowidth-label"
             >
-              Период отслеживани
+              Период отслеживания
             </InputLabel>
             <Select
               // labelId="demo-simple-select-autowidth-label"
@@ -39,6 +46,7 @@ const Task = () => {
           </FormControl>
         </Stack>
         <TimelineChart/>
+        <CreateTask open={openCreateTask} onClose={() => setOpenCreateTask(false)}/>
       </Paper>
     </Container>
   );
