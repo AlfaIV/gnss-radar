@@ -13,6 +13,8 @@ import {
   Typography,
   MenuItem,
   Select,
+  Alert,
+  Box,
 } from "@mui/material";
 
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -20,8 +22,8 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { Moment } from "moment";
 import { FC, useState } from "react";
-import { useMutation } from "react-query";
-import grqlFetch from "../../utils/grql";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { getSatellites, getDevices } from "@utils/requests/requests";
 
 interface CreateTaskProps {
   open: boolean;
@@ -39,6 +41,8 @@ interface task {
   signal?: string | null;
 }
 
+//TO DO - сделать запрос спутников по имени устройства
+
 const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
   moment.locale("ru");
 
@@ -52,16 +56,36 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
     signal: null,
   });
 
-  const listSatellitesRequest = `query listSatellites{
-    listSatellites(filter:{}){
-      items{
-        Id
-        SatelliteName
-      }
-    }
-  }`
+  const {
+    data: listSatellitesData,
+    isLoading: listSatellitesLoading,
+    isError: listSatellitesError,
+  } = useQuery("getSatellites", getSatellites);
 
-  return (
+  const {
+    data: listDevicesData,
+    isLoading: listDevicesLoading,
+    isError: listDevicesError,
+  } = useQuery("getDevices", getDevices);
+
+  if (
+    listSatellitesError ||
+    !listSatellitesData ||
+    listDevicesError ||
+    !listDevicesData
+  ) {
+    return (
+      <Dialog fullWidth maxWidth="lg" open={open} onClose={onClose}>
+        <DialogContent>
+          <Alert variant="filled" severity="error">
+            Ошибка получения данных с сервера
+          </Alert>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return true ? (
     <Dialog fullWidth maxWidth="lg" open={open} onClose={onClose}>
       <DialogTitle variant="h4">
         Создание нового задания для устройства
@@ -70,21 +94,28 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
         <DialogContentText>
           Укажите парамеры задания для устройства
         </DialogContentText>
-        <FormControl component="fieldset" fullWidth={true} sx={{ mt: 2}}>
+        <FormControl component="fieldset" fullWidth={true} sx={{ mt: 2 }}>
           <FormLabel component="legend">Выберите устройство</FormLabel>
           <Select>
-            <MenuItem>Устройство 1</MenuItem>
-            <MenuItem>Устройство 2</MenuItem>
+            {listDevicesData?.map((item) => (
+              <MenuItem key={item.id}>{item.name}</MenuItem>
+            ))}
           </Select>
           <Typography variant="h6" color="initial" sx={{ m: "20px 0px" }}>
             Описание задания
           </Typography>
           <FormLabel component="legend">Укажите название задания</FormLabel>
-          <TextField value={task.name} onChange={(e) => setTask({...task, name: e.target.value})} fullWidth={true} />
-          <FormLabel sx={{ mt: "10px" }} component="legend">Укажите описание задания</FormLabel>
+          <TextField
+            value={task.name}
+            onChange={(e) => setTask({ ...task, name: e.target.value })}
+            fullWidth={true}
+          />
+          <FormLabel sx={{ mt: "10px" }} component="legend">
+            Укажите описание задания
+          </FormLabel>
           <TextField
             value={task.description}
-            onChange={(e) => setTask({...task, description: e.target.value})}
+            onChange={(e) => setTask({ ...task, description: e.target.value })}
             fullWidth={true}
             multiline={true}
             rows={4}
@@ -97,13 +128,20 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
             <DateTimePicker
               value={task.startDataTime}
               format="HH часов DD.MM.YYYY"
-              onChange={(newDataTime) => setTask({...task, startDataTime: newDataTime})}
+              onChange={(newDataTime) =>
+                setTask({ ...task, startDataTime: newDataTime as Moment })
+              }
             />
-            <FormLabel sx={{ mt: "10px" }} component="legend">Время окончания выполнения</FormLabel>
+            <FormLabel sx={{ mt: "10px" }} component="legend">
+              Время окончания выполнения
+            </FormLabel>
             <DateTimePicker
               value={task.endDataTime}
               defaultValue={moment().add(1, "hours")}
               format="HH часов DD.MM.YYYY"
+              onChange={(newDataTime) =>
+                setTask({ ...task, endDataTime: newDataTime as Moment })
+              }
             />
           </LocalizationProvider>
           <Typography variant="h6" color="initial" sx={{ m: "20px 0px" }}>
@@ -111,10 +149,13 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
           </Typography>
           <FormLabel component="legend">Номер спутника</FormLabel>
           <Select>
-            <MenuItem>G1</MenuItem>
-            <MenuItem>G2</MenuItem>
+            {listSatellitesData?.map((item) => (
+              <MenuItem key={item.Id}>{item.Name}</MenuItem>
+            ))}
           </Select>
-          <FormLabel sx={{ mt: "10px" }} component="legend">Тип сигнала</FormLabel>
+          <FormLabel sx={{ mt: "10px" }} component="legend">
+            Тип сигнала
+          </FormLabel>
           <Select>
             <MenuItem>L1</MenuItem>
             <MenuItem>L2</MenuItem>
@@ -129,7 +170,7 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  ) : null;
 };
 
 export default CreateTask;
