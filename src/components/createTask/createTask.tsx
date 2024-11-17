@@ -21,7 +21,7 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { Moment } from "moment";
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   getSatellites,
@@ -45,8 +45,9 @@ interface CreateTaskProps {
 //To DO - сделать проверку по типу устройства, доступен ли установленный спутник, есть ли у спутника сигнал
 //To DO - сделать валидацию полей
 
-const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
+const CreateTask: FC<CreateTaskProps> = ({ open, onClose}) => {
   moment.locale("ru");
+  const queryClient = useQueryClient();
 
   const [task, setTask] = useState<task>({
     device: null,
@@ -80,6 +81,13 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
       console.error("Ошибка валидации данных:", error);
     }
   };
+
+  useEffect(() => {
+    if (createTaskMutation.isSuccess) {
+      queryClient.invalidateQueries("sgetTasks");
+      onClose();
+    }
+  }, [createTaskMutation.isSuccess]);
 
   if (
     listSatellitesError ||

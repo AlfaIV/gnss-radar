@@ -117,8 +117,8 @@ export async function getTasks(): Promise<task[]> {
   const response: any = await grqlFetch(getTasksRequest);
   const taskList: task[] = await response?.data?.listTask?.items?.map((item: any) => ({
     // device: 
-    // name: 
-    // description
+    name: "название",
+    description: "описание",
     id: IdToBigInt(item.id), 
     targetID: item.satelliteId,
     signal: SIGNAL_TYPE.get(item.signalType),
@@ -128,4 +128,17 @@ export async function getTasks(): Promise<task[]> {
     // item.CreatedAt
   }))
   return  taskList;
+}
+
+export async function deleteTask(id: string): Promise<any> {
+  const deleteTaskRequest = `mutation deleteTask{
+    gnss{
+      deleteTask(input:{id:""}){
+        _empty
+      }
+    }
+  }`
+
+  const response: any = await grqlFetch(deleteTaskRequest);
+  return response;
 }
