@@ -16,6 +16,8 @@ import { useState } from "react";
 
 import TimelineChart from "@components/timeline/timeline";
 
+import { getTasks } from "@utils/requests/requests"
+
 const Task = () => {
   
   const [openCreateTask, setOpenCreateTask] = useState(false);

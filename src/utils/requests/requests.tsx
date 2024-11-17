@@ -81,8 +81,8 @@ export async function getDevices(): Promise<Device[]> {
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
-      createTask(input:{startAt: "${newTask.startDataTime.utc()}", endAt:"${
-    newTask.endDataTime.utc()
+      createTask(input:{startAt: "${newTask.startDataTime.toISOString()}", endAt:"${
+    newTask.endDataTime.toISOString()
   }", groupingType:${GROUPING_TYPE.get(groups.all)}, satelliteId: "${
     newTask.target?.Id
   }", signalType:${SIGNAL_TYPE.get(signals.all)}}){
@@ -128,5 +128,4 @@ export async function getTasks(): Promise<task[]> {
     // item.CreatedAt
   }))
   return  taskList;
-
 }
