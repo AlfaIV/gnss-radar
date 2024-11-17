@@ -23,31 +23,33 @@ import moment from "moment";
 import { Moment } from "moment";
 import { FC, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { getSatellites, getDevices } from "@utils/requests/requests";
+import {
+  getSatellites,
+  getDevices,
+  createTask,
+} from "@utils/requests/requests";
+import {
+  Device,
+  Satellite,
+  signalType,
+  signals,
+  task,
+} from "@utils/types/types";
 
 interface CreateTaskProps {
   open: boolean;
   onClose: () => void;
 }
 
-interface task {
-  deviceID?: number | null;
-  deviceName: string | null;
-  name: string;
-  description?: string | null;
-  startDataTime: Moment;
-  endDataTime: Moment;
-  target?: string | null;
-  signal?: string | null;
-}
-
 //TO DO - сделать запрос спутников по имени устройства
+//To DO - сделать проверку по типу устройства, доступен ли установленный спутник, есть ли у спутника сигнал
+//To DO - сделать валидацию полей
 
 const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
   moment.locale("ru");
 
   const [task, setTask] = useState<task>({
-    deviceName: null,
+    device: null,
     name: "",
     description: "",
     startDataTime: moment(),
@@ -68,6 +70,17 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
     isError: listDevicesError,
   } = useQuery("getDevices", getDevices);
 
+  const createTaskMutation = useMutation("createTask", createTask);
+
+  const handleSubmit = () => {
+    try {
+      // validateData(task);
+      createTaskMutation.mutate(task);
+    } catch (error) {
+      console.error("Ошибка валидации данных:", error);
+    }
+  };
+
   if (
     listSatellitesError ||
     !listSatellitesData ||
@@ -85,7 +98,7 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
     );
   }
 
-  return true ? (
+  return (
     <Dialog fullWidth maxWidth="lg" open={open} onClose={onClose}>
       <DialogTitle variant="h4">
         Создание нового задания для устройства
@@ -96,9 +109,22 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
         </DialogContentText>
         <FormControl component="fieldset" fullWidth={true} sx={{ mt: 2 }}>
           <FormLabel component="legend">Выберите устройство</FormLabel>
-          <Select>
+          <Select
+            value={task.device?.name || null}
+            onChange={(e) => {
+              setTask({
+                ...task,
+                device:
+                  listDevicesData?.find(
+                    (item) => item.name === e.target.value
+                  ) || null,
+              });
+            }}
+          >
             {listDevicesData?.map((item) => (
-              <MenuItem key={item.id}>{item.name}</MenuItem>
+              <MenuItem key={item?.id} value={item?.name}>
+                {item?.name}
+              </MenuItem>
             ))}
           </Select>
           <Typography variant="h6" color="initial" sx={{ m: "20px 0px" }}>
@@ -144,33 +170,69 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose }) => {
               }
             />
           </LocalizationProvider>
-          <Typography variant="h6" color="initial" sx={{ m: "20px 0px" }}>
-            Цель наблюдения
-          </Typography>
-          <FormLabel component="legend">Номер спутника</FormLabel>
-          <Select>
-            {listSatellitesData?.map((item) => (
-              <MenuItem key={item.Id}>{item.Name}</MenuItem>
-            ))}
-          </Select>
-          <FormLabel sx={{ mt: "10px" }} component="legend">
-            Тип сигнала
-          </FormLabel>
-          <Select>
-            <MenuItem>L1</MenuItem>
-            <MenuItem>L2</MenuItem>
-          </Select>
+          {!!task.device && (
+            <>
+              <Typography variant="h6" color="initial" sx={{ m: "20px 0px" }}>
+                Цель наблюдения
+              </Typography>
+              <FormLabel component="legend">Номер спутника</FormLabel>
+              <Select
+                value={task.target?.Id || null}
+                onChange={(e) =>
+                  setTask({
+                    ...task,
+                    target:
+                      listSatellitesData?.find(
+                        (item) => item.Id === e.target.value
+                      ) || null,
+                  })
+                }
+              >
+                {listSatellitesData?.map((item) => (
+                  <MenuItem key={item.Id} value={item.Id}>
+                    {item.Name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormLabel sx={{ mt: "10px" }} component="legend">
+                Тип сигнала
+              </FormLabel>
+              <Select
+                value={task?.signal || null}
+                onChange={(e) =>
+                  setTask({ ...task, signal: e.target.value as signalType })
+                }
+              >
+                <MenuItem key="L1" value="L1">
+                  L1
+                </MenuItem>
+                <MenuItem key="L2" value="L2">
+                  L2
+                </MenuItem>
+              </Select>
+            </>
+          )}
+          {createTaskMutation.isError && (
+            <Alert severity="error">
+              Не удалось сохранить задание. Ошибка соединения
+            </Alert>
+          )}
+          {createTaskMutation.isSuccess && (
+            <Alert severity="success">Устройство успешно добавлено</Alert>
+          )}
           <FormHelperText></FormHelperText>
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained">Создать</Button>
+        <Button onClick={handleSubmit} variant="contained">
+          Создать
+        </Button>
         <Button onClick={onClose} variant="outlined">
           Отменить
         </Button>
       </DialogActions>
     </Dialog>
-  ) : null;
+  );
 };
 
 export default CreateTask;
