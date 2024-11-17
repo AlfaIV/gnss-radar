@@ -120,6 +120,7 @@ export async function getTasks(): Promise<task[]> {
     name: "название",
     description: "описание",
     id: IdToBigInt(item.id), 
+    backendID: item.id,
     targetID: item.satelliteId,
     signal: SIGNAL_TYPE.get(item.signalType),
     groupingType: GROUPING_TYPE.get(item.groupingType),
@@ -130,15 +131,15 @@ export async function getTasks(): Promise<task[]> {
   return  taskList;
 }
 
-export async function deleteTask(id: string): Promise<any> {
+export async function deleteTask(deleteTask: task): Promise<any> {
   const deleteTaskRequest = `mutation deleteTask{
     gnss{
-      deleteTask(input:{id:""}){
+      deleteTask(input:{id:"${deleteTask.backendID}"}){
         _empty
       }
     }
   }`
-
+  console.log(deleteTaskRequest);
   const response: any = await grqlFetch(deleteTaskRequest);
   return response;
 }

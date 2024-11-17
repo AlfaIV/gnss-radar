@@ -20,6 +20,7 @@ export interface Device {
 
 export interface task {
   id?: bigint;
+  backendID?: string;
   device: Device | null;
   name: string;
   description?: string | null;

@@ -10,11 +10,28 @@ import {
 } from "@mui/material";
 import { task } from "@utils/types/types";
 import { FC } from "react";
+import { deleteTask } from "@utils/requests/requests";
+import { useQueryClient, useMutation} from "react-query";
+
 interface CardTasksProps {
   task: task;
 }
 
 const CardTasks: FC<CardTasksProps> = ({ task }) => {
+  
+  const queryClient = useQueryClient();
+  const deleteTaskMutation = useMutation("deleteTask", deleteTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getTasks");
+    }
+  });
+
+  // function handleDelete() {
+  //   deleteTask(task).then(() => {
+  //     queryClient.invalidateQueries("getTasks");
+  //   });
+  // }
+
   return (
     <Card sx={{ maxWidth: 345, minWidth: "250px" }}>
       <CardContent>
@@ -45,7 +62,7 @@ const CardTasks: FC<CardTasksProps> = ({ task }) => {
       </CardContent>
       <CardActions>
         <Button color="primary">Подробнее</Button>
-        <Button color="primary">Удалить</Button>
+        <Button onClick={() => deleteTaskMutation.mutate(task)} color="primary">Удалить</Button>
       </CardActions>
     </Card>
   );
