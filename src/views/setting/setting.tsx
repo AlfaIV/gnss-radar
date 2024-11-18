@@ -17,6 +17,8 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import grqlFetch from "@utils/grql";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
 import { DeviceThermostatOutlined } from "@mui/icons-material";
+import { getDevices, updateDevice, addDevice } from "@utils/requests/requests";
+import { Device } from "@utils/types/types";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
@@ -24,135 +26,163 @@ import { DeviceThermostatOutlined } from "@mui/icons-material";
 const Setting = () => {
   const queryClient = useQueryClient();
 
-  interface Device {
-    id: number;
-    name: string;
-    token: string;
-    description: string;
-    Coords: {
-      x: string;
-      y: string;
-      z: string;
-    };
-  }
+  // interface Device {
+  //   id: number;
+  //   name: string;
+  //   token: string;
+  //   description: string;
+  //   Coords: {
+  //     x: string;
+  //     y: string;
+  //     z: string;
+  //   };
+  // }
 
   interface MutationError {
     message: string;
   }
 
-  async function updateGrqlDevice(updateDevices: Device) {
-    const updateDeviceRequest = `mutation updateDevice {
-      gnss {
-        updateDevice(
-          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices?.Coords.z}"}}
-        ){
-          device {
-            id
-            name
-            token
-            description
-            Coords{
-              x
-              y
-              z
-            }
-          }
-        }
-      }
-    }`;
-    const responce: any = await grqlFetch(updateDeviceRequest);
-    return responce?.data?.gnss?.updateDevice;
-  }
+  // async function updateGrqlDevice(updateDevices: Device) {
+  //   const updateDeviceRequest = `mutation updateDevice {
+  //     gnss {
+  //       updateDevice(
+  //         input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices?.Coords.z}"}}
+  //       ){
+  //         device {
+  //           id
+  //           name
+  //           token
+  //           description
+  //           Coords{
+  //             x
+  //             y
+  //             z
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }`;
+  //   const responce: any = await grqlFetch(updateDeviceRequest);
+  //   return responce?.data?.gnss?.updateDevice;
+  // }
 
-  async function getGrqlDevices() {
-    const getDevicesRequest = `query listDevice{
-      listDevice(filter:{}){
-        items{
-          id
-          name
-          token
-          description
-          Coords{
-            x
-            y
-            z
-          }
-        }
-      }
-    }`;
-    const responce: any = await grqlFetch(getDevicesRequest);
-    // !dataMutated ? setCurrentDevice(responce?.data?.listDevice?.items[0]) : setDataMutated(false);
-    setCurrentDevice(responce?.data?.listDevice?.items[0]);
-    // console.log(responce?.data?.listDevice?.items[0].id);
-    // console.log(BigInt(responce?.data?.listDevice?.items[0].id.replace(/\D/g, '')));
-    return responce?.data?.listDevice?.items;
-  }
+  // async function getGrqlDevices() {
+  //   const getDevicesRequest = `query listDevice{
+  //     listDevice(filter:{}){
+  //       items{
+  //         id
+  //         name
+  //         token
+  //         description
+  //         Coords{
+  //           x
+  //           y
+  //           z
+  //         }
+  //       }
+  //     }
+  //   }`;
+  //   const responce: any = await grqlFetch(getDevicesRequest);
+  //   // !dataMutated ? setCurrentDevice(responce?.data?.listDevice?.items[0]) : setDataMutated(false);
+  //   setCurrentDevice(responce?.data?.listDevice?.items[0]);
+  //   // console.log(responce?.data?.listDevice?.items[0].id);
+  //   // console.log(BigInt(responce?.data?.listDevice?.items[0].id.replace(/\D/g, '')));
+  //   return responce?.data?.listDevice?.items;
+  // }
 
-  async function addDevice() {
-    const addDeviceRequest = `mutation addDevice {
-      gnss {
-        createDevice(
-          input: {Name: "test", Token: "test", Description: "test", Coords: {x: "test", y: "test", z: "test"}}
-        ){
-          device {
-            id
-            name
-            token
-            description
-            Coords{
-              x
-              y
-              z
-            }
-          }
-        }
-      }
-    }`;
-    data?.push({
-      id: "test",
-      name: "test",
-      token: "test",
-      description: "test",
-      coordinates: { x: "test", y: "test", z: "test" },
-    });
-    // setCurrentDevice(data?.[data?.length - 1]);
-    const responce: any = await grqlFetch(addDeviceRequest);
-    return responce?.data?.listDevice?.items;
-  }
+  // async function addDevice() {
+  //   const addDeviceRequest = `mutation addDevice {
+  //     gnss {
+  //       createDevice(
+  //         input: {Name: "test", Token: "test", Description: "test", Coords: {x: "test", y: "test", z: "test"}}
+  //       ){
+  //         device {
+  //           id
+  //           name
+  //           token
+  //           description
+  //           Coords{
+  //             x
+  //             y
+  //             z
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }`;
+  //   data?.push({
+  //     id: "test",
+  //     name: "test",
+  //     token: "test",
+  //     description: "test",
+  //     coordinates: { x: "test", y: "test", z: "test" },
+  //   });
+  //   // setCurrentDevice(data?.[data?.length - 1]);
+  //   const responce: any = await grqlFetch(addDeviceRequest);
+  //   return responce?.data?.listDevice?.items;
+  // }
 
-  const { data, error, isLoading, refetch } = useQuery(
-    "getGrqlData",
-    getGrqlDevices
-  );
-  const changeDeviceMutation = useMutation<string, MutationError, Device>(
-    "updateGrqlDevice",
-    updateGrqlDevice,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("getGrqlData");
-      },
-    }
-  );
+  // const { data, error, isLoading, refetch } = useQuery(
+  //   "getGrqlData",
+  //   getGrqlDevices
+  // );
 
-  const createDeviceMutation = useMutation<string, MutationError, void>(
-    "createGrqlDevice",
+  const devices = useQuery("getDevices", getDevices);
+
+  const changeDeviceMutation = useMutation("updateDevice", updateDevice, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getDevices");
+    },
+  });
+
+  const createDeviceMutation = useMutation(
+    "createDeviceMutation",
     addDevice,
     {}
   );
 
-  const [currentDevice, setCurrentDevice] = useState<Device>(data?.[0]);
+  // const changeDeviceMutation = useMutation<string, MutationError, Device>(
+  //   "updateGrqlDevice",
+  //   updateGrqlDevice,
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries("getGrqlData");
+  //     },
+  //   }
+  // );
+
+  // const createDeviceMutation = useMutation<string, MutationError, void>(
+  //   "createGrqlDevice",
+  //   addDevice,
+  //   {}
+  // );
+
+  const [currentDevice, setCurrentDevice] = useState<Device | null>({
+    id:  BigInt(0),
+    backendID: "",
+    name: "",
+    token: "",
+    description: "",
+    coordinates: {
+      x: "",
+      y: "",
+      z: "",
+    },
+  });
 
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setCurrentDevice(
-      data?.find((device: Device) => device.id === event?.target?.value)
+      devices?.data?.find(
+        (device: Device) => Number(device?.id) === Number(event?.target?.value)
+      ) || null
     );
   }
 
-  if (isLoading) {
+  if (devices?.isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (devices?.error) {
     return <div>error</div>;
   }
 
@@ -160,7 +190,8 @@ const Setting = () => {
   //   return <div>no data</div>;
   // }
 
-  console.log(data);
+  console.log("currentDevice", currentDevice);
+  // console.log("devices.data", devices.data);
 
   return (
     <Container maxWidth="lg">
@@ -173,22 +204,28 @@ const Setting = () => {
         </Typography>
         <Stack direction="row" spacing={2} m={3}>
           <Select
-            // value={currentDevice.id}
+            value={Number(currentDevice?.id)}
             onChange={handleChange}
             autoWidth={true}
             sx={{ minWidth: 300 }}
           >
-            {!!data && data?.map((device: Device) => (
-              <MenuItem
-                sx={{ minWidth: 300 }}
-                key={device.id}
-                value={device.id}
-              >
-                {device.name}
-              </MenuItem>
-            ))}
+            {devices?.data?.length !== 0 &&
+              devices?.data?.map((device: Device) => (
+                <MenuItem
+                  sx={{ minWidth: 300 }}
+                  key={Number(device?.id)}
+                  value={Number(device?.id)}
+                >
+                  {device.name}
+                </MenuItem>
+              ))}
           </Select>
-          <Button onClick={() => {createDeviceMutation.mutate()}} variant="outlined">
+          <Button
+            onClick={() => {
+              createDeviceMutation.mutate();
+            }}
+            variant="outlined"
+          >
             Добавить устройство
           </Button>
         </Stack>
@@ -206,7 +243,7 @@ const Setting = () => {
                 setCurrentDevice({
                   ...currentDevice,
                   name: event.currentTarget.value,
-                })
+                } as Device)
               }
               variant="outlined"
               autoComplete="off"
@@ -256,30 +293,33 @@ const Setting = () => {
                 setCurrentDevice({
                   ...currentDevice,
                   description: event.currentTarget.value,
-                });
+                } as Device);
               }}
             />
-            {changeDeviceMutation.isSuccess && changeDeviceMutation.data && (
+            {changeDeviceMutation.isSuccess && !changeDeviceMutation.isIdle && (
               <Alert severity="success">Изменения сохранены</Alert>
             )}
-            {!changeDeviceMutation.isIdle && (changeDeviceMutation.isError || changeDeviceMutation?.data === undefined) ? (
+            {(changeDeviceMutation.isError ||
+              changeDeviceMutation?.data?.length === 0) ? (
               <Alert severity="error">
-                {changeDeviceMutation.error?.message || "Ошибка"}
+                Ошибка изменения параметров устройства
               </Alert>
             ) : null}
-            {!createDeviceMutation.isIdle && (createDeviceMutation.isError || createDeviceMutation?.data === undefined) ? (
-              <Alert severity="error">
-                {createDeviceMutation.error?.message  || "Ошибка создания нового устройства"}
-              </Alert>
+            {createDeviceMutation.isError ? (
+              <Alert severity="error">Ошибка создания нового устройства</Alert>
             ) : null}
-            {createDeviceMutation.isSuccess && createDeviceMutation.data && (
-              <Alert severity="success">Новое устройство добавлено. Измените параметры в соответствующих полях и нажмите кнопку сохранить</Alert>
+            {createDeviceMutation.isSuccess && (
+              <Alert severity="success">
+                Новое устройство добавлено. Измените параметры в соответствующих
+                полях и нажмите кнопку сохранить
+              </Alert>
             )}
             <Stack direction={"row"} spacing={2}>
               <Button
+                disabled={currentDevice === null}
                 onClick={() => {
                   // console.log(currentDevice);
-                  changeDeviceMutation.mutate(currentDevice);
+                  currentDevice && changeDeviceMutation.mutate(currentDevice);
                   // console.log(mutation);
                 }}
                 variant="contained"
@@ -290,9 +330,9 @@ const Setting = () => {
               <Button
                 onClick={() => {
                   setCurrentDevice(
-                    data?.find(
+                    devices?.data?.find(
                       (device: Device) => device.id === currentDevice?.id
-                    )
+                    ) || null
                   );
                 }}
                 variant="outlined"

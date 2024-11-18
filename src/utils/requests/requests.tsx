@@ -4,25 +4,24 @@ import { task } from "@utils/types/types";
 import moment from "moment";
 
 const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map();
-SIGNAL_TYPE.set(signals.L1 , "SIGNAL_TYPE_L1");
-SIGNAL_TYPE.set(signals.L2 , "SIGNAL_TYPE_L2");
+SIGNAL_TYPE.set(signals.L1, "SIGNAL_TYPE_L1");
+SIGNAL_TYPE.set(signals.L2, "SIGNAL_TYPE_L2");
 SIGNAL_TYPE.set(signals.all, "SIGNAL_TYPE_UNKNOWN");
-SIGNAL_TYPE.set("SIGNAL_TYPE_L1"     , signals.L1);
-SIGNAL_TYPE.set("SIGNAL_TYPE_L2"     , signals.L2);
+SIGNAL_TYPE.set("SIGNAL_TYPE_L1", signals.L1);
+SIGNAL_TYPE.set("SIGNAL_TYPE_L2", signals.L2);
 SIGNAL_TYPE.set("SIGNAL_TYPE_UNKNOWN", signals.all);
 
 const GROUPING_TYPE: Map<groups | string, string | groups> = new Map();
-GROUPING_TYPE.set(groups.GPS, "GROUPING_TYPE_GPS"        );
+GROUPING_TYPE.set(groups.GPS, "GROUPING_TYPE_GPS");
 GROUPING_TYPE.set(groups.Glonass, "GROUPING_TYPE_GLONASS");
 GROUPING_TYPE.set(groups.Galileo, "GROUPING_TYPE_GALILEO");
-GROUPING_TYPE.set(groups.Baidou,  "GROUPING_TYPE_BEIDOU" );
-GROUPING_TYPE.set(groups.all,     "GROUPING_TYPE_UNKNOWN");
-GROUPING_TYPE.set("GROUPING_TYPE_GPS"    ,groups.GPS    );
-GROUPING_TYPE.set("GROUPING_TYPE_GLONASS",groups.Glonass);
-GROUPING_TYPE.set("GROUPING_TYPE_GALILEO",groups.Galileo);
-GROUPING_TYPE.set("GROUPING_TYPE_BEIDOU" ,groups.Baidou );
-GROUPING_TYPE.set("GROUPING_TYPE_UNKNOWN",groups.all    );
-
+GROUPING_TYPE.set(groups.Baidou, "GROUPING_TYPE_BEIDOU");
+GROUPING_TYPE.set(groups.all, "GROUPING_TYPE_UNKNOWN");
+GROUPING_TYPE.set("GROUPING_TYPE_GPS", groups.GPS);
+GROUPING_TYPE.set("GROUPING_TYPE_GLONASS", groups.Glonass);
+GROUPING_TYPE.set("GROUPING_TYPE_GALILEO", groups.Galileo);
+GROUPING_TYPE.set("GROUPING_TYPE_BEIDOU", groups.Baidou);
+GROUPING_TYPE.set("GROUPING_TYPE_UNKNOWN", groups.all);
 
 const IdToBigInt = (id: string) => BigInt(id.replace(/\D/g, ""));
 
@@ -65,6 +64,7 @@ export async function getDevices(): Promise<Device[]> {
   const devices: Device[] = await response?.data?.listDevice?.items?.map(
     (item: any) => ({
       id: IdToBigInt(item.id),
+      backendID: item.id,
       name: item.name,
       token: item.token,
       description: item.description,
@@ -78,14 +78,92 @@ export async function getDevices(): Promise<Device[]> {
   return devices;
 }
 
+export async function updateDevice(updateDevices: Device): Promise<Device[]> {
+  const updateDeviceRequest = `mutation updateDevice {
+    gnss {
+      updateDevice(
+        input: {Id: "${updateDevices.backendID}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.coordinates?.x}", y: "${updateDevices.coordinates?.y}", z: "${updateDevices?.coordinates?.z}"}}
+      ){
+        device {
+          id
+          name
+          token
+          description
+          Coords{
+            x
+            y
+            z
+          }
+        }
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(updateDeviceRequest);
+  const device: Device[] = await response?.data?.listDevice?.items?.map(
+    (item: any) => ({
+      id: IdToBigInt(item.id),
+      backendID: item.id,
+      name: item.name,
+      token: item.token,
+      description: item.description,
+      coordinates: {
+        x: item.Coords.x,
+        y: item.Coords.y,
+        z: item.Coords.z,
+      },
+    })
+  );
+  return device;
+}
+
+
+export async function addDevice(): Promise<Device[]> {
+  const addDeviceRequest = `mutation addDevice {
+    gnss {
+      createDevice(
+        input: {Name: "", Description: "", Coords: {x: "", y: "", z: ""}}
+      ){
+        device {
+          id
+          name
+          token
+          description
+          Coords{
+            x
+            y
+            z
+          }
+        }
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(addDeviceRequest);
+  const device: Device[] = await response?.data?.listDevice?.items?.map(
+    (item: any) => ({
+      id: IdToBigInt(item.id),
+      backendID: item.id,
+      name: item.name,
+      token: item.token,
+      description: item.description,
+      coordinates: {
+        x: item.Coords.x,
+        y: item.Coords.y,
+        z: item.Coords.z,
+      },
+    })
+  );
+  return device;
+}
+
+
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
-      createTask(input:{startAt: "${newTask.startDataTime.toISOString()}", endAt:"${
-    newTask.endDataTime.toISOString()
-  }", groupingType:${GROUPING_TYPE.get(groups.all)}, satelliteId: "${
-    newTask.target?.Id
-  }", signalType:${SIGNAL_TYPE.get(signals.all)}}){
+      createTask(input:{startAt: "${newTask.startDataTime.toISOString()}", endAt:"${newTask.endDataTime.toISOString()}", groupingType:${GROUPING_TYPE.get(
+    groups.all
+  )}, satelliteId: "${newTask.target?.Id}", signalType:${SIGNAL_TYPE.get(
+    signals.all
+  )}}){
         task{
           id
         }
@@ -98,6 +176,29 @@ export async function createTask(newTask: task): Promise<any> {
   return response;
 }
 
+async function updateGrqlDevice(updateDevices: Device) {
+  const updateDeviceRequest = `mutation updateDevice {
+      gnss {
+        updateDevice(
+          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices?.coordinates?.x}", y: "${updateDevices?.coordinates?.y}", z: "${updateDevices?.coordinates?.z}"}}
+        ){
+          device {
+            id
+            name
+            token
+            description
+            Coords{
+              x
+              y
+              z
+            }
+          }
+        }
+      }
+    }`;
+  const responce: any = await grqlFetch(updateDeviceRequest);
+  return responce?.data?.gnss?.updateDevice;
+}
 
 export async function getTasks(): Promise<task[]> {
   const getTasksRequest = `query listTask {
@@ -112,23 +213,25 @@ export async function getTasks(): Promise<task[]> {
         CreatedAt
       }
     }
-  }`
-  
+  }`;
+
   const response: any = await grqlFetch(getTasksRequest);
-  const taskList: task[] = await response?.data?.listTask?.items?.map((item: any) => ({
-    // device: 
-    name: "название",
-    description: "описание",
-    id: IdToBigInt(item.id), 
-    backendID: item.id,
-    targetID: item.satelliteId,
-    signal: SIGNAL_TYPE.get(item.signalType),
-    groupingType: GROUPING_TYPE.get(item.groupingType),
-    startDataTime: moment(item.startAt),
-    endDataTime: moment(item.endAt),
-    // item.CreatedAt
-  }))
-  return  taskList;
+  const taskList: task[] = await response?.data?.listTask?.items?.map(
+    (item: any) => ({
+      // device:
+      name: "название",
+      description: "описание",
+      id: IdToBigInt(item.id),
+      backendID: item.id,
+      targetID: item.satelliteId,
+      signal: SIGNAL_TYPE.get(item.signalType),
+      groupingType: GROUPING_TYPE.get(item.groupingType),
+      startDataTime: moment(item.startAt),
+      endDataTime: moment(item.endAt),
+      // item.CreatedAt
+    })
+  );
+  return taskList;
 }
 
 export async function deleteTask(deleteTask: task): Promise<any> {
@@ -138,7 +241,7 @@ export async function deleteTask(deleteTask: task): Promise<any> {
         _empty
       }
     }
-  }`
+  }`;
   console.log(deleteTaskRequest);
   const response: any = await grqlFetch(deleteTaskRequest);
   return response;
