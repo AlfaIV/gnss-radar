@@ -91,9 +91,7 @@ const CreateTask: FC<CreateTaskProps> = ({ open, onClose}) => {
 
   if (
     listSatellitesError ||
-    !listSatellitesData ||
-    listDevicesError ||
-    !listDevicesData
+    listDevicesError
   ) {
     return (
       <Dialog fullWidth maxWidth="lg" open={open} onClose={onClose}>

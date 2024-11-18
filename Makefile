@@ -4,7 +4,7 @@ dev_start:
 	pnpm run dev
 
 dev_build:
-	pnpm run build
+	npm run build
 
 docker_run: docker_build
 	docker run -p 1000:80 gnss-radar
@@ -22,8 +22,8 @@ docker_login:
 	docker login -u $$DOCKER_USERNAME -p $$DOCKER_TOKEN
 
 docker_build: dev_build
-	docker build -t gnss-radar .
-	# docker build --no-cache -t gnss-radar .
+	# docker build -t gnss-radar .
+	docker build --no-cache -t gnss-radar .
 	docker tag gnss-radar:latest alfaiv/gnss-radar:latest
 
 server_connect:

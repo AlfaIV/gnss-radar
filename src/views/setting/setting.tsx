@@ -16,6 +16,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import grqlFetch from "@utils/grql";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
+import { DeviceThermostatOutlined } from "@mui/icons-material";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
@@ -43,7 +44,7 @@ const Setting = () => {
     const updateDeviceRequest = `mutation updateDevice {
       gnss {
         updateDevice(
-          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Token: "${updateDevices.token}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices?.Coords.z}"}}
+          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices?.Coords.z}"}}
         ){
           device {
             id
@@ -83,7 +84,7 @@ const Setting = () => {
     // !dataMutated ? setCurrentDevice(responce?.data?.listDevice?.items[0]) : setDataMutated(false);
     setCurrentDevice(responce?.data?.listDevice?.items[0]);
     // console.log(responce?.data?.listDevice?.items[0].id);
-    console.log(BigInt(responce?.data?.listDevice?.items[0].id.replace(/\D/g, '')));
+    // console.log(BigInt(responce?.data?.listDevice?.items[0].id.replace(/\D/g, '')));
     return responce?.data?.listDevice?.items;
   }
 
@@ -114,7 +115,7 @@ const Setting = () => {
       description: "test",
       coordinates: { x: "test", y: "test", z: "test" },
     });
-    setCurrentDevice(data?.[data?.length - 1]);
+    // setCurrentDevice(data?.[data?.length - 1]);
     const responce: any = await grqlFetch(addDeviceRequest);
     return responce?.data?.listDevice?.items;
   }
@@ -155,9 +156,11 @@ const Setting = () => {
     return <div>error</div>;
   }
 
-  if (!data && !currentDevice) {
-    return <div>no data</div>;
-  }
+  // if (!data && !currentDevice) {
+  //   return <div>no data</div>;
+  // }
+
+  console.log(data);
 
   return (
     <Container maxWidth="lg">
@@ -170,12 +173,12 @@ const Setting = () => {
         </Typography>
         <Stack direction="row" spacing={2} m={3}>
           <Select
-            value={currentDevice.id}
+            // value={currentDevice.id}
             onChange={handleChange}
             autoWidth={true}
             sx={{ minWidth: 300 }}
           >
-            {data?.map((device: Device) => (
+            {!!data && data?.map((device: Device) => (
               <MenuItem
                 sx={{ minWidth: 300 }}
                 key={device.id}

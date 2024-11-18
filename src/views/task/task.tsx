@@ -61,7 +61,7 @@ const Task = () => {
         </Stack>
         <TimelineChart />
         <Grid p={10} container spacing={2} maxWidth={"xl"} alignSelf={"center"} alignContent={"center"}>
-          {tasks.isSuccess &&
+          {tasks.isSuccess && !!tasks.data &&
             tasks.data.map((task) => (
               <Grid key={task.id}>
                 <CardTasks task={task} />
