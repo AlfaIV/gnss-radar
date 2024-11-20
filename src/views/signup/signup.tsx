@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC } from "react";
 import {
   TextField,
   Button,
@@ -8,30 +8,37 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import { useMutation } from "react-query";
-// import { useNavigate } from "react-router-dom";
-import grqlFetch from "../../utils/grql";
 
-const SignUp = () => {
-  interface User {
-    surname: string;
-    name: string;
-    company: string;
-    login: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    services: {
-      download: boolean;
-      taskCreation: boolean;
-      deviseControl: boolean;
-    };
-  }
+import { useNavigate } from "react-router-dom";
+import { UserForm } from "@utils/types/types";
 
-  // const navigate = useNavigate();
+import { signup } from "@utils/requests/requests";
+import { useMutation, useQueryClient } from "react-query";
 
+const SignUp: FC = () => {
+  
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [errorMsg, setErrorMsg] = useState("");
-  const [user, setUser] = useState<User>({
+
+  const signupMutation = useMutation(signup,{
+
+    onSuccess: () => {
+      queryClient.invalidateQueries("authCheck");
+      console.log(signupMutation);
+      if (signupMutation.error === null){
+        setErrorMsg("Ошибка регистрации")
+      }else{
+        navigate("/measure") 
+      }
+    },
+    onError: () => {
+      setErrorMsg("Ошибка регистрации");
+    },
+
+  });
+  
+  const [user, setUser] = useState<UserForm>({
     surname: "",
     name: "",
     company: "",
@@ -48,35 +55,15 @@ const SignUp = () => {
 
   const handleSubmit = () => {
     // todo добавить проверки на пустые поля
-    console.log("signin");
-    mutation.mutate();
+    signupMutation.mutate({
+      name: user.name,
+      surname: user.surname,
+      company: user.company,
+      email: user.email,
+      password: user.password,
+      role: "user",
+    });
   };
-
-  const signUp_query = `
-  mutation Authorization {
-      authorization {
-          signup(input: { login: "${user.login}", password:"${user.password}" }) {
-          userInfo
-          }
-      }
-}
-`;
-
-  const getGrqlData = async () => {
-    return grqlFetch(signUp_query);
-  };
-
-  const mutation = useMutation(getGrqlData, {
-    onSuccess: (data) => {
-      console.log("Данные успешно отправлены:", data);
-      setErrorMsg("");
-      // navigate("/measure/");
-    },
-    onError: (error) => {
-      console.error("Ошибка при отправке данных:", error);
-      setErrorMsg(`Ошибка при отправке данных: ${error}`);
-    },
-  });
 
   return (
     <Container
@@ -159,10 +146,12 @@ const SignUp = () => {
         <FormControlLabel
           control={<Switch value={user.services.download} />}
           label="Скачивание данных"
+          disabled
         />
         <FormControlLabel
           control={<Switch value={user.services.taskCreation} />}
           label="Формирование задач"
+          disabled
         />
         <FormControlLabel
           control={<Switch value={user.services.deviseControl} />}

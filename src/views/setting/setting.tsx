@@ -22,108 +22,8 @@ import { Device } from "@utils/types/types";
 //to do - решить  вопрос с id
 
 const Setting = () => {
+
   const queryClient = useQueryClient();
-
-  // interface Device {
-  //   id: number;
-  //   name: string;
-  //   token: string;
-  //   description: string;
-  //   Coords: {
-  //     x: string;
-  //     y: string;
-  //     z: string;
-  //   };
-  // }
-
-  interface MutationError {
-    message: string;
-  }
-
-  // async function updateGrqlDevice(updateDevices: Device) {
-  //   const updateDeviceRequest = `mutation updateDevice {
-  //     gnss {
-  //       updateDevice(
-  //         input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices.Coords.x}", y: "${updateDevices.Coords.y}", z: "${updateDevices?.Coords.z}"}}
-  //       ){
-  //         device {
-  //           id
-  //           name
-  //           token
-  //           description
-  //           Coords{
-  //             x
-  //             y
-  //             z
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }`;
-  //   const responce: any = await grqlFetch(updateDeviceRequest);
-  //   return responce?.data?.gnss?.updateDevice;
-  // }
-
-  // async function getGrqlDevices() {
-  //   const getDevicesRequest = `query listDevice{
-  //     listDevice(filter:{}){
-  //       items{
-  //         id
-  //         name
-  //         token
-  //         description
-  //         Coords{
-  //           x
-  //           y
-  //           z
-  //         }
-  //       }
-  //     }
-  //   }`;
-  //   const responce: any = await grqlFetch(getDevicesRequest);
-  //   // !dataMutated ? setCurrentDevice(responce?.data?.listDevice?.items[0]) : setDataMutated(false);
-  //   setCurrentDevice(responce?.data?.listDevice?.items[0]);
-  //   // console.log(responce?.data?.listDevice?.items[0].id);
-  //   // console.log(BigInt(responce?.data?.listDevice?.items[0].id.replace(/\D/g, '')));
-  //   return responce?.data?.listDevice?.items;
-  // }
-
-  // async function addDevice() {
-  //   const addDeviceRequest = `mutation addDevice {
-  //     gnss {
-  //       createDevice(
-  //         input: {Name: "test", Token: "test", Description: "test", Coords: {x: "test", y: "test", z: "test"}}
-  //       ){
-  //         device {
-  //           id
-  //           name
-  //           token
-  //           description
-  //           Coords{
-  //             x
-  //             y
-  //             z
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }`;
-  //   data?.push({
-  //     id: "test",
-  //     name: "test",
-  //     token: "test",
-  //     description: "test",
-  //     coordinates: { x: "test", y: "test", z: "test" },
-  //   });
-  //   // setCurrentDevice(data?.[data?.length - 1]);
-  //   const responce: any = await grqlFetch(addDeviceRequest);
-  //   return responce?.data?.listDevice?.items;
-  // }
-
-  // const { data, error, isLoading, refetch } = useQuery(
-  //   "getGrqlData",
-  //   getGrqlDevices
-  // );
 
   const devices = useQuery("getDevices", getDevices);
 
@@ -143,22 +43,6 @@ const Setting = () => {
       },
     }
   );
-
-  // const changeDeviceMutation = useMutation<string, MutationError, Device>(
-  //   "updateGrqlDevice",
-  //   updateGrqlDevice,
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries("getGrqlData");
-  //     },
-  //   }
-  // );
-
-  // const createDeviceMutation = useMutation<string, MutationError, void>(
-  //   "createGrqlDevice",
-  //   addDevice,
-  //   {}
-  // );
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>({
     id:  BigInt(0),

@@ -1,12 +1,32 @@
 import { Moment } from "moment";
 
 export interface User{
-  id: string;
-  login: string;
-  role: string;
-  CreatedAt: string;
-  password?: string | null
+  id?: string;
+  name?: string | null;
+  surname?: string | null;
+  company?: string | null;
+  email?: string;
+  login?: string;
+  password?: string | null;
+  role?: string;
+  CreatedAt?: string;
 }
+
+export interface UserForm {
+  surname: string;
+  name: string;
+  company: string;
+  login: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  services: {
+    download: boolean;
+    taskCreation: boolean;
+    deviseControl: boolean;
+  };
+}
+
 
 export interface Satellite {
   Id: string;

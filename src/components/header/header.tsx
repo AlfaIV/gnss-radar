@@ -4,7 +4,19 @@ import menu from './menuList';
 import logo from '@icons/radarIco.svg'
 import userIco from '@icons/defaultUserIco.svg'
 
-const Header = () => {
+import { FC } from "react";
+import { logout } from '@utils/requests/requests';
+import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+
+const Header: FC = () => {
+    const navigate = useNavigate();
+    const logoutMutation = useMutation(logout, {
+        onSuccess: () => {
+            navigate('/login')
+        }
+    })
+
     return (
         <div className={styles.header}>
             <div className={styles.header__logo}>
@@ -19,9 +31,10 @@ const Header = () => {
                     link={item.link}
                 ></MenuButton>
             ))}
-            <div className={styles.header__user}>
+            <div className={styles.header__user} onClick={() => logoutMutation.mutate()} >
                 <p>defaultUser</p>
                 <img src={userIco} alt="userlogo" />
+
             </div>
         </div>
     );
