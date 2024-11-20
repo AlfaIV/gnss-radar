@@ -155,6 +155,18 @@ export async function addDevice(): Promise<Device> {
   return device;
 }
 
+export async function deleteDevice(deleteDevice: Device): Promise<any> {
+  const deleteDeviceRequest = `mutation deleteDevice{
+    gnss{
+      deleteDevice(input:{id:""}){
+        _empty
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(deleteDeviceRequest);
+  return response;
+}
+
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
@@ -188,8 +200,6 @@ export async function getTasks(): Promise<task[]> {
         startAt
         endAt
         CreatedAt
-        title
-        description
       }
     }
   }`;
@@ -240,7 +250,7 @@ export async function sendTaskToDevice(task: task): Promise<any> {
 export async function signup(newUser: User): Promise<User | null>{
   const signUpRequest = `mutation signup{
   authorization{
-      signup(input:{login:"${newUser.login}", password:"${newUser.password}", password:"admin"}){
+      signup(input:{login:"${newUser.email}", password:"${newUser.password}"}){
         userInfo{
           id
           login
@@ -251,13 +261,15 @@ export async function signup(newUser: User): Promise<User | null>{
     }
   }`
   const response: any = await grqlFetch(signUpRequest);
-  const { data: { authorization: { signup: { userInfo } } } } = response;
-  if (!!userInfo) return null;
+  // const { data: { authorization: { signup: { userInfo } } } } = response;
+  const userInfo = response?.data?.authorization?.signup?.userInfo;
+  console.log("signup ", userInfo);
+  if (!userInfo) return null;
   const user: User = {
-    id: userInfo?.id,
-    login: userInfo?.login,
-    role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    id: userInfo.id,
+    email: userInfo.login,
+    role: userInfo.role,
+    CreatedAt: userInfo.CreatedAt
   };
   return user
 }
@@ -265,7 +277,7 @@ export async function signup(newUser: User): Promise<User | null>{
 export async function login(user: User): Promise<User | null>{
   const loginRequest = `mutation sigin{
   authorization{
-      signin(input:{login:"${user.login}", password:"${user.password}"}){
+      signin(input:{login:"${user?.email}", password:"${user?.password}"}){
         userInfo{
           id
           login
@@ -276,18 +288,20 @@ export async function login(user: User): Promise<User | null>{
     }
   }`;
   const response: any = await grqlFetch(loginRequest);
-  const { data: { authorization: { signin: { userInfo } } } } = response;
-  if (!!userInfo) return null;
+  // const { data: { authorization: { signin: { userInfo } } } } = response;
+  const userInfo = response?.data?.authorization?.signin?.userInfo;
+  console.log("login ", userInfo);
+  if (!userInfo) return null;
   const serverUser: User = {
     id: userInfo?.id,
-    login: userInfo?.login,
+    email: userInfo?.login,
     role: userInfo?.role,
     CreatedAt: userInfo?.CreatedAt
   };
   return serverUser
 }
 
-export async function logout(user: User): Promise<void>{
+export async function logout(): Promise<void>{
   const logoutRequest = `mutation logout{
     authorization{
       logout(input:{}){
@@ -297,4 +311,30 @@ export async function logout(user: User): Promise<void>{
   }`;
   const response: any = await grqlFetch(logoutRequest);
   return response
+}
+
+
+export async function authCheck(): Promise<User | null>{
+  const authRequest = `query authCheck {
+    authcheck(input: {}) {
+      userInfo {
+        id
+        login
+        role
+        CreatedAt
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(authRequest);
+  // const { data: { authcheck: { userInfo } } } = response;
+  const userInfo = response?.data?.authcheck?.userInfo;
+  console.log("authCheck ", userInfo);
+  if (!userInfo) return null;
+  const serverUser: User = {
+    id: userInfo?.id,
+    email: userInfo?.login,
+    role: userInfo?.role,
+    CreatedAt: userInfo?.CreatedAt
+  };
+  return serverUser
 }

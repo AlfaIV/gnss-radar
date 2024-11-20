@@ -1,47 +1,32 @@
 import { useState, FormEvent } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import grqlFetch from "../../utils/grql";
+
+import { login } from "@utils/requests/requests";
+import { User } from "@utils/types/types";
+import { set } from "lodash";
 
 const Login = () => {
+  
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const queryClient = useQueryClient();
 
-  const FILMS_QUERY = `
-    mutation Authorization {
-      authorization {
-          signin(input: { login: "${username}", password:"${password}" }) {
-              userInfo
-          }
-      }
-    }
-`;
+  const [user, setUser] = useState<User>({
+    email: "",
+    password: "",
+  });
 
-  const postData = async () => {
-    return grqlFetch(FILMS_QUERY);
-  };
-
-  const mutation = useMutation(postData, {
-    onSuccess: (data) => {
-      console.log("Данные успешно отправлены:", data);
-      setErrorMsg("");
-      // navigate("/state/");
-    },
-    onError: (error) => {
-      console.error("Ошибка при отправке данных:", error);
-      setErrorMsg(`Ошибка при отправке данных: ${error}`);
+  const logInMutation = useMutation("updateDevice", login, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("authCheck");
+      navigate("/measure/");
     },
   });
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("FILMS_QUERY:", FILMS_QUERY);
-    mutation.mutate();
+    logInMutation.mutate(user);
   };
 
   return (
@@ -63,8 +48,8 @@ const Login = () => {
             required
             fullWidth
             label="Имя пользователя"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={user.email}
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
           />
           <TextField
             margin="normal"
@@ -72,8 +57,8 @@ const Login = () => {
             fullWidth
             label="Пароль"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={user.password}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
           <Button
             type="submit"
@@ -84,9 +69,7 @@ const Login = () => {
           >
             Войти
           </Button>
-          <Typography component="p" variant="body1" color="error">
-            {errorMsg}
-          </Typography>
+          <Typography component="p" variant="body1" color="error"></Typography>
         </Box>
         <Typography
           component="p"
@@ -96,7 +79,6 @@ const Login = () => {
           У Вас нет доступа к системе? Пройдите регистрацию и дождитесь
           подтверждения администрацией комплекса.
         </Typography>
-        {/* <Link to={`/signin/`}> */}
         <Button
           fullWidth
           variant="contained"
@@ -106,7 +88,6 @@ const Login = () => {
         >
           Регистрация
         </Button>
-        {/* </Link> */}
       </Box>
     </Container>
   );

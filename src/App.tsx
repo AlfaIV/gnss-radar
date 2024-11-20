@@ -11,6 +11,7 @@ import Setting from "@views/setting/setting";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+
 const client = new QueryClient();
 
 const router = createBrowserRouter([
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
 ]);
+
 
 function App() {
   return (
