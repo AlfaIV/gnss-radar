@@ -1,5 +1,13 @@
 import { Moment } from "moment";
 
+export interface User{
+  id: string;
+  login: string;
+  role: string;
+  CreatedAt: string;
+  password?: string | null
+}
+
 export interface Satellite {
   Id: string;
   Name: string;

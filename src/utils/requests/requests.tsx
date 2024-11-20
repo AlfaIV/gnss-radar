@@ -1,5 +1,6 @@
+import axios from "axios";
 import grqlFetch from "@utils/grql";
-import { Satellite, Device, groups, signals } from "@utils/types/types";
+import { Satellite, Device, groups, signals, User } from "@utils/types/types";
 import { task } from "@utils/types/types";
 import moment from "moment";
 
@@ -116,12 +117,11 @@ export async function updateDevice(updateDevices: Device): Promise<Device[]> {
   return device;
 }
 
-
-export async function addDevice(): Promise<Device[]> {
+export async function addDevice(): Promise<Device> {
   const addDeviceRequest = `mutation addDevice {
     gnss {
       createDevice(
-        input: {Name: "", Description: "", Coords: {x: "", y: "", z: ""}}
+        input: {Name: "new", Description: "new", Coords: {x: "0", y: "0", z: "0"}}
       ){
         device {
           id
@@ -138,7 +138,7 @@ export async function addDevice(): Promise<Device[]> {
     }
   }`;
   const response: any = await grqlFetch(addDeviceRequest);
-  const device: Device[] = await response?.data?.listDevice?.items?.map(
+  const device: Device = await response?.data?.listDevice?.items?.map(
     (item: any) => ({
       id: IdToBigInt(item.id),
       backendID: item.id,
@@ -155,11 +155,12 @@ export async function addDevice(): Promise<Device[]> {
   return device;
 }
 
-
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
-      createTask(input:{startAt: "${newTask.startDataTime.toISOString()}", endAt:"${newTask.endDataTime.toISOString()}", groupingType:${GROUPING_TYPE.get(
+      createTask(input:{title:"${newTask.name}", description:"${
+    newTask.description
+  }", startAt: "${newTask.startDataTime.toISOString()}", endAt:"${newTask.endDataTime.toISOString()}", groupingType:${GROUPING_TYPE.get(
     groups.all
   )}, satelliteId: "${newTask.target?.Id}", signalType:${SIGNAL_TYPE.get(
     signals.all
@@ -176,30 +177,6 @@ export async function createTask(newTask: task): Promise<any> {
   return response;
 }
 
-async function updateGrqlDevice(updateDevices: Device) {
-  const updateDeviceRequest = `mutation updateDevice {
-      gnss {
-        updateDevice(
-          input: {Id: "${updateDevices.id}", Name: "${updateDevices.name}", Description: "${updateDevices.description}", Coords: {x: "${updateDevices?.coordinates?.x}", y: "${updateDevices?.coordinates?.y}", z: "${updateDevices?.coordinates?.z}"}}
-        ){
-          device {
-            id
-            name
-            token
-            description
-            Coords{
-              x
-              y
-              z
-            }
-          }
-        }
-      }
-    }`;
-  const responce: any = await grqlFetch(updateDeviceRequest);
-  return responce?.data?.gnss?.updateDevice;
-}
-
 export async function getTasks(): Promise<task[]> {
   const getTasksRequest = `query listTask {
     listTask(filter: {}) {
@@ -211,6 +188,8 @@ export async function getTasks(): Promise<task[]> {
         startAt
         endAt
         CreatedAt
+        title
+        description
       }
     }
   }`;
@@ -219,8 +198,8 @@ export async function getTasks(): Promise<task[]> {
   const taskList: task[] = await response?.data?.listTask?.items?.map(
     (item: any) => ({
       // device:
-      name: "название",
-      description: "описание",
+      name: item.title,
+      description: item.description,
       id: IdToBigInt(item.id),
       backendID: item.id,
       targetID: item.satelliteId,
@@ -245,4 +224,77 @@ export async function deleteTask(deleteTask: task): Promise<any> {
   console.log(deleteTaskRequest);
   const response: any = await grqlFetch(deleteTaskRequest);
   return response;
+}
+
+export async function sendTaskToDevice(task: task): Promise<any> {
+  // мок запрос на устройство
+  axios.post('http://localhost:3000/sendTask', {...task, id: task.backendID})
+    .then(response => {
+        console.log('Response:', response.data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+export async function signup(newUser: User): Promise<User | null>{
+  const signUpRequest = `mutation signup{
+  authorization{
+      signup(input:{login:"${newUser.login}", password:"${newUser.password}", password:"admin"}){
+        userInfo{
+          id
+          login
+          role
+          CreatedAt
+        }
+      }
+    }
+  }`
+  const response: any = await grqlFetch(signUpRequest);
+  const { data: { authorization: { signup: { userInfo } } } } = response;
+  if (!!userInfo) return null;
+  const user: User = {
+    id: userInfo?.id,
+    login: userInfo?.login,
+    role: userInfo?.role,
+    CreatedAt: userInfo?.CreatedAt
+  };
+  return user
+}
+
+export async function login(user: User): Promise<User | null>{
+  const loginRequest = `mutation sigin{
+  authorization{
+      signin(input:{login:"${user.login}", password:"${user.password}"}){
+        userInfo{
+          id
+          login
+          role
+          CreatedAt
+        }
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(loginRequest);
+  const { data: { authorization: { signin: { userInfo } } } } = response;
+  if (!!userInfo) return null;
+  const serverUser: User = {
+    id: userInfo?.id,
+    login: userInfo?.login,
+    role: userInfo?.role,
+    CreatedAt: userInfo?.CreatedAt
+  };
+  return serverUser
+}
+
+export async function logout(user: User): Promise<void>{
+  const logoutRequest = `mutation logout{
+    authorization{
+      logout(input:{}){
+        _empty
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(logoutRequest);
+  return response
 }

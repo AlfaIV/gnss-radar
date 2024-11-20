@@ -14,9 +14,7 @@ import {
 } from "@mui/material";
 
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import grqlFetch from "@utils/grql";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
-import { DeviceThermostatOutlined } from "@mui/icons-material";
 import { getDevices, updateDevice, addDevice } from "@utils/requests/requests";
 import { Device } from "@utils/types/types";
 
@@ -138,7 +136,12 @@ const Setting = () => {
   const createDeviceMutation = useMutation(
     "createDeviceMutation",
     addDevice,
-    {}
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getDevices");
+        createDeviceMutation.isSuccess && setCurrentDevice(createDeviceMutation.data || null);
+      },
+    }
   );
 
   // const changeDeviceMutation = useMutation<string, MutationError, Device>(
