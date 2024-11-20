@@ -9,7 +9,7 @@ const Header = () => {
         <div className={styles.header}>
             <div className={styles.header__logo}>
                 <img src={logo} alt="menulogo" />
-                <p>ГНСС Радар</p>
+                <p>Мониторинг</p>
             </div>
             {menu.map((item) => (
                 <MenuButton

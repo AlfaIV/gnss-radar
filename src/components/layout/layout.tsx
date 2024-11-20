@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Outlet } from "react-router-dom";
 
 import Header from "@components/header/header";
@@ -6,11 +6,12 @@ import Footer from "@components/footer/footer";
 
 import style from "./layout.module.scss";
 
-// interface LayoutProps {
-//   children: React.ReactNode;
-// }
+import { authCheck } from "@utils/requests/requests";
+import { useQuery } from "react-query";
 
-const Layout = () => {
+const Layout:FC = () => {
+  const auth = useQuery("authCheck", authCheck);
+  console.log(auth.data);
   return (
     <div className={style.app}>
       <Header />

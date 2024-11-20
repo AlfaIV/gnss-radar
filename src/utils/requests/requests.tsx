@@ -188,8 +188,6 @@ export async function getTasks(): Promise<task[]> {
         startAt
         endAt
         CreatedAt
-        title
-        description
       }
     }
   }`;
@@ -297,4 +295,27 @@ export async function logout(user: User): Promise<void>{
   }`;
   const response: any = await grqlFetch(logoutRequest);
   return response
+}
+
+export async function authCheck(): Promise<User | null>{
+  const authRequest = `query authCheck {
+    authcheck(input: {}) {
+      userInfo {
+        id
+        login
+        role
+        CreatedAt
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(authRequest);
+  const { data: { userInfo } } = response;
+  if (!!userInfo) return null;
+  const serverUser: User = {
+    id: userInfo?.id,
+    login: userInfo?.login,
+    role: userInfo?.role,
+    CreatedAt: userInfo?.CreatedAt
+  };
+  return serverUser
 }
