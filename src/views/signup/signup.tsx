@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { UserForm } from "@utils/types/types";
 
-import { signup } from "@utils/requests/requests";
+import { signup, login } from "@utils/requests/requests";
 import { useMutation, useQueryClient } from "react-query";
 
 const SignUp: FC = () => {
@@ -20,16 +20,21 @@ const SignUp: FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [errorMsg, setErrorMsg] = useState("");
-
-  const signupMutation = useMutation(signup,{
-
+  
+  const loginMutation = useMutation(login, {
     onSuccess: () => {
       queryClient.invalidateQueries("authCheck");
-      console.log(signupMutation);
-      if (signupMutation.error === null){
+      navigate("/measure/");
+    },
+  })
+  const signupMutation = useMutation(signup,{
+
+    onSuccess: (data) => {
+      console.log("signupMutation",data);
+      if (data === null){
         setErrorMsg("Ошибка регистрации")
       }else{
-        navigate("/measure") 
+        loginMutation.mutate(data);
       }
     },
     onError: () => {

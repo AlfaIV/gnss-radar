@@ -9,28 +9,33 @@ import style from "./layout.module.scss";
 import { authCheck } from "@utils/requests/requests";
 import { useQuery } from "react-query";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-
-const Layout:FC = () => {
+const Layout: FC = () => {
   const auth = useQuery("authCheck", authCheck, {
     // cacheTime: 0,
     // staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    onSuccess: () => {
-      // fix it на проде раскомментировать 
-      console.log("auth.data",auth.data);
-      if (!auth.data) {
-        navigate('/login');
+    onSuccess: (data) => {
+      // fix it на проде раскомментировать
+      console.log("auth.data", data);
+      if (!data) {
+        navigate("/login");
       } else {
-        navigate('/measure');
+        navigate("/measure");
       }
     },
   });
   const navigate = useNavigate();
 
+  if (auth.isLoading) {
+    return <div>Loading...</div>;
+  }
 
+  if (auth.error) {
+    return <div>Ошибка при проверке аутентификации</div>;
+  }
 
   return (
     <div className={style.app}>

@@ -249,7 +249,8 @@ export async function signup(newUser: User): Promise<User | null>{
     }
   }`
   const response: any = await grqlFetch(signUpRequest);
-  const { data: { authorization: { signup: { userInfo } } } } = response;
+  // const { data: { authorization: { signup: { userInfo } } } } = response;
+  const userInfo = response?.data?.authorization?.signup?.userInfo;
   console.log("signup ", userInfo);
   if (!userInfo) return null;
   const user: User = {
@@ -275,7 +276,8 @@ export async function login(user: User): Promise<User | null>{
     }
   }`;
   const response: any = await grqlFetch(loginRequest);
-  const { data: { authorization: { signin: { userInfo } } } } = response;
+  // const { data: { authorization: { signin: { userInfo } } } } = response;
+  const userInfo = response?.data?.authorization?.signin?.userInfo;
   console.log("login ", userInfo);
   if (!userInfo) return null;
   const serverUser: User = {
