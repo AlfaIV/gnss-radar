@@ -158,7 +158,7 @@ export async function addDevice(newDevice: Device): Promise<Device> {
 export async function deleteDevice(deleteDevice: Device): Promise<any> {
   const deleteDeviceRequest = `mutation deleteDevice{
     gnss{
-      deleteDevice(input:{id:""}){
+      deleteDevice(input:{id:"${deleteDevice.backendID}"}){
         _empty
       }
     }
