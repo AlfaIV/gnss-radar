@@ -55,7 +55,7 @@ const CardTasks: FC<CardTasksProps> = ({ task }) => {
         </Typography> */}
       </CardContent>
       <CardActions>
-        <Button color="primary">Подробнее</Button>
+        <Button disabled={true} color="primary">Подробнее</Button>
         <Button onClick={() => deleteTaskMutation.mutate(task)} color="primary">Удалить</Button>
         <Button onClick={() => sendTaskToDevice(task)} color="primary">Отправить</Button>
       </CardActions>
