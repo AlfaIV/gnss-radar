@@ -75,8 +75,9 @@ const TimelineChart: FC<{ tasks: task[] | undefined }> = ({ tasks }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val, opts) {
-        let label = opts.w.globals.labels[opts.dataPointIndex];
-        return `Цель: ${label}`;
+        const taskName = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex].id;
+        console.log(opts.w.globals);
+        return `Задача: ${taskName}`;
       },
       style: {
         colors: ["#f3f4f5", "#fff"],
