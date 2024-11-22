@@ -126,7 +126,7 @@ const Setting = () => {
     return <div>error</div>;
   }
 
-  console.log("currentDevice", currentDevice);
+  // console.log("currentDevice", currentDevice);
   // console.log("devices.data", devices.data);
 
   return (

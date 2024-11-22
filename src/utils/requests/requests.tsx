@@ -183,7 +183,7 @@ export async function createTask(newTask: task): Promise<any> {
       }
     }
   }`;
-  console.log(createTaskRequest);
+  // console.log(createTaskRequest);
   const response: any = await grqlFetch(createTaskRequest);
   // console.log(response);
   return response;
@@ -194,6 +194,8 @@ export async function getTasks(): Promise<task[]> {
     listTask(filter: {}) {
       items {
         id
+        title
+        description
         satelliteId
         signalType
         groupingType
@@ -231,7 +233,7 @@ export async function deleteTask(deleteTask: task): Promise<any> {
       }
     }
   }`;
-  console.log(deleteTaskRequest);
+  // console.log(deleteTaskRequest);
   const response: any = await grqlFetch(deleteTaskRequest);
   return response;
 }
@@ -263,7 +265,7 @@ export async function signup(newUser: User): Promise<User | null>{
   const response: any = await grqlFetch(signUpRequest);
   // const { data: { authorization: { signup: { userInfo } } } } = response;
   const userInfo = response?.data?.authorization?.signup?.userInfo;
-  console.log("signup ", userInfo);
+  // console.log("signup ", userInfo);
   if (!userInfo) return null;
   const user: User = {
     id: userInfo.id,
@@ -290,7 +292,7 @@ export async function login(user: User): Promise<User | null>{
   const response: any = await grqlFetch(loginRequest);
   // const { data: { authorization: { signin: { userInfo } } } } = response;
   const userInfo = response?.data?.authorization?.signin?.userInfo;
-  console.log("login ", userInfo);
+  // console.log("login ", userInfo);
   if (!userInfo) return null;
   const serverUser: User = {
     id: userInfo?.id,
@@ -328,7 +330,7 @@ export async function authCheck(): Promise<User | null>{
   const response: any = await grqlFetch(authRequest);
   // const { data: { authcheck: { userInfo } } } = response;
   const userInfo = response?.data?.authcheck?.userInfo;
-  console.log("authCheck ", userInfo);
+  // console.log("authCheck ", userInfo);
   if (!userInfo) return null;
   const serverUser: User = {
     id: userInfo?.id,

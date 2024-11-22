@@ -18,7 +18,7 @@ interface CardTasksProps {
 }
 
 const CardTasks: FC<CardTasksProps> = ({ task }) => {
-  
+  console.log(task);
   const queryClient = useQueryClient();
   const deleteTaskMutation = useMutation("deleteTask", deleteTask, {
     onSuccess: () => {
