@@ -117,11 +117,11 @@ export async function updateDevice(updateDevices: Device): Promise<Device[]> {
   return device;
 }
 
-export async function addDevice(): Promise<Device> {
+export async function addDevice(newDevice: Device): Promise<Device> {
   const addDeviceRequest = `mutation addDevice {
     gnss {
       createDevice(
-        input: {Name: "new", Description: "new", Coords: {x: "0", y: "0", z: "0"}}
+        input: {Name: "${newDevice.name}", Description: "${newDevice.description}", Coords: {x: "${newDevice.coordinates?.x}", y: "${newDevice.coordinates?.y}", z: "${newDevice.coordinates?.z}"}}
       ){
         device {
           id

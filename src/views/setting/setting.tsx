@@ -17,11 +17,14 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
 import { getDevices, updateDevice, addDevice } from "@utils/requests/requests";
 import { Device } from "@utils/types/types";
+import { Description } from "@mui/icons-material";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
 
 const Setting = () => {
+
+  const [newDeviceCreation, setNewDeviceCreation] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -40,6 +43,7 @@ const Setting = () => {
       onSuccess: () => {
         queryClient.invalidateQueries("getDevices");
         createDeviceMutation.isSuccess && setCurrentDevice(createDeviceMutation.data || null);
+        setNewDeviceCreation(false);
       },
     }
   );
@@ -58,11 +62,29 @@ const Setting = () => {
   });
 
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
+    setNewDeviceCreation(false);
     setCurrentDevice(
       devices?.data?.find(
         (device: Device) => Number(device?.id) === Number(event?.target?.value)
       ) || null
     );
+  }
+
+  function handleCreateDevice() {
+    const newDefaultDevice: Device = {
+      id: BigInt(0),
+      name: "Новое устройство",
+      description: "Описание нового устройства",
+      token: "Токен сгенерируется автоматически",
+      coordinates: {
+        x: "0", 
+        y: "0",
+        z: "0",
+      },
+    };
+    setCurrentDevice(newDefaultDevice);
+    setNewDeviceCreation(true);
+    // createDeviceMutation.mutate();
   }
 
   if (devices?.isLoading) {
@@ -109,7 +131,7 @@ const Setting = () => {
           </Select>
           <Button
             onClick={() => {
-              createDeviceMutation.mutate();
+              handleCreateDevice();
             }}
             variant="outlined"
           >
@@ -206,7 +228,8 @@ const Setting = () => {
                 disabled={currentDevice === null}
                 onClick={() => {
                   // console.log(currentDevice);
-                  currentDevice && changeDeviceMutation.mutate(currentDevice);
+                  !newDeviceCreation && currentDevice && changeDeviceMutation.mutate(currentDevice);
+                  newDeviceCreation && currentDevice && createDeviceMutation.mutate(currentDevice);
                   // console.log(mutation);
                 }}
                 variant="contained"

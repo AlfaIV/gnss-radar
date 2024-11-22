@@ -20,11 +20,11 @@ const Layout: FC = () => {
     onSuccess: (data) => {
       // fix it на проде раскомментировать
       console.log("auth.data", data);
-      if (!data) {
-        navigate("/login");
-      } else {
-        navigate("/measure");
-      }
+      // if (!data) {
+      //   navigate("/login");
+      // } else {
+      //   navigate("/measure");
+      // }
     },
   });
   const navigate = useNavigate();
