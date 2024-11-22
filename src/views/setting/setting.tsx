@@ -23,33 +23,59 @@ import { Description } from "@mui/icons-material";
 //to do - решить  вопрос с id
 
 const Setting = () => {
+  const closeMsgTimer = setTimeout(() => {
+    setSuccessMsg("");
+  }, 5000);
 
   const [newDeviceCreation, setNewDeviceCreation] = useState(false);
+  const [errMsg, setErrMsg] = useState<string>("");
+  const [successMsg, setSuccessMsg] = useState<string>("");
 
   const queryClient = useQueryClient();
 
-  const devices = useQuery("getDevices", getDevices);
-
-  const changeDeviceMutation = useMutation("updateDevice", updateDevice, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("getDevices");
-    },
+  const devices = useQuery("getDevices", getDevices,{
+    onError: () => {
+      setErrMsg("Ошибка получения устройств");
+    }
   });
 
-  const createDeviceMutation = useMutation(
-    "createDeviceMutation",
-    addDevice,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("getDevices");
-        createDeviceMutation.isSuccess && setCurrentDevice(createDeviceMutation.data || null);
-        setNewDeviceCreation(false);
-      },
+  const changeDeviceMutation = useMutation("updateDevice", updateDevice, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("getDevices");
+      if (!!data) {
+        setErrMsg("");
+        setSuccessMsg("Устройство обновлено");
+        closeMsgTimer; 
+      }else{
+        setErrMsg("Ошибка обновления устройства");
+      }
+    },
+    onError: () => {
+      setErrMsg("Ошибка обновления устройства");
     }
-  );
+  });
+
+  const createDeviceMutation = useMutation("createDeviceMutation", addDevice, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("getDevices");
+      createDeviceMutation.isSuccess &&
+      setCurrentDevice(createDeviceMutation.data || null);
+      if(!!data){
+        setNewDeviceCreation(false);
+        setErrMsg("");
+        setSuccessMsg("Устройство создано");
+        closeMsgTimer;
+      }else{
+        setErrMsg("Ошибка создания устройства");
+      }
+    },
+    onError: () => {
+      setErrMsg("Ошибка создания устройства");
+    }
+  });
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>({
-    id:  BigInt(0),
+    id: BigInt(0),
     backendID: "",
     name: "",
     token: "",
@@ -77,14 +103,13 @@ const Setting = () => {
       description: "Описание нового устройства",
       token: "Токен сгенерируется автоматически",
       coordinates: {
-        x: "0", 
+        x: "0",
         y: "0",
         z: "0",
       },
     };
     setCurrentDevice(newDefaultDevice);
     setNewDeviceCreation(true);
-    // createDeviceMutation.mutate();
   }
 
   if (devices?.isLoading) {
@@ -94,10 +119,6 @@ const Setting = () => {
   if (devices?.error) {
     return <div>error</div>;
   }
-
-  // if (!data && !currentDevice) {
-  //   return <div>no data</div>;
-  // }
 
   console.log("currentDevice", currentDevice);
   // console.log("devices.data", devices.data);
@@ -141,9 +162,8 @@ const Setting = () => {
         <Box sx={{ padding: "20px" }}>
           <Stack spacing={4}>
             <Typography variant="body1">
-              В данном разделе можно редактировать параметры уже ранее
-              добавленных устройств или добавлять новые для хранения данных с
-              них.
+              {newDeviceCreation ? "Внесите изменения в параметры устройства и нажмите \"Сохранить\"" :
+              "В данном разделе можно редактировать параметры уже ранее добавленных устройств или добавлять новые для хранения данных с них."}
             </Typography>
             <TextField
               label="Название устройства"
@@ -205,31 +225,19 @@ const Setting = () => {
                 } as Device);
               }}
             />
-            {changeDeviceMutation.isSuccess && !changeDeviceMutation.isIdle && (
-              <Alert severity="success">Изменения сохранены</Alert>
-            )}
-            {(changeDeviceMutation.isError ||
-              changeDeviceMutation?.data?.length === 0) ? (
-              <Alert severity="error">
-                Ошибка изменения параметров устройства
-              </Alert>
-            ) : null}
-            {createDeviceMutation.isError ? (
-              <Alert severity="error">Ошибка создания нового устройства</Alert>
-            ) : null}
-            {createDeviceMutation.isSuccess && (
-              <Alert severity="success">
-                Новое устройство добавлено. Измените параметры в соответствующих
-                полях и нажмите кнопку сохранить
-              </Alert>
-            )}
+            {!!errMsg && <Alert severity="error">{errMsg}</Alert>}
+            {!!successMsg && <Alert severity="success">{successMsg}</Alert>}
             <Stack direction={"row"} spacing={2}>
               <Button
                 disabled={currentDevice === null}
                 onClick={() => {
                   // console.log(currentDevice);
-                  !newDeviceCreation && currentDevice && changeDeviceMutation.mutate(currentDevice);
-                  newDeviceCreation && currentDevice && createDeviceMutation.mutate(currentDevice);
+                  !newDeviceCreation &&
+                    currentDevice &&
+                    changeDeviceMutation.mutate(currentDevice);
+                  newDeviceCreation &&
+                    currentDevice &&
+                    createDeviceMutation.mutate(currentDevice);
                   // console.log(mutation);
                 }}
                 variant="contained"
