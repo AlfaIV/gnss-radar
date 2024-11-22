@@ -15,37 +15,31 @@ import {
 
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
-import { getDevices, updateDevice, addDevice } from "@utils/requests/requests";
+import {
+  getDevices,
+  updateDevice,
+  addDevice,
+  deleteDevice,
+} from "@utils/requests/requests";
 import { Device } from "@utils/types/types";
+import { Description } from "@mui/icons-material";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
 
 const Setting = () => {
+  const [newDeviceCreation, setNewDeviceCreation] = useState(false);
+  const [errMsg, setErrMsg] = useState<string>("");
+  const [successMsg, setSuccessMsg] = useState<string>("");
 
   const queryClient = useQueryClient();
 
-  const devices = useQuery("getDevices", getDevices);
-
-  const changeDeviceMutation = useMutation("updateDevice", updateDevice, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("getDevices");
-    },
-  });
-
-  const createDeviceMutation = useMutation(
-    "createDeviceMutation",
-    addDevice,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("getDevices");
-        createDeviceMutation.isSuccess && setCurrentDevice(createDeviceMutation.data || null);
-      },
-    }
-  );
+  const closeMsgTimer = setTimeout(() => {
+    setSuccessMsg("");
+  }, 5000);
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>({
-    id:  BigInt(0),
+    id: BigInt(0),
     backendID: "",
     name: "",
     token: "",
@@ -57,12 +51,71 @@ const Setting = () => {
     },
   });
 
+  const devices = useQuery("getDevices", getDevices, {
+    onError: () => {
+      setErrMsg("Ошибка получения устройств");
+    },
+  });
+
+  const changeDeviceMutation = useMutation("updateDevice", updateDevice, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("getDevices");
+      setErrMsg("");
+      setSuccessMsg("Устройство обновлено");
+      closeMsgTimer;
+    },
+    onError: () => {
+      setErrMsg("Ошибка обновления устройства");
+    },
+  });
+
+  const createDeviceMutation = useMutation("createDeviceMutation", addDevice, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("getDevices");
+      createDeviceMutation.isSuccess &&
+        setCurrentDevice(createDeviceMutation.data || null);
+      setNewDeviceCreation(false);
+      setErrMsg("");
+      setSuccessMsg("Устройство создано");
+      closeMsgTimer;
+    },
+    onError: () => {
+      setErrMsg("Ошибка создания устройства");
+    },
+  });
+
+  const deleteDeviceMutation = useMutation("deleteDevice", deleteDevice, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getDevices");
+      setErrMsg("");
+      setSuccessMsg("Устройство удалено");
+      closeMsgTimer;
+    },
+  });
+
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
+    setNewDeviceCreation(false);
     setCurrentDevice(
       devices?.data?.find(
         (device: Device) => Number(device?.id) === Number(event?.target?.value)
       ) || null
     );
+  }
+
+  function handleCreateDevice() {
+    const newDefaultDevice: Device = {
+      id: BigInt(0),
+      name: "Новое устройство",
+      description: "Описание нового устройства",
+      token: "Токен сгенерируется автоматически",
+      coordinates: {
+        x: "0",
+        y: "0",
+        z: "0",
+      },
+    };
+    setCurrentDevice(newDefaultDevice);
+    setNewDeviceCreation(true);
   }
 
   if (devices?.isLoading) {
@@ -73,11 +126,7 @@ const Setting = () => {
     return <div>error</div>;
   }
 
-  // if (!data && !currentDevice) {
-  //   return <div>no data</div>;
-  // }
-
-  console.log("currentDevice", currentDevice);
+  // console.log("currentDevice", currentDevice);
   // console.log("devices.data", devices.data);
 
   return (
@@ -109,7 +158,7 @@ const Setting = () => {
           </Select>
           <Button
             onClick={() => {
-              createDeviceMutation.mutate();
+              handleCreateDevice();
             }}
             variant="outlined"
           >
@@ -119,9 +168,9 @@ const Setting = () => {
         <Box sx={{ padding: "20px" }}>
           <Stack spacing={4}>
             <Typography variant="body1">
-              В данном разделе можно редактировать параметры уже ранее
-              добавленных устройств или добавлять новые для хранения данных с
-              них.
+              {newDeviceCreation
+                ? 'Внесите изменения в параметры устройства и нажмите "Сохранить"'
+                : "В данном разделе можно редактировать параметры уже ранее добавленных устройств или добавлять новые для хранения данных с них."}
             </Typography>
             <TextField
               label="Название устройства"
@@ -183,30 +232,24 @@ const Setting = () => {
                 } as Device);
               }}
             />
-            {changeDeviceMutation.isSuccess && !changeDeviceMutation.isIdle && (
-              <Alert severity="success">Изменения сохранены</Alert>
-            )}
-            {(changeDeviceMutation.isError ||
-              changeDeviceMutation?.data?.length === 0) ? (
-              <Alert severity="error">
-                Ошибка изменения параметров устройства
-              </Alert>
-            ) : null}
-            {createDeviceMutation.isError ? (
-              <Alert severity="error">Ошибка создания нового устройства</Alert>
-            ) : null}
-            {createDeviceMutation.isSuccess && (
-              <Alert severity="success">
-                Новое устройство добавлено. Измените параметры в соответствующих
-                полях и нажмите кнопку сохранить
-              </Alert>
-            )}
+            <TextField  
+              label="URL устройства"
+              variant="outlined"
+              disabled={true}
+            />
+            {!!errMsg && <Alert severity="error">{errMsg}</Alert>}
+            {!!successMsg && <Alert severity="success">{successMsg}</Alert>}
             <Stack direction={"row"} spacing={2}>
               <Button
                 disabled={currentDevice === null}
                 onClick={() => {
                   // console.log(currentDevice);
-                  currentDevice && changeDeviceMutation.mutate(currentDevice);
+                  !newDeviceCreation &&
+                    currentDevice &&
+                    changeDeviceMutation.mutate(currentDevice);
+                  newDeviceCreation &&
+                    currentDevice &&
+                    createDeviceMutation.mutate(currentDevice);
                   // console.log(mutation);
                 }}
                 variant="contained"
@@ -227,7 +270,16 @@ const Setting = () => {
               >
                 Отменить
               </Button>
-              <Button variant="outlined" color="error" sx={{ width: "150px" }}>
+              <Button
+                onClick={() => {
+                  if (currentDevice) {
+                    deleteDeviceMutation.mutate(currentDevice);
+                  }
+                }}
+                variant="outlined"
+                color="error"
+                sx={{ width: "150px" }}
+              >
                 Удалить
               </Button>
             </Stack>

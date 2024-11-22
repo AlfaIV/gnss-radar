@@ -5,17 +5,18 @@
     display: grid;
     
     gap: 50px;
+    justify-items: center;
     justify-content: center;
     grid-template-columns: 1fr 1fr;  
     
-    min-height: 90wh;
+    min-height: 100wh;
 }
 
-@media (max-width: 1520px) {
-    .container {
-        grid-template-columns: 1fr; /* 2 колонки для планшетов */
-    }
-}
+// @media (max-width: 1520px) {
+//     .container {
+//         grid-template-columns: 1fr; /* 2 колонки для планшетов */
+//     }
+// }
 
 .radar__table{
     padding: 100px 20px;
@@ -28,6 +29,16 @@
 
     @include text-header(20px, 24px);
 }
+
+@media (max-width: 1520px) {
+    .radar__plot{
+        grid-column: span 2;
+    }
+    .radar__table {
+        grid-column: span 2;
+    }
+}
+
 
 .radar__table__status{
     display: flex;

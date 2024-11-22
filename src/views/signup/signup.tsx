@@ -30,7 +30,7 @@ const SignUp: FC = () => {
   const signupMutation = useMutation(signup,{
 
     onSuccess: (data) => {
-      console.log("signupMutation",data);
+      // console.log("signupMutation",data);
       if (data === null){
         setErrorMsg("Ошибка регистрации")
       }else{

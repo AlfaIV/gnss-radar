@@ -19,12 +19,12 @@ const Layout: FC = () => {
     refetchOnWindowFocus: true,
     onSuccess: (data) => {
       // fix it на проде раскомментировать
-      console.log("auth.data", data);
-      if (!data) {
-        navigate("/login");
-      } else {
-        navigate("/measure");
-      }
+      // console.log("auth.data", data);
+      // if (!data) {
+      //   navigate("/login");
+      // } else {
+      //   navigate("/measure");
+      // }
     },
   });
   const navigate = useNavigate();

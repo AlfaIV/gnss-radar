@@ -35,10 +35,10 @@ export interface Satellite {
 }
 
 export interface Device {
-  id:  bigint;
+  id?:  bigint;
   backendID?: string;
-  name: string;
-  token: string;
+  name?: string;
+  token?: string;
   description?: string;
   coordinates?: {
     x: string;

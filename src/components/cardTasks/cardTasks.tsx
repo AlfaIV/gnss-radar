@@ -15,10 +15,10 @@ import { useQueryClient, useMutation} from "react-query";
 
 interface CardTasksProps {
   task: task;
+  openInfoTask: (task: task) => void;
 }
 
-const CardTasks: FC<CardTasksProps> = ({ task }) => {
-  
+const CardTasks: FC<CardTasksProps> = ({ task, openInfoTask }) => {
   const queryClient = useQueryClient();
   const deleteTaskMutation = useMutation("deleteTask", deleteTask, {
     onSuccess: () => {
@@ -55,7 +55,7 @@ const CardTasks: FC<CardTasksProps> = ({ task }) => {
         </Typography> */}
       </CardContent>
       <CardActions>
-        <Button color="primary">Подробнее</Button>
+        <Button onClick={() => openInfoTask(task)} color="primary">Подробнее</Button>
         <Button onClick={() => deleteTaskMutation.mutate(task)} color="primary">Удалить</Button>
         <Button onClick={() => sendTaskToDevice(task)} color="primary">Отправить</Button>
       </CardActions>

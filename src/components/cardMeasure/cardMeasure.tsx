@@ -37,11 +37,11 @@ const CardMeasure: FC<CardMeasureProps> = ({
       </CardContent>
       <CardActions>
         {/* <a href={dataLink}> */}
-        <Button size="small" variant="contained">
+        <Button  disabled={true} size="small" variant="contained">
           Скачать
         </Button>
         {/* </a> */}
-        <Button size="small" variant="contained">
+        <Button  disabled={true} size="small" variant="contained">
           Исследовать
         </Button>
       </CardActions>
