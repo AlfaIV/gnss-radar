@@ -155,6 +155,18 @@ export async function addDevice(): Promise<Device> {
   return device;
 }
 
+export async function deleteDevice(deleteDevice: Device): Promise<any> {
+  const deleteDeviceRequest = `mutation deleteDevice{
+    gnss{
+      deleteDevice(input:{id:""}){
+        _empty
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(deleteDeviceRequest);
+  return response;
+}
+
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
