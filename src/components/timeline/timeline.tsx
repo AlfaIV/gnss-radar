@@ -24,10 +24,10 @@ const TimelineChart: FC<{ tasks: task[] | undefined }> = ({ tasks }) => {
     ...data,
     chart: {
       type: "rangeBar",
-      height: 300,
+      // height: 400,
       events: {
-        dataPointSelection: function (event, chartContext, config) {
-          alert(`Вы нажали на точку`);
+        dataPointSelection: function (event, chartContext, opts) {
+          alert(`Вы нажали на точку ${opts.dataPointIndex}`);
         },
       },
     },
@@ -75,12 +75,11 @@ const TimelineChart: FC<{ tasks: task[] | undefined }> = ({ tasks }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val, opts) {
-        const taskName = opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex].id;
-        console.log(opts.w.globals);
-        return `Задача: ${taskName}`;
+        return `Название задачи: ${!!tasks ? tasks[opts.dataPointIndex].name : "Нет данных"}`;
       },
       style: {
         colors: ["#f3f4f5", "#fff"],
+        // colors: ["#000"],
       },
     },
     tooltip: {

@@ -232,6 +232,11 @@ const Setting = () => {
                 } as Device);
               }}
             />
+            <TextField  
+              label="URL устройства"
+              variant="outlined"
+              disabled={true}
+            />
             {!!errMsg && <Alert severity="error">{errMsg}</Alert>}
             {!!successMsg && <Alert severity="success">{successMsg}</Alert>}
             <Stack direction={"row"} spacing={2}>
