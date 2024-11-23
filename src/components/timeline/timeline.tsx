@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import { task } from "@utils/types/types";
 import moment from "moment";
 
-const TimelineChart: FC<{ tasks: task[] | undefined }> = ({ tasks }) => {
+const TimelineChart: FC<{ tasks: task[] | undefined, openInfoTask: (task: task) => void }> = ({ tasks, openInfoTask }) => {
   const data = {
     series: [
       {
@@ -27,7 +27,7 @@ const TimelineChart: FC<{ tasks: task[] | undefined }> = ({ tasks }) => {
       // height: 400,
       events: {
         dataPointSelection: function (event, chartContext, opts) {
-          alert(`Вы нажали на точку ${opts.dataPointIndex}`);
+          if (!!tasks) openInfoTask(tasks[opts.dataPointIndex]);
         },
       },
     },

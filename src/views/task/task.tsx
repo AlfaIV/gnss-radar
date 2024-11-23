@@ -22,9 +22,12 @@ import { getTasks } from "@utils/requests/requests";
 import { useQuery } from "react-query";
 
 import { task } from "@utils/types/types";
+import InfoTask from "@components/infoTask/infoTask";
 
 const Task = () => {
   const [openCreateTask, setOpenCreateTask] = useState(false);
+  const [openInfoTask, setOpenInfoTask] = useState<task | null>(null);
+  // const [infoTask, setInfoTask] = useState<task | null>(null);
 
   const tasks = useQuery("getTasks", getTasks);
 
@@ -50,7 +53,9 @@ const Task = () => {
             </Select>
           </FormControl>
         </Stack>
-        <TimelineChart tasks={tasks.data} />
+        <TimelineChart
+         openInfoTask={setOpenInfoTask}
+         tasks={tasks.data} />
         <Grid
           p={10}
           container
@@ -63,7 +68,9 @@ const Task = () => {
             !!tasks.data &&
             tasks.data.map((task) => (
               <Grid key={task.id}>
-                <CardTasks task={task} />
+                <CardTasks
+                 openInfoTask={setOpenInfoTask}
+                 task={task} />
               </Grid>
             ))}
         </Grid>
@@ -74,6 +81,17 @@ const Task = () => {
             tasks.refetch();
           }}
         />
+        { openInfoTask &&
+          <InfoTask
+            open={!!openInfoTask}
+            onClose={() => {
+              setOpenInfoTask(null);
+              tasks.refetch();
+            }}
+            currentTask={openInfoTask}
+          />
+
+        }
       </Paper>
     </Container>
   );
