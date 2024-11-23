@@ -1,6 +1,6 @@
 import style from "./radar.module.scss";
 import Plot from "react-plotly.js";
-import Button from "@components/button/button";
+import {Button} from "@mui/material";
 import plotConfig from "./plot.config";
 import TableSatellite from "@components/table/table";
 
@@ -15,7 +15,14 @@ const Radar = () => {
           <p>Статус калибровки:</p>
           <div>Калиброван</div>
         </div>
-        <Button text="Проверить" />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Проверить
+        </Button>
         <div className={style.radar__table__task}>
           <p>Выполняется задание:</p>
           <div className={style.radar__table__task_p}>
@@ -23,7 +30,14 @@ const Radar = () => {
             <p>Начало записи: </p>
             <p>Окончание записи: </p>
           </div>
-          <Button text="Прервать задание" />
+          <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Проверить задание
+        </Button>
         </div>
         <TableSatellite />
       </div>  
