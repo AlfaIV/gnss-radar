@@ -70,6 +70,7 @@ export interface Measure {
   target: string,
   spectrum?: SpectrumMeasure,
   power?: PowerMeasure,
+  link?: string,
 }
 
 export interface SpectrumMeasure {

@@ -309,6 +309,7 @@ export async function login(user: User): Promise<User | null>{
   return serverUser
 }
 
+
 export async function logout(): Promise<void>{
   const logoutRequest = `mutation logout{
     authorization{
@@ -350,7 +351,8 @@ export async function authCheck(): Promise<User | null>{
 
 // ---------------------------------------------------------------------
 
-export async function getMeasures(): Promise<Measure[] | null> {
+
+export async function getMeasures(): Promise<Measure[]> {
   const listMeasurementsRequest = `query listMeasurements{
     listMeasurements(filter:{}){
       items{
@@ -364,11 +366,10 @@ export async function getMeasures(): Promise<Measure[] | null> {
     }
   }`
   const response: any = await grqlFetch(listMeasurementsRequest);
-  if (!response?.data?.listMeasurements?.items) return null
   const measures: Measure[] = await response?.data?.listMeasurements?.items?.map((item: any) => ({
     token: item.token,
-    startTime: item.startTime,
-    endTime: item.endTime,
+    startTime: moment(item.startTime),
+    endTime: moment(item.endTime),
     group: item.group,
     signalType: item.signalType,
     target: item.target

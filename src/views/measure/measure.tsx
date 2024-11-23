@@ -1,12 +1,15 @@
 import style from "./measure.module.scss";
 import "./measure.module.scss";
+
 import CardMeasure from "@components/cardMeasure/cardMeasure";
 import MeasureFilter from "@components/measureFilter/measureFilter";
 import filters from "@components/measureFilter/measureFilter.types";
+
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { measure } from "@views/measure/data";
 import { debounce } from "lodash";
+
 import TuneIcon from "@mui/icons-material/Tune";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import {
@@ -23,34 +26,39 @@ import LinearChart from "@components/linearChart/linearChart";
 import { linearChartInterface } from "@components/linearChart/linearChart.interface";
 import RinexTable from "@components/rinexTable/rinexTable";
 
+import { getMeasures } from "@utils/requests/requests";
+import { useQuery } from "react-query";
+
 const Measure = () => {
   const [openFilter, setOpenFilter] = useState(false);
   const [openGraph, setOpenGraph] = useState(false);
-  
+
+  const measures = useQuery("getMeasures", getMeasures);
+
   enum visualizationType {
     power,
     spectrum,
     rinex,
   }
 
-  const [currentVisualizationType, setCurrentVisualizationType] = useState<visualizationType>(visualizationType.power);
+  const [currentVisualizationType, setCurrentVisualizationType] =
+    useState<visualizationType>(visualizationType.power);
 
-  const queryData:linearChartInterface = {
-    title: 'Спектр сигнала',
+  const queryData: linearChartInterface = {
+    title: "Спектр сигнала",
     xData: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-    xLabel: 'Спектр сигнала',
+    xLabel: "Спектр сигнала",
     yData: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    yLabel: 'Амплитуда',
-  }
+    yLabel: "Амплитуда",
+  };
 
-  const queryData2:linearChartInterface = {
-    title: 'Мощность сигнала',
+  const queryData2: linearChartInterface = {
+    title: "Мощность сигнала",
     xData: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-    xLabel: 'Время',
+    xLabel: "Время",
     yData: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    yLabel: 'Мощность',
-  }
-
+    yLabel: "Мощность",
+  };
 
   const [filters, setFilters] = useState<filters>({
     satelliteType: {
@@ -126,7 +134,12 @@ const Measure = () => {
         {openGraph && (
           <Grid item xs={6}>
             <div className={style.plots}>
-              <Typography variant="h3" sx={{width: "100%", textAlign: "center"}}>Графики</Typography>
+              <Typography
+                variant="h3"
+                sx={{ width: "100%", textAlign: "center" }}
+              >
+                Графики
+              </Typography>
               {/* <Select
                 value={currentVisualizationType}
                 label="Тип информации"
@@ -141,11 +154,9 @@ const Measure = () => {
                 <MenuItem value={visualizationType.rinex}>RINEX</MenuItem>
               </Select> */}
 
-
-              
-              <RinexTable/>
-              <LinearChart {...queryData}/>
-              <LinearChart {...queryData2}/>
+              <RinexTable />
+              <LinearChart {...queryData} />
+              <LinearChart {...queryData2} />
             </div>
           </Grid>
         )}
@@ -157,19 +168,11 @@ const Measure = () => {
             >
               Записи
             </Typography>
-            {measure.map((item) => (
-              <CardMeasure
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                comment={item.comment}
-                startData={item.startData}
-                startTime={item.startTime}
-                endTime={item.endTime}
-                endData={item.endData}
-                dataLink={item.dataLink}
-              ></CardMeasure>
-            ))}
+            {measures?.data?.length
+              ? measures.data.map((item) => (
+                  <CardMeasure key={item.token} measure={item} />
+                ))
+              : "Измерения не загрузились"}
           </div>
         </Grid>
       </Grid>
