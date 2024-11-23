@@ -68,18 +68,18 @@ export interface Measure {
   group: groupType,
   signalType: signalType,
   target: string,
-  spectrum?: spectrumMeasure,
-  power?: powerMeasure,
+  spectrum?: SpectrumMeasure,
+  power?: PowerMeasure,
 }
 
-export interface spectrumMeasure {
+export interface SpectrumMeasure {
   spectrum: number[],
   StartFreq: number,
   FreqStep: number,
   startTime: Moment,
 }
 
-export interface powerMeasure {
+export interface PowerMeasure {
   power: number[],
   startTime: Moment
   timeStep: number

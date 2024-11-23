@@ -1,6 +1,6 @@
 import axios from "axios";
 import grqlFetch from "@utils/grql";
-import { Satellite, Device, groups, signals, User } from "@utils/types/types";
+import { Satellite, Device, groups, signals, User, Measure, SpectrumMeasure, PowerMeasure } from "@utils/types/types";
 import { task } from "@utils/types/types";
 import moment from "moment";
 
@@ -350,7 +350,7 @@ export async function authCheck(): Promise<User | null>{
 
 // ---------------------------------------------------------------------
 
-export async function getMeasures(): Promise<any> {
+export async function getMeasures(): Promise<Measure[] | null> {
   const listMeasurementsRequest = `query listMeasurements{
     listMeasurements(filter:{}){
       items{
@@ -364,5 +364,14 @@ export async function getMeasures(): Promise<any> {
     }
   }`
   const response: any = await grqlFetch(listMeasurementsRequest);
-  return response?.data?.listMeasurements?.items
+  if (!response?.data?.listMeasurements?.items) return null
+  const measures: Measure[] = await response?.data?.listMeasurements?.items?.map((item: any) => ({
+    token: item.token,
+    startTime: item.startTime,
+    endTime: item.endTime,
+    group: item.group,
+    signalType: item.signalType,
+    target: item.target
+  }))
+  return measures;
 }
