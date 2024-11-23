@@ -61,6 +61,31 @@ export interface task {
   groupType?: groupType | null;
 }
 
+export interface Measure {
+  token: string,
+  startTime: Moment,
+  endTime: Moment,
+  group: groupType,
+  signalType: signalType,
+  target: string,
+  spectrum?: spectrumMeasure,
+  power?: powerMeasure,
+}
+
+export interface spectrumMeasure {
+  spectrum: number[],
+  StartFreq: number,
+  FreqStep: number,
+  startTime: Moment,
+}
+
+export interface powerMeasure {
+  power: number[],
+  startTime: Moment
+  timeStep: number
+}
+
+
 export type signalType = "L1" | "L2" | "L5" | "G1" | "G2" | "G5" | "E1" | "E5" | "E6" |  "B1" | "B2" | "B3" | "all";
 export enum signals {
   L1 = "L1",

@@ -45,6 +45,8 @@ export async function getSatellites(): Promise<Satellite[]> {
   return satellites;
 }
 
+// ---------------------------------------------------------------------
+
 export async function getDevices(): Promise<Device[]> {
   const getDevicesRequest = `query listDevice{
     listDevice(filter:{}){
@@ -167,6 +169,8 @@ export async function deleteDevice(deleteDevice: Device): Promise<any> {
   return response;
 }
 
+// ---------------------------------------------------------------------
+
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
@@ -248,6 +252,8 @@ export async function sendTaskToDevice(task: task): Promise<any> {
         console.error('Error:', error);
     });
 }
+
+// ---------------------------------------------------------------------
 
 export async function signup(newUser: User): Promise<User | null>{
   const signUpRequest = `mutation signup{
@@ -339,4 +345,24 @@ export async function authCheck(): Promise<User | null>{
     CreatedAt: userInfo?.CreatedAt
   };
   return serverUser
+}
+
+
+// ---------------------------------------------------------------------
+
+export async function getMeasures(): Promise<any> {
+  const listMeasurementsRequest = `query listMeasurements{
+    listMeasurements(filter:{}){
+      items{
+        token
+        startTime
+        endTime
+        group
+        signalType
+        target
+      }
+    }
+  }`
+  const response: any = await grqlFetch(listMeasurementsRequest);
+  return response?.data?.listMeasurements?.items
 }
