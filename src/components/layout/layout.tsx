@@ -12,19 +12,23 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 const Layout: FC = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1';
+
   const auth = useQuery("authCheck", authCheck, {
     // cacheTime: 0,
     // staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     onSuccess: (data) => {
-      // fix it на проде раскомментировать
-      // console.log("auth.data", data);
-      // if (!data) {
-      //   navigate("/login");
-      // } else {
-      //   navigate("/measure");
-      // }
+      if(isLocalhost){
+        return
+      }
+      if (!data) {
+        navigate("/login");
+      } else {
+        navigate("/state");
+      }
     },
   });
   const navigate = useNavigate();

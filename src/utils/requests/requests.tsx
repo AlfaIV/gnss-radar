@@ -1,8 +1,18 @@
 import axios from "axios";
 import grqlFetch from "@utils/grql";
-import { Satellite, Device, groups, signals, User, Measure, SpectrumMeasure, PowerMeasure } from "@utils/types/types";
+import {
+  Satellite,
+  Device,
+  groups,
+  signals,
+  User,
+  Measure,
+  SpectrumMeasure,
+  PowerMeasure,
+} from "@utils/types/types";
 import { task } from "@utils/types/types";
 import moment from "moment";
+import { Power } from "@mui/icons-material";
 
 const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map();
 SIGNAL_TYPE.set(signals.L1, "SIGNAL_TYPE_L1");
@@ -244,18 +254,19 @@ export async function deleteTask(deleteTask: task): Promise<any> {
 
 export async function sendTaskToDevice(task: task): Promise<any> {
   // мок запрос на устройство
-  axios.post('http://localhost:3000/sendTask', {...task, id: task.backendID})
-    .then(response => {
-        console.log('Response:', response.data);
+  axios
+    .post("http://localhost:3000/sendTask", { ...task, id: task.backendID })
+    .then((response) => {
+      console.log("Response:", response.data);
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      console.error("Error:", error);
     });
 }
 
 // ---------------------------------------------------------------------
 
-export async function signup(newUser: User): Promise<User | null>{
+export async function signup(newUser: User): Promise<User | null> {
   const signUpRequest = `mutation signup{
   authorization{
       signup(input:{login:"${newUser.email}", password:"${newUser.password}"}){
@@ -267,7 +278,7 @@ export async function signup(newUser: User): Promise<User | null>{
         }
       }
     }
-  }`
+  }`;
   const response: any = await grqlFetch(signUpRequest);
   // const { data: { authorization: { signup: { userInfo } } } } = response;
   const userInfo = response?.data?.authorization?.signup?.userInfo;
@@ -277,12 +288,12 @@ export async function signup(newUser: User): Promise<User | null>{
     id: userInfo.id,
     email: userInfo.login,
     role: userInfo.role,
-    CreatedAt: userInfo.CreatedAt
+    CreatedAt: userInfo.CreatedAt,
   };
-  return user
+  return user;
 }
 
-export async function login(user: User): Promise<User | null>{
+export async function login(user: User): Promise<User | null> {
   const loginRequest = `mutation sigin{
   authorization{
       signin(input:{login:"${user?.email}", password:"${user?.password}"}){
@@ -304,13 +315,12 @@ export async function login(user: User): Promise<User | null>{
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    CreatedAt: userInfo?.CreatedAt,
   };
-  return serverUser
+  return serverUser;
 }
 
-
-export async function logout(): Promise<void>{
+export async function logout(): Promise<void> {
   const logoutRequest = `mutation logout{
     authorization{
       logout(input:{}){
@@ -319,11 +329,10 @@ export async function logout(): Promise<void>{
     }
   }`;
   const response: any = await grqlFetch(logoutRequest);
-  return response
+  return response;
 }
 
-
-export async function authCheck(): Promise<User | null>{
+export async function authCheck(): Promise<User | null> {
   const authRequest = `query authCheck {
     authcheck(input: {}) {
       userInfo {
@@ -343,19 +352,18 @@ export async function authCheck(): Promise<User | null>{
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    CreatedAt: userInfo?.CreatedAt,
   };
-  return serverUser
+  return serverUser;
 }
 
-
 // ---------------------------------------------------------------------
-
 
 export async function getMeasures(): Promise<Measure[]> {
   const listMeasurementsRequest = `query listMeasurements{
     listMeasurements(filter:{}){
       items{
+        id
         token
         startTime
         endTime
@@ -364,15 +372,71 @@ export async function getMeasures(): Promise<Measure[]> {
         target
       }
     }
-  }`
+  }`;
   const response: any = await grqlFetch(listMeasurementsRequest);
-  const measures: Measure[] = await response?.data?.listMeasurements?.items?.map((item: any) => ({
-    token: item.token,
-    startTime: moment(item.startTime),
-    endTime: moment(item.endTime),
-    group: item.group,
-    signalType: item.signalType,
-    target: item.target
-  }))
+  const measures: Measure[] =
+    await response?.data?.listMeasurements?.items?.map((item: any) => ({
+      id: item.id,
+      token: item.token,
+      startTime: moment(item.startTime),
+      endTime: moment(item.endTime),
+      group: item.group,
+      signalType: item.signalType,
+      target: item.target,
+    }));
+  return measures;
+}
+
+export async function getGraph(id: string): Promise<Measure[]> {
+  const listMeasurementsRequest = `query listMeasurements{
+    listMeasurements(filter:{id: "${id}"}){
+      items{
+        id
+        token
+        startTime
+        endTime
+        group
+        signalType
+        target
+        dataSpectrum{
+          spectrum
+          StartFreq
+          FreqStep
+          startTime
+        }
+        dataPower{
+          power
+          startTime
+          timeStep
+        }
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(listMeasurementsRequest);
+  const measures: Measure[] =
+    await response?.data?.listMeasurements?.items?.map((item: any) => ({
+      id: item.id,
+      token: item.token,
+      startTime: moment(item.startTime),
+      endTime: moment(item.endTime),
+      group: item.group,
+      signalType: item.signalType,
+      target: item.target,
+      spectrum: item?.dataSpectrum
+        ? {
+            spectrum: item?.dataSpectrum?.spectrum,
+            StartFreq: item?.dataSpectrum?.StartFreq,
+            FreqStep: item?.dataSpectrum?.FreqStep,
+            startTime: item?.dataSpectrum?.startTime,
+          }
+        : undefined,
+      power: item?.dataPower ? {
+        power: item?.dataPower?.power,
+        startTime: item?.dataPower?.startTime,
+        timeStep: item?.dataPower?.timeStep,
+      } : undefined,
+    }
+  ));
+  // console.log("getGraph", measures);
   return measures;
 }

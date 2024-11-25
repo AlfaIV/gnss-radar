@@ -28,37 +28,62 @@ import RinexTable from "@components/rinexTable/rinexTable";
 
 import { getMeasures } from "@utils/requests/requests";
 import { useQuery } from "react-query";
+import { Measure as MeasureType } from "@utils/types/types";
+import { range } from "@utils/graphUtils";
 
 const Measure = () => {
-  const [openFilter, setOpenFilter] = useState(false);
-  const [openGraph, setOpenGraph] = useState(false);
-
-  const measures = useQuery("getMeasures", getMeasures);
-
   enum visualizationType {
     power,
     spectrum,
     rinex,
   }
 
-  const [currentVisualizationType, setCurrentVisualizationType] =
-    useState<visualizationType>(visualizationType.power);
+  const [openFilter, setOpenFilter] = useState(false);
+  const [openGraph, setOpenGraph] = useState(false);
+  const [graphData, setGraphData] = useState<MeasureType | null>(null);
 
-  const queryData: linearChartInterface = {
-    title: "Спектр сигнала",
-    xData: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-    xLabel: "Спектр сигнала",
-    yData: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    yLabel: "Амплитуда",
-  };
+  const measures = useQuery("getMeasures", getMeasures);
 
-  const queryData2: linearChartInterface = {
+  const [spectrumGraphData, setSpectrumGraphData] =
+    useState<linearChartInterface>({
+      title: "Спектр сигнала",
+      xData: [],
+      xLabel: "Спектр сигнала",
+      yData: [],
+      yLabel: "Амплитуда",
+    });
+  const [powerGraphData, setPowerGraphData] = useState<linearChartInterface>({
     title: "Мощность сигнала",
-    xData: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+    xData: [],
     xLabel: "Время",
-    yData: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    yData: [],
     yLabel: "Мощность",
-  };
+  });
+
+  useEffect(() => {
+    console.log("use effect", graphData);
+    if (!!graphData) {
+      setSpectrumGraphData({
+        title: "Спектр сигнала",
+        xData: [],
+        xLabel: "Спектр сигнала",
+        yData: graphData?.spectrum?.spectrum || [],
+        yLabel: "Амплитуда",
+      });
+
+      setPowerGraphData({
+        title: "Мощность сигнала",
+        xData: [],
+        xLabel: "Время",
+        yData: graphData?.power?.power || [],
+        yLabel: "Мощность",
+      });
+    }
+  }, [graphData]);
+
+  // console.log("powerGraphData",powerGraphData);
+  // console.log("spectrumGraphData",spectrumGraphData);
+  // console.log("graphData",graphData);
 
   const [filters, setFilters] = useState<filters>({
     satelliteType: {
@@ -79,7 +104,7 @@ const Measure = () => {
 
   useEffect(() => {
     const debouncedHandleChange = debounce((queryParams: filters) => {
-      console.log(queryParams);
+      // console.log(queryParams);
     }, 1000);
     debouncedHandleChange(filters);
   }, [filters]);
@@ -99,6 +124,7 @@ const Measure = () => {
   //     keepPreviousData: true, // Сохраняем предыдущие данные во время загрузки
   //   }
   // );
+
   return (
     <div className={style.measure}>
       <div className={style.left_menu}>
@@ -155,8 +181,13 @@ const Measure = () => {
               </Select> */}
 
               <RinexTable />
-              <LinearChart {...queryData} />
-              <LinearChart {...queryData2} />
+
+              {spectrumGraphData?.yData?.length !== 0 && (
+                <LinearChart {...spectrumGraphData} />
+              )}
+              {powerGraphData?.yData?.length !== 0 && (
+                <LinearChart {...powerGraphData} />
+              )}
             </div>
           </Grid>
         )}
@@ -170,7 +201,11 @@ const Measure = () => {
             </Typography>
             {measures?.data?.length
               ? measures.data.map((item) => (
-                  <CardMeasure key={item.token} measure={item} />
+                  <CardMeasure
+                    key={item.id}
+                    measure={item}
+                    setGraphData={setGraphData}
+                  />
                 ))
               : "Измерения не загрузились"}
           </div>

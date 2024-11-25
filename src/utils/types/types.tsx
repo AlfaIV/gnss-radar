@@ -62,6 +62,7 @@ export interface task {
 }
 
 export interface Measure {
+  id: string,
   token: string,
   startTime: Moment,
   endTime: Moment,
