@@ -18,6 +18,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
 
 const Radar: FC = () => {
   return (
@@ -35,11 +36,11 @@ const Radar: FC = () => {
           <Typography component={"p"} variant="body1">
             Статус калибровки:
           </Typography>
-          <Alert sx={{ maxWidth: "200px" }} severity="success">
+          <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px" }} severity="success">
             Калиброван
           </Alert>
-          {/* <Alert sx={{ maxWidth: "200px"}} severity="warning">Нет данных</Alert> */}
-          {/* <Alert sx={{ maxWidth: "200px"}} severity="error">Калибровка отсутствует</Alert> */}
+          {/* <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px"}} severity="warning">Нет данных</Alert>
+          <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px"}} severity="error">Калибровка отсутствует</Alert> */}
           <Button variant="contained">Провести калибровку</Button>
         </Stack>
         <TableContainer >
