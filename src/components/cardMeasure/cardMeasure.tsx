@@ -22,11 +22,39 @@ const CardMeasure: FC<{
 }> = ({ measure, setGraphData }) => {
   const getGraphMutation = useMutation(`getGraph/${measure?.token}`, getGraph, {
     onSuccess: (data) => {
-      // fix it
-      console.log(data);
       !!data[0] ? setGraphData(data[0]) : setGraphData(null);
     },
   });
+
+  const handleDownload = async (jsonData: Record<string, any>) => {
+    try {
+      // console.log(jsonData);
+      const blob = new Blob([JSON.stringify(jsonData)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${measure?.token}-MeasuredData-${measure?.startTime}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Ошибка при загрузке JSON:", error);
+    }
+  };
+
+  const downloadGraphMutation = useMutation(
+    `downloadGraph/${measure?.token}`,
+    getGraph,
+    {
+      onSuccess: (data) => {
+        // console.log(!!data[0]);
+        !!data[0] && handleDownload(data[0]);
+      },
+    }
+  );
 
   return (
     <Card sx={{ width: 350, padding: "10px" }}>
@@ -46,11 +74,16 @@ const CardMeasure: FC<{
         </Typography>
       </CardContent>
       <CardActions>
-        {/* <a href={dataLink}> */}
-        <Button disabled={true} size="small" variant="contained">
+        <Button
+          onClick={() => {
+            console.log("downloadGraphMutation", measure?.id);
+            downloadGraphMutation.mutate(measure?.id);
+          }}
+          size="small"
+          variant="contained"
+        >
           Скачать
         </Button>
-        {/* </a> */}
         <Button
           onClick={() => getGraphMutation.mutate(measure?.id)}
           size="small"
