@@ -61,7 +61,7 @@ const Measure = () => {
   });
 
   useEffect(() => {
-    console.log("use effect", graphData);
+    // console.log("use effect", graphData);
     if (!!graphData) {
       setSpectrumGraphData({
         title: "Спектр сигнала",
@@ -166,21 +166,12 @@ const Measure = () => {
               >
                 Графики
               </Typography>
-              {/* <Select
-                value={currentVisualizationType}
-                label="Тип информации"
-                onChange={(event) => setCurrentVisualizationType(event.target.value as visualizationType)}
-                autoWidth
-                // defaultValue={visualizationType.power}
-                sx={{minWidth: 120, m: 2 }}
+              {spectrumGraphData?.yData?.length == 0 && powerGraphData?.yData?.length == 0 &&  (
+                <Typography variant="body1">Добавьте измерения, нажав на кнопку "Исследовать" на карточке измерения</Typography>
+              )}
 
-              >
-                <MenuItem value={visualizationType.spectrum}>Спектр</MenuItem>
-                <MenuItem value={visualizationType.power}>Мощность</MenuItem>
-                <MenuItem value={visualizationType.rinex}>RINEX</MenuItem>
-              </Select> */}
-
-              <RinexTable />
+              {false &&
+                <RinexTable />}
 
               {spectrumGraphData?.yData?.length !== 0 && (
                 <LinearChart {...spectrumGraphData} />
