@@ -32,6 +32,9 @@ export interface Satellite {
   Id: string;
   Name: string;
   ExternalID?: string;
+  azimuth?: number;
+  elevation?: number;
+  range?: number;
 }
 
 export interface Device {

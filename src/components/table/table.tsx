@@ -15,8 +15,9 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { Satellite } from "@utils/types/types";
 
-const TableSatellite: FC = () => {
+const TableSatellite: FC<{ satellites: Satellite[] }> = ({ satellites }) => {
   return (
     <TableContainer>
       <Table>
@@ -24,20 +25,38 @@ const TableSatellite: FC = () => {
           <TableRow>
             <TableCell className={style.table__header__item}>Спутник</TableCell>
             <TableCell className={style.table__header__item}>Азимут</TableCell>
-            <TableCell className={style.table__header__item}>Угол места</TableCell>
-            <TableCell className={style.table__header__item}>Дальность</TableCell>
+            <TableCell className={style.table__header__item}>
+              Угол места
+            </TableCell>
+            <TableCell className={style.table__header__item}>
+              Дальность
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(gnssTable).map((key) =>
-            gnssTable[key].map((item) => (
-              <TableRow className={style.table__row} key={item.name}>
-                <TableCell className={style.table__row__item}> {item.name}     </TableCell>
-                <TableCell className={style.table__row__item}> {item.azimuth}  </TableCell>
-                <TableCell className={style.table__row__item}> {item.elevation}</TableCell>
-                <TableCell className={style.table__row__item}> {item.range}    </TableCell>
+          {!!satellites && satellites.length > 0 ? (
+            satellites.map((satellite) => (
+              <TableRow className={style.table__row} key={satellite?.Id}>
+                <TableCell className={style.table__row__item}>
+                  {" "}
+                  {satellite.Name}{" "}
+                </TableCell>
+                <TableCell className={style.table__row__item}>
+                  {" "}
+                  {satellite?.azimuth}{" "}
+                </TableCell>
+                <TableCell className={style.table__row__item}>
+                  {" "}
+                  {satellite?.elevation}
+                </TableCell>
+                <TableCell className={style.table__row__item}>
+                  {" "}
+                  {satellite?.range}{" "}
+                </TableCell>
               </TableRow>
             ))
+          ) : (
+            <TableRow>Список доступных спутников не загрузился</TableRow>
           )}
         </TableBody>
       </Table>
