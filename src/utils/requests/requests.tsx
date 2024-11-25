@@ -427,13 +427,13 @@ export async function getGraph(id: string): Promise<Measure[]> {
             spectrum: item?.dataSpectrum?.spectrum,
             StartFreq: item?.dataSpectrum?.StartFreq,
             FreqStep: item?.dataSpectrum?.FreqStep,
-            startTime: item?.dataSpectrum?.startTime,
+            startTime: moment(item?.dataSpectrum?.startTime),
           }
         : undefined,
       power: item?.dataPower ? {
         power: item?.dataPower?.power,
-        startTime: item?.dataPower?.startTime,
-        timeStep: item?.dataPower?.timeStep,
+        startTime: moment(item?.dataPower?.startTime),
+        timeStep: moment(item?.dataPower?.timeStep),
       } : undefined,
     }
   ));

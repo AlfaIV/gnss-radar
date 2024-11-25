@@ -84,7 +84,7 @@ export interface SpectrumMeasure {
 export interface PowerMeasure {
   power: number[],
   startTime: Moment
-  timeStep: number
+  timeStep: Moment
 }
 
 

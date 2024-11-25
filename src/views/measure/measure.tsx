@@ -29,7 +29,7 @@ import RinexTable from "@components/rinexTable/rinexTable";
 import { getMeasures } from "@utils/requests/requests";
 import { useQuery } from "react-query";
 import { Measure as MeasureType } from "@utils/types/types";
-import { range } from "@utils/graphUtils";
+import { freqRange, timeRange } from "@utils/graphUtils";
 
 const Measure = () => {
   enum visualizationType {
@@ -65,15 +65,17 @@ const Measure = () => {
     if (!!graphData) {
       setSpectrumGraphData({
         title: "Спектр сигнала",
-        xData: [],
-        xLabel: "Спектр сигнала",
+        // xData: [],
+        xData: freqRange(graphData?.spectrum?.StartFreq, graphData?.spectrum?.FreqStep, graphData?.spectrum?.spectrum?.length) || [],
+        xLabel: "Частота [Гц]",
         yData: graphData?.spectrum?.spectrum || [],
         yLabel: "Амплитуда",
       });
 
       setPowerGraphData({
         title: "Мощность сигнала",
-        xData: [],
+        // xData: [],
+        xData:  timeRange(graphData?.power?.startTime, graphData?.power?.timeStep, graphData?.power?.power?.length) || [],
         xLabel: "Время",
         yData: graphData?.power?.power || [],
         yLabel: "Мощность",
