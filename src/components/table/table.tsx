@@ -43,15 +43,21 @@ const TableSatellite: FC<{ satellites: Satellite[] }> = ({ satellites }) => {
                 </TableCell>
                 <TableCell className={style.table__row__item}>
                   {" "}
-                  {satellite?.azimuth}{" "}
+                  {/* {satellite?.azimuth} */}
+                  {satellite?.x}
+                  {" "}
                 </TableCell>
                 <TableCell className={style.table__row__item}>
                   {" "}
-                  {satellite?.elevation}
+                  {/* {satellite?.elevation} */}
+                  {satellite?.y}
+                  {" "}
                 </TableCell>
                 <TableCell className={style.table__row__item}>
                   {" "}
-                  {satellite?.range}{" "}
+                  {/* {satellite?.range} */}
+                  {satellite?.z}
+                  {" "}
                 </TableCell>
               </TableRow>
             ))

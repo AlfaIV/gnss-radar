@@ -45,6 +45,55 @@ export async function getSatellites(): Promise<Satellite[]> {
   return satellites;
 }
 
+export async function getSatellitesFromDevice(
+  Device: Device
+): Promise<Satellite[]> {
+  const listSatellitesRequest = `query listSatellites{
+    listSatellites(filter:{deviceIds:"${Device.backendID}"}){
+      items{
+        Id
+        SatelliteName
+      }
+    }
+  }`;
+
+  const response: any = await grqlFetch(listSatellitesRequest);
+  const satellites: Satellite[] =
+    await response?.data?.listSatellites?.items?.map((item: any) => ({
+      Id: item.Id,
+      Name: item.SatelliteName,
+    }));
+  return satellites;
+}
+
+export async function getSatellitesCoordinate(
+  Device: Device
+): Promise<Satellite[]> {
+  const listSatellitesRequest = `query listGnss {
+    listGnss(filter: {coordinates:{x:"1", y:"2", z: "3"}}){
+      items {
+        Id
+        Coordinates{
+          x
+          y
+          z
+        }
+      }
+    }
+  }`;
+
+  const response: any = await grqlFetch(listSatellitesRequest);
+  const satellites: Satellite[] =
+    await response?.data?.listGnss?.items?.map((item: any) => ({
+      Id: item.Id,
+      Name: item.SatelliteName,
+      x: item.Coordinates.x,
+      y: item.Coordinates.y,
+      z: item.Coordinates.z,
+    }));
+  return satellites;
+}
+
 export async function getDevices(): Promise<Device[]> {
   const getDevicesRequest = `query listDevice{
     listDevice(filter:{}){
@@ -240,16 +289,17 @@ export async function deleteTask(deleteTask: task): Promise<any> {
 
 export async function sendTaskToDevice(task: task): Promise<any> {
   // мок запрос на устройство
-  axios.post('http://localhost:3000/sendTask', {...task, id: task.backendID})
-    .then(response => {
-        console.log('Response:', response.data);
+  axios
+    .post("http://localhost:3000/sendTask", { ...task, id: task.backendID })
+    .then((response) => {
+      console.log("Response:", response.data);
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      console.error("Error:", error);
     });
 }
 
-export async function signup(newUser: User): Promise<User | null>{
+export async function signup(newUser: User): Promise<User | null> {
   const signUpRequest = `mutation signup{
   authorization{
       signup(input:{login:"${newUser.email}", password:"${newUser.password}"}){
@@ -261,7 +311,7 @@ export async function signup(newUser: User): Promise<User | null>{
         }
       }
     }
-  }`
+  }`;
   const response: any = await grqlFetch(signUpRequest);
   // const { data: { authorization: { signup: { userInfo } } } } = response;
   const userInfo = response?.data?.authorization?.signup?.userInfo;
@@ -271,12 +321,12 @@ export async function signup(newUser: User): Promise<User | null>{
     id: userInfo.id,
     email: userInfo.login,
     role: userInfo.role,
-    CreatedAt: userInfo.CreatedAt
+    CreatedAt: userInfo.CreatedAt,
   };
-  return user
+  return user;
 }
 
-export async function login(user: User): Promise<User | null>{
+export async function login(user: User): Promise<User | null> {
   const loginRequest = `mutation sigin{
   authorization{
       signin(input:{login:"${user?.email}", password:"${user?.password}"}){
@@ -298,12 +348,12 @@ export async function login(user: User): Promise<User | null>{
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    CreatedAt: userInfo?.CreatedAt,
   };
-  return serverUser
+  return serverUser;
 }
 
-export async function logout(): Promise<void>{
+export async function logout(): Promise<void> {
   const logoutRequest = `mutation logout{
     authorization{
       logout(input:{}){
@@ -312,11 +362,10 @@ export async function logout(): Promise<void>{
     }
   }`;
   const response: any = await grqlFetch(logoutRequest);
-  return response
+  return response;
 }
 
-
-export async function authCheck(): Promise<User | null>{
+export async function authCheck(): Promise<User | null> {
   const authRequest = `query authCheck {
     authcheck(input: {}) {
       userInfo {
@@ -336,7 +385,7 @@ export async function authCheck(): Promise<User | null>{
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    CreatedAt: userInfo?.CreatedAt,
   };
-  return serverUser
+  return serverUser;
 }

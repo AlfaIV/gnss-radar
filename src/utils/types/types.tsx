@@ -35,6 +35,9 @@ export interface Satellite {
   azimuth?: number;
   elevation?: number;
   range?: number;
+  x?: string;
+  y?: string;
+  z?: string;
 }
 
 export interface Device {

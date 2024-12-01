@@ -25,10 +25,11 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
-import { getDevices, getSatellites } from "@utils/requests/requests";
+import { getDevices, getSatellites, getSatellitesFromDevice, getSatellitesCoordinate } from "@utils/requests/requests";
 import { Device, Satellite } from "@utils/types/types";
 
 const Radar: FC = () => {
+  const queryClient = useQueryClient();
   const [errMsg, setErrMsg] = useState<string>("");
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>({
@@ -56,12 +57,39 @@ const Radar: FC = () => {
     },
   });
 
+  const satellitesFromDevice = useQuery(
+    "getSatellitesFromDevice",
+    () => getSatellitesFromDevice(currentDevice as Device),
+    {
+      enabled: currentDevice !== null,
+      onError: () => {
+        setErrMsg("Ошибка получения спутников");
+      },
+    }
+  )
+
+  const satellitesCoordinate = useQuery(
+    "getSatellitesCoordinate",
+    () => getSatellitesCoordinate(currentDevice as Device),
+    {
+      enabled: currentDevice !== null,
+      onSuccess: (data) => {
+        console.log("спутники: ",data);
+      },
+      onError: () => {
+        setErrMsg("Ошибка получения спутников");
+      },
+    }
+  )
+
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setCurrentDevice(
       devices?.data?.find(
         (device: Device) => Number(device?.id) === Number(event?.target?.value)
       ) || null
     );
+    queryClient.invalidateQueries("getSatellitesFromDevice");
+    queryClient.invalidateQueries("getSatellitesCoordinate");
   }
 
   return (
@@ -137,7 +165,7 @@ const Radar: FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TableSatellite satellites={satellitesList.data || [] } />
+        <TableSatellite satellites={satellitesCoordinate.data || [] } />
       </div>
     </div>
   );
