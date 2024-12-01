@@ -181,7 +181,6 @@ export async function deleteDevice(deleteDevice: Device): Promise<any> {
 
 // ---------------------------------------------------------------------
 
-
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
@@ -270,7 +269,7 @@ export async function sendTaskToDevice(task: task): Promise<any> {
 export async function signup(newUser: User): Promise<User | null> {
   const signUpRequest = `mutation signup{
   authorization{
-      signup(input:{login:"${newUser.email}", password:"${newUser.password}"}){
+      signup(input:{login:"${newUser.email}", password:"${newUser.password}", email: "${newUser.email}", organizationName: "${newUser.company}", firstName: "${newUser.name}", secondName: "${newUser.surname}"}){
         userInfo{
           id
           login
@@ -431,13 +430,14 @@ export async function getGraph(id: string): Promise<Measure[]> {
             startTime: moment(item?.dataSpectrum?.startTime),
           }
         : undefined,
-      power: item?.dataPower ? {
-        power: item?.dataPower?.power,
-        startTime: moment(item?.dataPower?.startTime),
-        timeStep: moment(item?.dataPower?.timeStep),
-      } : undefined,
-    }
-  ));
+      power: item?.dataPower
+        ? {
+            power: item?.dataPower?.power,
+            startTime: moment(item?.dataPower?.startTime),
+            timeStep: moment(item?.dataPower?.timeStep),
+          }
+        : undefined,
+    }));
   // console.log("getGraph", measures);
   return measures;
 }
