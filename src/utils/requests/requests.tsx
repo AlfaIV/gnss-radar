@@ -181,6 +181,7 @@ export async function deleteDevice(deleteDevice: Device): Promise<any> {
 
 // ---------------------------------------------------------------------
 
+
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
@@ -190,7 +191,7 @@ export async function createTask(newTask: task): Promise<any> {
     groups.all
   )}, satelliteId: "${newTask.target?.Id}", signalType:${SIGNAL_TYPE.get(
     signals.all
-  )}}){
+  )}, deviceId:"${newTask.device?.backendID}"}){
         task{
           id
         }
