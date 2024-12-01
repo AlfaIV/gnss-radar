@@ -22,6 +22,7 @@
     }
     
     .button__text{
+        color: white;
         @include text-header(20px, 24px, center);
         margin: 0px;
     }

@@ -70,7 +70,6 @@ const Login = () => {
             Войти
           </Button>
           <Typography component="p" variant="body1" color="error"></Typography>
-        </Box>
         <Typography
           component="p"
           variant="body1"
@@ -88,6 +87,7 @@ const Login = () => {
         >
           Регистрация
         </Button>
+        </Box>
       </Box>
     </Container>
   );

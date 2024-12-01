@@ -79,7 +79,7 @@ const SignUp: FC = () => {
         alignItems: "stretch",
       }}
     >
-      <Typography variant="h3" component="h1" color="initial" sx={{ mb: 2 }}>
+      <Typography variant="h3" component="h1" color="initial" sx={{ mb: 2, alignSelf: "center"}}>
         Регистрация
       </Typography>
       <Typography variant="body1" component="p" color="initial">
