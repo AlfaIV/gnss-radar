@@ -78,6 +78,9 @@ export async function getSatellitesCoordinate(
           y
           z
         }
+        azimuth
+        elevation_angle
+        distance
       }
     }
   }`;
@@ -90,6 +93,9 @@ export async function getSatellitesCoordinate(
       x: item.Coordinates.x,
       y: item.Coordinates.y,
       z: item.Coordinates.z,
+      azimuth: item.azimuth,
+      elevation: item.elevation_angle,
+      range: item.distance,
     }));
   return satellites;
 }

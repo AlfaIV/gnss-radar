@@ -25,25 +25,34 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { ChangeEvent, useState, ReactNode, useEffect } from "react";
-import { getDevices, getSatellites, getSatellitesFromDevice, getSatellitesCoordinate } from "@utils/requests/requests";
+import {
+  getDevices,
+  getSatellites,
+  getSatellitesFromDevice,
+  getSatellitesCoordinate,
+} from "@utils/requests/requests";
 import { Device, Satellite } from "@utils/types/types";
+import { forEach } from "lodash";
+import { Data, Layout } from "plotly.js";
 
 const Radar: FC = () => {
   const queryClient = useQueryClient();
   const [errMsg, setErrMsg] = useState<string>("");
 
-  const [currentDevice, setCurrentDevice] = useState<Device | null>({
-    id: BigInt(0),
-    backendID: "",
-    name: "",
-    token: "",
-    description: "",
-    coordinates: {
-      x: "",
-      y: "",
-      z: "",
-    },
-  });
+  // const [currentDevice, setCurrentDevice] = useState<Device | null>({
+  //   id: BigInt(0),
+  //   backendID: "",
+  //   name: "",
+  //   token: "",
+  //   description: "",
+  //   coordinates: {
+  //     x: "",
+  //     y: "",
+  //     z: "",
+  //   },
+  // });
+
+  const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
 
   const devices = useQuery("getDevices", getDevices, {
     onError: () => {
@@ -66,7 +75,7 @@ const Radar: FC = () => {
         setErrMsg("Ошибка получения спутников");
       },
     }
-  )
+  );
 
   const satellitesCoordinate = useQuery(
     "getSatellitesCoordinate",
@@ -74,13 +83,65 @@ const Radar: FC = () => {
     {
       enabled: currentDevice !== null,
       onSuccess: (data) => {
-        console.log("спутники: ",data);
+        console.log("спутники: ", data);
+        let plotData: {
+          type: string;
+          r: (number | undefined)[];
+          theta: (number | undefined)[];
+          fill: string;
+          name: string;
+          mode: string;
+          marker: {
+            size: number;
+            color: string;
+          };
+        }[] = [
+          {
+            type: "scatterpolar",
+            r: [],
+            theta: [],
+            fill: "none",
+            name: "GPS",
+            mode: "markers",
+            marker: {
+              size: 10,
+              color: "blue",
+            },
+          },
+          {
+            type: "scatterpolar",
+            r: [],
+            theta: [],
+            fill: "none",
+            name: "Glonass",
+            mode: "markers",
+            marker: {
+              size: 10,
+              color: "red",
+            },
+          },
+        ];
+        data.forEach((satellite: Satellite) => {
+          if (satellite) {
+            plotData[0].r.push(
+              satellite.range !== undefined ? satellite.range / 500 : 0
+            );
+            plotData[0].theta.push(
+              satellite.azimuth !== undefined ? satellite.azimuth : 0
+            );
+            // Если нужно, добавьте данные для Glonass
+            // plotData[1].r.push(satellite.range);
+            // plotData[1].theta.push(satellite.elevation);
+          }
+        });
+        console.log(plotData);
+        plotConfig.data = plotData as Data[];
       },
       onError: () => {
         setErrMsg("Ошибка получения спутников");
       },
     }
-  )
+  );
 
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setCurrentDevice(
@@ -94,9 +155,6 @@ const Radar: FC = () => {
 
   return (
     <div className={style.radar}>
-      <div className={style.radar__plot}>
-        <Plot data={plotConfig.data} layout={plotConfig.layout} />
-      </div>
       <div className={style.radar__table}>
         <Stack spacing={2} direction="row" alignItems={"center"}>
           <Typography>Выберите устройство</Typography>
@@ -165,7 +223,11 @@ const Radar: FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TableSatellite satellites={satellitesCoordinate.data || [] } />
+        <TableSatellite satellites={satellitesCoordinate.data || []} />
+      </div>
+
+      <div className={style.radar__plot}>
+        {!!currentDevice && <Plot data={plotConfig.data} layout={plotConfig.layout} />}
       </div>
     </div>
   );
