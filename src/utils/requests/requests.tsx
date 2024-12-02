@@ -55,7 +55,60 @@ export async function getSatellites(): Promise<Satellite[]> {
   return satellites;
 }
 
-// ---------------------------------------------------------------------
+export async function getSatellitesFromDevice(
+  Device: Device
+): Promise<Satellite[]> {
+  const listSatellitesRequest = `query listSatellites{
+    listSatellites(filter:{deviceIds:"${Device.backendID}"}){
+      items{
+        Id
+        SatelliteName
+      }
+    }
+  }`;
+
+  const response: any = await grqlFetch(listSatellitesRequest);
+  const satellites: Satellite[] =
+    await response?.data?.listSatellites?.items?.map((item: any) => ({
+      Id: item.Id,
+      Name: item.SatelliteName,
+    }));
+  return satellites;
+}
+
+export async function getSatellitesCoordinate(
+  Device: Device
+): Promise<Satellite[]> {
+  const listSatellitesRequest = `query listGnss {
+    listGnss(filter: {coordinates:{x:"1", y:"2", z: "3"}}){
+      items {
+        Id
+        Coordinates{
+          x
+          y
+          z
+        }
+        azimuth
+        elevation_angle
+        distance
+      }
+    }
+  }`;
+
+  const response: any = await grqlFetch(listSatellitesRequest);
+  const satellites: Satellite[] =
+    await response?.data?.listGnss?.items?.map((item: any) => ({
+      Id: item.Id,
+      Name: item.SatelliteName,
+      x: item.Coordinates.x,
+      y: item.Coordinates.y,
+      z: item.Coordinates.z,
+      azimuth: item.azimuth,
+      elevation: item.elevation_angle,
+      range: item.distance,
+    }));
+  return satellites;
+}
 
 export async function getDevices(): Promise<Device[]> {
   const getDevicesRequest = `query listDevice{

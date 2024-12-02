@@ -5,8 +5,8 @@ const plotConfig: PlotParams = {
   data: [
     {
       type: "scatterpolar",
-      r: [250, 100],
-      theta: [0, 340],
+      r: [],
+      theta: [],
       fill: "toself",
       name: "GPS",
       mode: "markers",
@@ -17,8 +17,8 @@ const plotConfig: PlotParams = {
     },
     {
       type: "scatterpolar",
-      r: [150, 50],
-      theta: [90, 180],
+      r: [],
+      theta: [],
       fill: "toself",
       name: "Glonass",
       mode: "markers",
