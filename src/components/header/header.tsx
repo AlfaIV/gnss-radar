@@ -1,8 +1,12 @@
-import styles from './header.module.scss'
-import MenuButton from '../menuButton/menuButton'
-import menu from './menuList';
-import logo from '@icons/radarIco.svg'
-import userIco from '@icons/defaultUserIco.svg'
+
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import RouterOutlinedIcon from '@mui/icons-material/RouterOutlined';
+import {
+    Button,
+    Container,
+    Stack,
+    AppBar,
+  } from "@mui/material";
 
 import { FC } from "react";
 import { logout } from '@utils/requests/requests';
@@ -18,25 +22,22 @@ const Header: FC = () => {
     })
 
     return (
-        <div className={styles.header}>
-            <div className={styles.header__logo}>
-                <img src={logo} alt="menulogo" />
-                <p>Мониторинг</p>
-            </div>
-            {menu.map((item) => (
-                <MenuButton
-                    key={item.menuText}
-                    menuText={item.menuText}
-                    logoPath={item.logoPath}
-                    link={item.link}
-                ></MenuButton>
-            ))}
-            <div className={styles.header__user} onClick={() => logoutMutation.mutate()} >
-                <p>defaultUser</p>
-                <img src={userIco} alt="userlogo" />
-
-            </div>
-        </div>
+        <AppBar position="static">
+            <Container maxWidth="xl" sx={{display: 'flex', height: '60px', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Stack direction="row" spacing={2} sx={{display: 'inline-flex', alignItems: 'center'}}>
+                    <Stack direction="row" spacing={0} sx={{display: 'inline-flex', alignItems: 'center'}}>
+                        <RouterOutlinedIcon sx={{fontSize: 40}} onClick={() =>  navigate('state/')}/>
+                        <Button color="inherit" onClick={() =>  navigate('state/')} sx={{ textTransform: 'capitalize', fontSize: 16 }}> Мониторинг </Button>
+                    </Stack>
+                    <Stack direction="row" spacing={0} sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Button color="inherit" onClick={() =>  navigate('measure/')} sx={{ textTransform: 'capitalize', fontSize: 16 }}>    Измерения  </Button>
+                        <Button color="inherit" onClick={() =>  navigate('task/')}    sx={{ textTransform: 'capitalize', fontSize: 16 }}>       Задания    </Button>
+                        <Button color="inherit" onClick={() =>  navigate('setting/')} sx={{ textTransform: 'capitalize', fontSize: 16 }}>    Настройки  </Button>
+                    </Stack>
+                </Stack >
+                    <Button color="inherit"  endIcon={<LogoutOutlinedIcon />} onClick={() =>  logoutMutation.mutate()} sx={{ textTransform: 'capitalize', fontSize: 16 }}> user </Button>
+            </Container>
+        </AppBar>
     );
 };  
 
