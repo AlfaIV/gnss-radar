@@ -16,6 +16,7 @@ import {
   Paper,
 } from "@mui/material";
 import { Satellite } from "@utils/types/types";
+// import { Satellite } from "@mui/icons-material";
 
 const TableSatellite: FC<{ satellites: Satellite[] }> = ({ satellites }) => {
   return (
@@ -35,11 +36,12 @@ const TableSatellite: FC<{ satellites: Satellite[] }> = ({ satellites }) => {
         </TableHead>
         <TableBody>
           {!!satellites && satellites.length > 0 ? (
-            satellites.map((satellite) => (
+            satellites.map((satellite:Satellite) => (
               <TableRow className={style.table__row} key={satellite?.Id}>
                 <TableCell className={style.table__row__item}>
                   {" "}
-                  {satellite.Name}{" "}
+                  S{satellite.Id.slice(0,2)}
+                  {" "}
                 </TableCell>
                 <TableCell className={style.table__row__item}>
                   {" "}

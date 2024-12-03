@@ -20,6 +20,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  Box,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -32,7 +33,7 @@ import {
   getSatellitesCoordinate,
 } from "@utils/requests/requests";
 import { Device, Satellite } from "@utils/types/types";
-import { forEach } from "lodash";
+import { forEach, min } from "lodash";
 import { Data, Layout } from "plotly.js";
 
 const Radar: FC = () => {
@@ -155,7 +156,7 @@ const Radar: FC = () => {
 
   return (
     <div className={style.radar}>
-      <div className={style.radar__table}>
+      <Box sx={{minHeight: "100vh"}} className={style.radar__table}>
         <Stack spacing={2} direction="row" alignItems={"center"}>
           <Typography>Выберите устройство</Typography>
           <Select
@@ -187,16 +188,24 @@ const Radar: FC = () => {
           <Typography component={"p"} variant="body1">
             Статус калибровки:
           </Typography>
-          <Alert
+          {/* <Alert
             icon={<CheckIcon fontSize="inherit" />}
             sx={{ maxWidth: "200px" }}
             severity="success"
           >
             Калиброван
+          </Alert> */}
+          <Alert
+            icon={<CheckIcon fontSize="inherit" />}
+            sx={{ maxWidth: "200px" }}
+            severity="warning"
+          >
+            Нет данных
           </Alert>
-          {/* <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px"}} severity="warning">Нет данных</Alert>
-          <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px"}} severity="error">Калибровка отсутствует</Alert> */}
-          <Button variant="contained">Провести калибровку</Button>
+          {/* <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px"}} severity="error">Калибровка отсутствует</Alert>  */}
+          <Button disabled variant="contained">
+            Провести калибровку
+          </Button>
         </Stack>
         <TableContainer>
           <Table sx={{ border: "2px solid white", borderRadius: "15px" }}>
@@ -223,12 +232,16 @@ const Radar: FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TableSatellite satellites={satellitesCoordinate.data || []} />
-      </div>
+        {!!currentDevice && (
+          <TableSatellite satellites={satellitesCoordinate.data || []} />
+        )}
+      </Box>
 
-      <div className={style.radar__plot}>
-        {!!currentDevice && <Plot data={plotConfig.data} layout={plotConfig.layout} />}
-      </div>
+      <Box sx={{m:0, p:0}} className={style.radar__plot}>
+        {!!currentDevice && (
+          <Plot data={plotConfig.data} layout={plotConfig.layout} />
+        )}
+      </Box>
     </div>
   );
 };

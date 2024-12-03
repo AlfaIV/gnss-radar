@@ -17,8 +17,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
-    padding: 20px;
+    // gap: 20px;
+    // padding: 20px;
+    min-height: 100wh;
 }
 
 // @media (max-width: 1520px) {
@@ -34,7 +35,7 @@
     flex-direction: column;
     gap: 20px;
     
-
+    min-height: 100wh;
     @include text-header(20px, 24px);
 }
 
