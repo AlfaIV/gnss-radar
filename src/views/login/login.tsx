@@ -47,7 +47,7 @@ const Login = () => {
             margin="normal"
             required
             fullWidth
-            label="Имя пользователя"
+            label="Почта"
             value={user.email}
             onChange={(e) => setUser({ ...user, email: e.target.value })}
           />
