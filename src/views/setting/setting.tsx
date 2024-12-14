@@ -203,8 +203,15 @@ const Setting = () => {
                 variant="outlined"
                 autoComplete="off"
               />
-              <Select defaultValue="RTL-SDR" label="Модель SDR" value={currentDevice?.model}>
-                <MenuItem>RTL-SDR</MenuItem>
+              <Select
+                defaultValue="RTL-SDR"
+                label="Модель SDR"
+                // value={currentDevice?.model}
+                value={"1"}
+              >
+                <MenuItem key={Number(1)} value={"1"}>
+                  RTL-SDR
+                </MenuItem>
               </Select>
               <TextField
                 // value={`${currentDevice?.Coords.x}.${currentDevice?.Coords.y}.${currentDevice?.Coords.z}`}

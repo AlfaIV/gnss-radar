@@ -157,13 +157,14 @@ const Radar: FC = () => {
   return (
     <div className={style.radar}>
       <Box sx={{minHeight: "100vh"}} className={style.radar__table}>
-        <Stack spacing={2} direction="row" alignItems={"center"}>
+        <Stack spacing={"12%"} direction="row" alignItems={"center"}>
           <Typography>Выберите устройство</Typography>
           <Select
             value={Number(currentDevice?.id)}
             onChange={handleChange}
             autoWidth={true}
-            sx={{ maxWidth: 300, minWidth: 300, backgroundColor: "white" }}
+            sx={{ maxWidth: 300, minWidth: 300, backgroundColor: "white"}}
+
           >
             {devices?.data?.length !== 0 &&
               devices?.data?.map((device: Device) => (
@@ -207,7 +208,7 @@ const Radar: FC = () => {
             Провести калибровку
           </Button>
         </Stack>
-        <TableContainer>
+        <TableContainer  sx={{ alignSelf: "start" }}>
           <Table sx={{ border: "2px solid white", borderRadius: "15px" }}>
             <TableBody>
               <TableRow>
@@ -216,7 +217,7 @@ const Radar: FC = () => {
                     Выполняется задание: {"Нет данных"}{" "}
                   </TableRow>
                   <TableRow sx={{ mb: 2 }}>
-                    <Button variant="contained">Прервать задание</Button>
+                    <Button disabled={true} variant="contained">Прервать задание</Button>
                   </TableRow>
                 </TableCell>
                 <TableCell>
@@ -238,9 +239,10 @@ const Radar: FC = () => {
       </Box>
 
       <Box sx={{m:0, p:0}} className={style.radar__plot}>
-        {!!currentDevice && (
+        {/* {!!currentDevice && (
           <Plot data={plotConfig.data} layout={plotConfig.layout} />
-        )}
+        )} */}
+        <Plot data={plotConfig.data} layout={plotConfig.layout} />
       </Box>
     </div>
   );
