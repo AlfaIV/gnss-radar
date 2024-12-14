@@ -504,7 +504,7 @@ export async function getCode(device: Device): Promise<string> {
       programCode
     }
   }`;
-
+  console.log(device.token);
   const response: any = await grqlFetch(getCodeRequest);
   const code:string = response?.data?.generateRecieverCode?.programCode;
   return code;

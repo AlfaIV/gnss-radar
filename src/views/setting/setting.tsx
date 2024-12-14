@@ -24,6 +24,8 @@ import {
 } from "@utils/requests/requests";
 import { Device } from "@utils/types/types";
 import { Description } from "@mui/icons-material";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
@@ -94,27 +96,23 @@ const Setting = () => {
     },
   });
 
-  const getCodeQuery = useQuery(
-    "getCodeReceiver", 
-    () => currentDevice?.name ? getCode(currentDevice) : Promise.reject(new Error("No device name")), 
-    {
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      onError: (error) => {
-        console.error("Failed to get code:", error);
-      },
-    }
-  );
+  const getCodeQuery = useMutation("getCodeReceiver", getCode, {
+    onSuccess: (data) => {
+      // console.log(data);
+    },
+    onError: (error) => {
+      console.error("Failed to get code:", error);
+    },
+  });
 
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setNewDeviceCreation(false);
-    setCurrentDevice(
+    const newDevice =
       devices?.data?.find(
         (device: Device) => Number(device?.id) === Number(event?.target?.value)
-      ) || null
-    );
-    queryClient.invalidateQueries("getCodeReceiver");
+      ) || null;
+    setCurrentDevice(newDevice);
+    newDevice && getCodeQuery.mutate(newDevice);
   }
 
   function handleCreateDevice() {
@@ -247,7 +245,7 @@ const Setting = () => {
                 } as Device);
               }}
             />
-            <TextField  
+            <TextField
               label="URL устройства"
               variant="outlined"
               disabled={true}
@@ -299,9 +297,11 @@ const Setting = () => {
               </Button>
             </Stack>
           </Stack>
-          <Typography>
-          {getCodeQuery.data}
-          </Typography>
+        </Box>
+        <Box sx={{ padding: "20px" }}>
+          <SyntaxHighlighter language={"python"} style={coy}>
+            {getCodeQuery.data}
+          </SyntaxHighlighter>
         </Box>
       </Paper>
     </Container>
