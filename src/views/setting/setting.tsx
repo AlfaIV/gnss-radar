@@ -20,6 +20,7 @@ import {
   updateDevice,
   addDevice,
   deleteDevice,
+  getCode,
 } from "@utils/requests/requests";
 import { Device } from "@utils/types/types";
 import { Description } from "@mui/icons-material";
@@ -93,6 +94,19 @@ const Setting = () => {
     },
   });
 
+  const getCodeQuery = useQuery(
+    "getCodeReceiver", 
+    () => currentDevice?.name ? getCode(currentDevice) : Promise.reject(new Error("No device name")), 
+    {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        console.error("Failed to get code:", error);
+      },
+    }
+  );
+
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setNewDeviceCreation(false);
     setCurrentDevice(
@@ -100,6 +114,7 @@ const Setting = () => {
         (device: Device) => Number(device?.id) === Number(event?.target?.value)
       ) || null
     );
+    queryClient.invalidateQueries("getCodeReceiver");
   }
 
   function handleCreateDevice() {
@@ -284,6 +299,9 @@ const Setting = () => {
               </Button>
             </Stack>
           </Stack>
+          <Typography>
+          {getCodeQuery.data}
+          </Typography>
         </Box>
       </Paper>
     </Container>

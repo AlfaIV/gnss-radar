@@ -322,7 +322,7 @@ export async function sendTaskToDevice(task: task): Promise<any> {
 export async function signup(newUser: User): Promise<User | null> {
   const signUpRequest = `mutation signup{
   authorization{
-      signup(input:{login:"${newUser.email}", password:"${newUser.password}", email: "${newUser.email}", organizationName: "${newUser.company}", firstName: "${newUser.name}", secondName: "${newUser.surname}"}){
+      signup(input:{login:"${newUser.name}", password:"${newUser.password}", email: "${newUser.email}", organizationName: "${newUser.company}", firstName: "${newUser.name}", secondName: "${newUser.surname}"}){
         userInfo{
           id
           login
@@ -493,4 +493,19 @@ export async function getGraph(id: string): Promise<Measure[]> {
     }));
   // console.log("getGraph", measures);
   return measures;
+}
+
+
+// --------------------------------------------------------------------
+
+export async function getCode(device: Device): Promise<string> {
+  const getCodeRequest = `query getCode{
+    generateRecieverCode(filter:{token:"${device.token}", typeLang: "python"}){
+      programCode
+    }
+  }`;
+
+  const response: any = await grqlFetch(getCodeRequest);
+  const code:string = response?.data?.generateRecieverCode?.programCode;
+  return code;
 }

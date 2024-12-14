@@ -117,7 +117,8 @@ const SignUp: FC = () => {
         <TextField
           margin="normal"
           required
-          label="Почта"
+          label="Имя пользователя"
+          //fix it
           value={user.email}
           onChange={(e) => setUser({ ...user, email: e.target.value })}
         />
