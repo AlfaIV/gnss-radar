@@ -27,7 +27,7 @@ import { linearChartInterface } from "@components/linearChart/linearChart.interf
 import RinexTable from "@components/rinexTable/rinexTable";
 
 import { getMeasures } from "@utils/requests/requests";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Measure as MeasureType } from "@utils/types/types";
 import { freqRange, timeRange } from "@utils/graphUtils";
 
@@ -42,7 +42,8 @@ const Measure = () => {
   const [openGraph, setOpenGraph] = useState(false);
   const [graphData, setGraphData] = useState<MeasureType | null>(null);
 
-  const measures = useQuery("getMeasures", getMeasures);
+  // const measures = useQuery("getMeasures", getMeasures);
+  const measures = useMutation("getMeasures", getMeasures);
 
   const [spectrumGraphData, setSpectrumGraphData] =
     useState<linearChartInterface>({
@@ -107,6 +108,7 @@ const Measure = () => {
   useEffect(() => {
     const debouncedHandleChange = debounce((queryParams: filters) => {
       // console.log(queryParams);
+      measures.mutate(filters);
     }, 1000);
     debouncedHandleChange(filters);
   }, [filters]);
@@ -145,7 +147,8 @@ const Measure = () => {
               setOpenGraph(!openGraph);
               setOpenFilter(false);
             }}
-            sx={{ backgroundColor: openGraph ? "#A48ECC" : "white" }}
+            // sx={{ backgroundColor: openGraph ? "#A48ECC" : "white" }}
+            sx={{ backgroundColor: openGraph ? "#ABCDEF" : "white" }}
           >
             <TimelineIcon />
           </IconButton>

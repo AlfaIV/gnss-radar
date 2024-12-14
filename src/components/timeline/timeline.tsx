@@ -78,8 +78,7 @@ const TimelineChart: FC<{ tasks: task[] | undefined, openInfoTask: (task: task) 
         return `Название задачи: ${!!tasks ? tasks[opts.dataPointIndex].name : "Нет данных"}`;
       },
       style: {
-        colors: ["#f3f4f5", "#fff"],
-        // colors: ["#000"],
+        colors: ['#003153'],
       },
     },
     tooltip: {

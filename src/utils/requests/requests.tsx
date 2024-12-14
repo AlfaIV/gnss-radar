@@ -13,6 +13,7 @@ import {
 import { task } from "@utils/types/types";
 import moment from "moment";
 import { Power } from "@mui/icons-material";
+import filters from "@components/measureFilter/measureFilter.types";
 
 const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map();
 SIGNAL_TYPE.set(signals.L1, "SIGNAL_TYPE_L1");
@@ -412,7 +413,7 @@ export async function authCheck(): Promise<User | null> {
 
 // ---------------------------------------------------------------------
 
-export async function getMeasures(): Promise<Measure[]> {
+export async function getMeasures(filter: filters): Promise<Measure[]> {
   const listMeasurementsRequest = `query listMeasurements{
     listMeasurements(filter:{}){
       items{
@@ -426,6 +427,19 @@ export async function getMeasures(): Promise<Measure[]> {
       }
     }
   }`;
+  // const listMeasurementsRequest = `query listMeasurements{
+  //   listMeasurements(filter:{startAt:"${filter.startData?.toString()}", endAt:"${filter.endData?.toString()}"}){
+  //     items{
+  //       id
+  //       token
+  //       startTime
+  //       endTime
+  //       group
+  //       signalType
+  //       target
+  //     }
+  //   }
+  // }`;
   const response: any = await grqlFetch(listMeasurementsRequest);
   const measures: Measure[] =
     await response?.data?.listMeasurements?.items?.map((item: any) => ({

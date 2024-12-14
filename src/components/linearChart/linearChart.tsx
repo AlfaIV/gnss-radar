@@ -33,6 +33,7 @@ const LinearChart: FC<linearChartInterface> = ({
       title: {
         text: xLabel,
       },
+      tickAmount: 5,
     },
     yaxis: {
       title: {

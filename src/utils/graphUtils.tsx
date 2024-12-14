@@ -25,7 +25,9 @@ export function timeRange(start: Moment | null | undefined, step: Moment | null 
   if (!start || !step || !length || length <= 0) return [];
 
   let previousElement: Moment | null = null; 
-  const stepMilliseconds = step.valueOf();   
+  // fix it
+  // const stepMilliseconds = step.valueOf();
+  const stepMilliseconds = 1000;   
 
   return Array.from({ length }, (_, index) => {
     const result = previousElement ? previousElement.add(stepMilliseconds, 'milliseconds') : start;

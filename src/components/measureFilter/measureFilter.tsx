@@ -175,7 +175,7 @@ const MeasureFilter: FC<MeasureFilterProps> = ({filters, setFilters}) => {
             }
             label="L2"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Checkbox
                 name="L3"
@@ -185,7 +185,7 @@ const MeasureFilter: FC<MeasureFilterProps> = ({filters, setFilters}) => {
             }
             label="L3"
             disabled
-          />
+          /> */}
         </FormGroup>
         <FormHelperText></FormHelperText>
         <FormLabel sx={{ margin: "20px 0" }}  component="legend">Время и дата записи:</FormLabel>
