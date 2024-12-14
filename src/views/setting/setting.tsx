@@ -26,6 +26,7 @@ import { Device } from "@utils/types/types";
 import { Description } from "@mui/icons-material";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { copyToClipboard } from "@utils/clipboard";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
@@ -151,6 +152,7 @@ const Setting = () => {
         <Typography variant="h3" color="initial">
           Настройки аппаратных комплексов
         </Typography>
+        <Typography sx={{ m: 3 }} >Выберите созданное устройство или нажмите "Добавить устройство" если хотите добавить новое.</Typography>
         <Stack direction="row" spacing={2} m={3}>
           <Select
             value={Number(currentDevice?.id)}
@@ -179,124 +181,127 @@ const Setting = () => {
           </Button>
         </Stack>
         <Box sx={{ padding: "20px" }}>
-          <Stack spacing={4}>
-            <Typography variant="body1">
-              {newDeviceCreation
-                ? 'Внесите изменения в параметры устройства и нажмите "Сохранить"'
-                : "В данном разделе можно редактировать параметры уже ранее добавленных устройств или добавлять новые для хранения данных с них."}
-            </Typography>
-            <TextField
-              label="Название устройства"
-              value={currentDevice?.name}
-              onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                setCurrentDevice({
-                  ...currentDevice,
-                  name: event.currentTarget.value,
-                } as Device)
-              }
-              variant="outlined"
-              autoComplete="off"
-            />
-            <TextField
-              // value={`${currentDevice?.Coords.x}.${currentDevice?.Coords.y}.${currentDevice?.Coords.z}`}
-              // value={currentDevice?.Coords.x}
-              label="Точка стояния"
-              variant="outlined"
-            />
-            <Stack direction="row" spacing={2}>
+          {!!currentDevice?.id && (
+            <Stack spacing={4}>
+              <Typography variant="body1">
+                {newDeviceCreation
+                  ? 'Внесите изменения в параметры устройства и нажмите "Сохранить"'
+                  : "В данном разделе можно редактировать параметры уже добавленных устройств для этого нужно изменить требуемый параметр и нажать 'Сохранить'. Или создать новое устройство нажав кнопку 'Добавить устройство'."}
+              </Typography>
               <TextField
-                label="Токен"
+                label="Название устройства"
+                value={currentDevice?.name}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setCurrentDevice({
+                    ...currentDevice,
+                    name: event.currentTarget.value,
+                  } as Device)
+                }
                 variant="outlined"
-                sx={{ width: "500px" }}
-                value={currentDevice?.token}
                 autoComplete="off"
               />
-              <Button
-                variant="contained"
-                //  onClick={handleCopy}
-                disabled={true}
-              >
-                Скопировать
-              </Button>
-              <Snackbar
-                // open={openSnackbar}
-                autoHideDuration={3000}
-                // onClose={handleCloseSnackbar}
-              >
-                <Alert
-                  // onClose={handleCloseSnackbar}
-                  severity="success"
+              <TextField
+                // value={`${currentDevice?.Coords.x}.${currentDevice?.Coords.y}.${currentDevice?.Coords.z}`}
+                // value={currentDevice?.Coords.x}
+                label="Точка стояния"
+                variant="outlined"
+              />
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label="Токен"
+                  variant="outlined"
+                  sx={{ width: "500px" }}
+                  value={currentDevice?.token}
+                  autoComplete="off"
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    copyToClipboard(currentDevice?.token || "");
+                  }}
                 >
-                  Токен скопирован в буфер обмена!
-                </Alert>
-              </Snackbar>
-            </Stack>
-            <TextField
-              variant="outlined"
-              label="Описание устройства"
-              multiline
-              rows={4}
-              value={currentDevice?.description}
-              autoFocus={true}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                setCurrentDevice({
-                  ...currentDevice,
-                  description: event.currentTarget.value,
-                } as Device);
-              }}
-            />
-            <TextField
-              label="URL устройства"
-              variant="outlined"
-              disabled={true}
-            />
-            {!!errMsg && <Alert severity="error">{errMsg}</Alert>}
-            {!!successMsg && <Alert severity="success">{successMsg}</Alert>}
-            <Stack direction={"row"} spacing={2}>
-              <Button
-                disabled={currentDevice === null}
-                onClick={() => {
-                  // console.log(currentDevice);
-                  !newDeviceCreation &&
-                    currentDevice &&
-                    changeDeviceMutation.mutate(currentDevice);
-                  newDeviceCreation &&
-                    currentDevice &&
-                    createDeviceMutation.mutate(currentDevice);
-                  // console.log(mutation);
-                }}
-                variant="contained"
-                sx={{ width: "150px" }}
-              >
-                Сохранить
-              </Button>
-              <Button
-                onClick={() => {
-                  setCurrentDevice(
-                    devices?.data?.find(
-                      (device: Device) => device.id === currentDevice?.id
-                    ) || null
-                  );
-                }}
+                  Скопировать
+                </Button>
+                <Snackbar
+                  // open={openSnackbar}
+                  autoHideDuration={3000}
+                  // onClose={handleCloseSnackbar}
+                >
+                  <Alert
+                    // onClose={handleCloseSnackbar}
+                    severity="success"
+                  >
+                    Токен скопирован в буфер обмена!
+                  </Alert>
+                </Snackbar>
+              </Stack>
+              <TextField
                 variant="outlined"
-                sx={{ width: "150px" }}
-              >
-                Отменить
-              </Button>
-              <Button
-                onClick={() => {
-                  if (currentDevice) {
-                    deleteDeviceMutation.mutate(currentDevice);
-                  }
+                label="Описание устройства"
+                multiline
+                rows={4}
+                value={currentDevice?.description}
+                autoFocus={true}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  setCurrentDevice({
+                    ...currentDevice,
+                    description: event.currentTarget.value,
+                  } as Device);
                 }}
+              />
+              <TextField
+                label="URL устройства"
                 variant="outlined"
-                color="error"
-                sx={{ width: "150px" }}
-              >
-                Удалить
-              </Button>
+                disabled={true}
+              />
+              {!!errMsg && <Alert severity="error">{errMsg}</Alert>}
+              {!!successMsg && <Alert severity="success">{successMsg}</Alert>}
+              <Stack direction={"row"} spacing={2}>
+                <Button
+                  disabled={currentDevice === null}
+                  onClick={() => {
+                    // console.log(currentDevice);
+                    !newDeviceCreation &&
+                      currentDevice &&
+                      changeDeviceMutation.mutate(currentDevice);
+                    newDeviceCreation &&
+                      currentDevice &&
+                      createDeviceMutation.mutate(currentDevice);
+                    // console.log(mutation);
+                  }}
+                  variant="contained"
+                  sx={{ width: "150px" }}
+                >
+                  Сохранить
+                </Button>
+                <Button
+                  onClick={() => {
+                    setCurrentDevice(
+                      devices?.data?.find(
+                        (device: Device) => device.id === currentDevice?.id
+                      ) || null
+                    );
+                  }}
+                  variant="outlined"
+                  sx={{ width: "150px" }}
+                >
+                  Отменить
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (currentDevice) {
+                      deleteDeviceMutation.mutate(currentDevice);
+                    }
+                  }}
+                  variant="outlined"
+                  color="error"
+                  sx={{ width: "150px" }}
+                >
+                  Удалить
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
+          )}
         </Box>
         <Box sx={{ padding: "20px" }}>
           <SyntaxHighlighter language={"python"} style={coy}>
@@ -314,17 +319,6 @@ export default Setting;
 
 // const [token, setToken] = useState("ВашТокен12345");
 // const [openSnackbar, setOpenSnackbar] = useState(false);
-
-// const handleCopy = () => {
-//   navigator.clipboard
-//     .writeText(token)
-//     .then(() => {
-//       setOpenSnackbar(true);
-//     })
-//     .catch((err) => {
-//       console.error("Ошибка копирования: ", err);
-//     });
-// };
 
 // const handleCloseSnackbar = () => {
 //   setOpenSnackbar(false);
