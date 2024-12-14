@@ -1,3 +1,4 @@
+.PHONY: start_hardware
 include ./.env.sh
 
 dev_start:
@@ -28,6 +29,9 @@ docker_build: dev_build
 
 server_connect:
 	ssh -i id_rsa root@$$SERVER_IP
+
+start_hardware:
+	cd /home/alfap/Projects/sdr_scripts/Makefile && make run
 
 help:
 	@echo "make docker_run" - запускт и сборка контейнера

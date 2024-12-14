@@ -10,7 +10,7 @@ import {
   Paper,
 } from "@mui/material";
 
-import Grid from '@mui/material/Grid2';
+import Grid from "@mui/material/Grid2";
 import CreateTask from "@components/createTask/createTask";
 
 import { useState } from "react";
@@ -21,8 +21,13 @@ import CardTasks from "@components/cardTasks/cardTasks";
 import { getTasks } from "@utils/requests/requests";
 import { useQuery } from "react-query";
 
+import { task } from "@utils/types/types";
+import InfoTask from "@components/infoTask/infoTask";
+
 const Task = () => {
   const [openCreateTask, setOpenCreateTask] = useState(false);
+  const [openInfoTask, setOpenInfoTask] = useState<task | null>(null);
+  // const [infoTask, setInfoTask] = useState<task | null>(null);
 
   const tasks = useQuery("getTasks", getTasks);
 
@@ -40,38 +45,53 @@ const Task = () => {
           <Button onClick={() => setOpenCreateTask(true)} variant="contained">
             Создать задачу
           </Button>
-          <FormControl sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel
-            // id="demo-simple-select-autowidth-label"
-            >
-              Период отслеживания
-            </InputLabel>
-            <Select
-              // labelId="demo-simple-select-autowidth-label"
-              // id="demo-simple-select-autowidth"
-              // value={age}
-              // onChange={handleChange}
-              // autoWidth
-              label="Период отслеживания"
-            >
+          <FormControl disabled={true} sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel>Период отслеживания</InputLabel>
+            <Select label="Период отслеживания">
               <MenuItem value={20}>Сегодня</MenuItem>
               <MenuItem value={21}>Все</MenuItem>
             </Select>
           </FormControl>
         </Stack>
-        <TimelineChart />
-        <Grid p={10} container spacing={2} maxWidth={"xl"} alignSelf={"center"} alignContent={"center"}>
-          {tasks.isSuccess && !!tasks.data &&
+        <TimelineChart
+         openInfoTask={setOpenInfoTask}
+         tasks={tasks.data} />
+        <Grid
+          p={10}
+          container
+          spacing={2}
+          maxWidth={"xl"}
+          alignSelf={"center"}
+          alignContent={"center"}
+        >
+          {tasks.isSuccess &&
+            !!tasks.data &&
             tasks.data.map((task) => (
               <Grid key={task.id}>
-                <CardTasks task={task} />
+                <CardTasks
+                 openInfoTask={setOpenInfoTask}
+                 task={task} />
               </Grid>
             ))}
         </Grid>
         <CreateTask
           open={openCreateTask}
-          onClose={() => {setOpenCreateTask(false); tasks.refetch()}}
+          onClose={() => {
+            setOpenCreateTask(false);
+            tasks.refetch();
+          }}
         />
+        { openInfoTask &&
+          <InfoTask
+            open={!!openInfoTask}
+            onClose={() => {
+              setOpenInfoTask(null);
+              tasks.refetch();
+            }}
+            currentTask={openInfoTask}
+          />
+
+        }
       </Paper>
     </Container>
   );

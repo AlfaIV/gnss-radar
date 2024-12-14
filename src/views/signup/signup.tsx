@@ -7,6 +7,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
+  Stack,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -16,33 +17,30 @@ import { signup, login } from "@utils/requests/requests";
 import { useMutation, useQueryClient } from "react-query";
 
 const SignUp: FC = () => {
-  
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [errorMsg, setErrorMsg] = useState("");
-  
+
   const loginMutation = useMutation(login, {
     onSuccess: () => {
       queryClient.invalidateQueries("authCheck");
       navigate("/measure/");
     },
-  })
-  const signupMutation = useMutation(signup,{
-
+  });
+  const signupMutation = useMutation(signup, {
     onSuccess: (data) => {
-      console.log("signupMutation",data);
-      if (data === null){
-        setErrorMsg("Ошибка регистрации")
-      }else{
+      // console.log("signupMutation",data);
+      if (data === null) {
+        setErrorMsg("Ошибка регистрации");
+      } else {
         loginMutation.mutate(data);
       }
     },
     onError: () => {
       setErrorMsg("Ошибка регистрации");
     },
-
   });
-  
+
   const [user, setUser] = useState<UserForm>({
     surname: "",
     name: "",
@@ -81,7 +79,7 @@ const SignUp: FC = () => {
         alignItems: "stretch",
       }}
     >
-      <Typography variant="h3" component="h1" color="initial" sx={{ mb: 2 }}>
+      <Typography variant="h3" component="h1" color="initial" sx={{ mb: 2, alignSelf: "center"}}>
         Регистрация
       </Typography>
       <Typography variant="body1" component="p" color="initial">
@@ -166,15 +164,26 @@ const SignUp: FC = () => {
         <Typography component="p" variant="body1" color="error">
           {errorMsg}
         </Typography>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={handleSubmit}
-        >
-          Зарегистрироваться
-        </Button>
+        <Stack spacing={2} direction="row">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleSubmit}
+          >
+            Зарегистрироваться
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={() => navigate("/login/")}
+          >
+            Назад
+          </Button>
+        </Stack>
       </FormGroup>
     </Container>
   );

@@ -1,12 +1,15 @@
 import style from "./measure.module.scss";
 import "./measure.module.scss";
+
 import CardMeasure from "@components/cardMeasure/cardMeasure";
 import MeasureFilter from "@components/measureFilter/measureFilter";
 import filters from "@components/measureFilter/measureFilter.types";
+
 import moment from "moment";
 import { useState, useEffect } from "react";
 import { measure } from "@views/measure/data";
 import { debounce } from "lodash";
+
 import TuneIcon from "@mui/icons-material/Tune";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import {
@@ -23,34 +26,66 @@ import LinearChart from "@components/linearChart/linearChart";
 import { linearChartInterface } from "@components/linearChart/linearChart.interface";
 import RinexTable from "@components/rinexTable/rinexTable";
 
+import { getMeasures } from "@utils/requests/requests";
+import { useQuery } from "react-query";
+import { Measure as MeasureType } from "@utils/types/types";
+import { freqRange, timeRange } from "@utils/graphUtils";
+
 const Measure = () => {
-  const [openFilter, setOpenFilter] = useState(false);
-  const [openGraph, setOpenGraph] = useState(false);
-  
   enum visualizationType {
     power,
     spectrum,
     rinex,
   }
 
-  const [currentVisualizationType, setCurrentVisualizationType] = useState<visualizationType>(visualizationType.power);
+  const [openFilter, setOpenFilter] = useState(false);
+  const [openGraph, setOpenGraph] = useState(false);
+  const [graphData, setGraphData] = useState<MeasureType | null>(null);
 
-  const queryData:linearChartInterface = {
-    title: 'Спектр сигнала',
-    xData: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-    xLabel: 'Спектр сигнала',
-    yData: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    yLabel: 'Амплитуда',
-  }
+  const measures = useQuery("getMeasures", getMeasures);
 
-  const queryData2:linearChartInterface = {
-    title: 'Мощность сигнала',
-    xData: [30, 40, 35, 50, 49, 60, 70, 91, 125],
-    xLabel: 'Время',
-    yData: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    yLabel: 'Мощность',
-  }
+  const [spectrumGraphData, setSpectrumGraphData] =
+    useState<linearChartInterface>({
+      title: "Спектр сигнала",
+      xData: [],
+      xLabel: "Спектр сигнала",
+      yData: [],
+      yLabel: "Амплитуда",
+    });
+  const [powerGraphData, setPowerGraphData] = useState<linearChartInterface>({
+    title: "Мощность сигнала",
+    xData: [],
+    xLabel: "Время",
+    yData: [],
+    yLabel: "Мощность",
+  });
 
+  useEffect(() => {
+    // console.log("use effect", graphData);
+    if (!!graphData) {
+      setSpectrumGraphData({
+        title: "Спектр сигнала",
+        // xData: [],
+        xData: freqRange(graphData?.spectrum?.StartFreq, graphData?.spectrum?.FreqStep, graphData?.spectrum?.spectrum?.length) || [],
+        xLabel: "Частота [Гц]",
+        yData: graphData?.spectrum?.spectrum || [],
+        yLabel: "Амплитуда",
+      });
+
+      setPowerGraphData({
+        title: "Мощность сигнала",
+        // xData: [],
+        xData:  timeRange(graphData?.power?.startTime, graphData?.power?.timeStep, graphData?.power?.power?.length) || [],
+        xLabel: "Время",
+        yData: graphData?.power?.power || [],
+        yLabel: "Мощность",
+      });
+    }
+  }, [graphData]);
+
+  // console.log("powerGraphData",powerGraphData);
+  // console.log("spectrumGraphData",spectrumGraphData);
+  // console.log("graphData",graphData);
 
   const [filters, setFilters] = useState<filters>({
     satelliteType: {
@@ -71,7 +106,7 @@ const Measure = () => {
 
   useEffect(() => {
     const debouncedHandleChange = debounce((queryParams: filters) => {
-      console.log(queryParams);
+      // console.log(queryParams);
     }, 1000);
     debouncedHandleChange(filters);
   }, [filters]);
@@ -91,6 +126,7 @@ const Measure = () => {
   //     keepPreviousData: true, // Сохраняем предыдущие данные во время загрузки
   //   }
   // );
+
   return (
     <div className={style.measure}>
       <div className={style.left_menu}>
@@ -126,26 +162,25 @@ const Measure = () => {
         {openGraph && (
           <Grid item xs={6}>
             <div className={style.plots}>
-              <Typography variant="h3" sx={{width: "100%", textAlign: "center"}}>Графики</Typography>
-              {/* <Select
-                value={currentVisualizationType}
-                label="Тип информации"
-                onChange={(event) => setCurrentVisualizationType(event.target.value as visualizationType)}
-                autoWidth
-                // defaultValue={visualizationType.power}
-                sx={{minWidth: 120, m: 2 }}
-
+              <Typography
+                variant="h3"
+                sx={{ width: "100%", textAlign: "center" }}
               >
-                <MenuItem value={visualizationType.spectrum}>Спектр</MenuItem>
-                <MenuItem value={visualizationType.power}>Мощность</MenuItem>
-                <MenuItem value={visualizationType.rinex}>RINEX</MenuItem>
-              </Select> */}
+                Графики
+              </Typography>
+              {spectrumGraphData?.yData?.length == 0 && powerGraphData?.yData?.length == 0 &&  (
+                <Typography variant="body1">Добавьте измерения, нажав на кнопку "Исследовать" на карточке измерения</Typography>
+              )}
 
+              {false &&
+                <RinexTable />}
 
-              
-              <RinexTable/>
-              <LinearChart {...queryData}/>
-              <LinearChart {...queryData2}/>
+              {spectrumGraphData?.yData?.length !== 0 && (
+                <LinearChart {...spectrumGraphData} />
+              )}
+              {powerGraphData?.yData?.length !== 0 && (
+                <LinearChart {...powerGraphData} />
+              )}
             </div>
           </Grid>
         )}
@@ -157,19 +192,15 @@ const Measure = () => {
             >
               Записи
             </Typography>
-            {measure.map((item) => (
-              <CardMeasure
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                comment={item.comment}
-                startData={item.startData}
-                startTime={item.startTime}
-                endTime={item.endTime}
-                endData={item.endData}
-                dataLink={item.dataLink}
-              ></CardMeasure>
-            ))}
+            {measures?.data?.length
+              ? measures.data.map((item) => (
+                  <CardMeasure
+                    key={item.id}
+                    measure={item}
+                    setGraphData={setGraphData}
+                  />
+                ))
+              : "Измерения не загрузились"}
           </div>
         </Grid>
       </Grid>

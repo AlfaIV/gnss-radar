@@ -97,7 +97,7 @@ const MeasureFilter: FC<MeasureFilterProps> = ({filters, setFilters}) => {
         });
         break;
       default:
-        console.log("error");
+        // console.log("error");
     }
   };
 

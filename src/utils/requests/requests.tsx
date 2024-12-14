@@ -1,8 +1,18 @@
 import axios from "axios";
 import grqlFetch from "@utils/grql";
-import { Satellite, Device, groups, signals, User } from "@utils/types/types";
+import {
+  Satellite,
+  Device,
+  groups,
+  signals,
+  User,
+  Measure,
+  SpectrumMeasure,
+  PowerMeasure,
+} from "@utils/types/types";
 import { task } from "@utils/types/types";
 import moment from "moment";
+import { Power } from "@mui/icons-material";
 
 const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map();
 SIGNAL_TYPE.set(signals.L1, "SIGNAL_TYPE_L1");
@@ -41,6 +51,61 @@ export async function getSatellites(): Promise<Satellite[]> {
     await response?.data?.listSatellites?.items?.map((item: any) => ({
       Id: item.Id,
       Name: item.SatelliteName,
+    }));
+  return satellites;
+}
+
+export async function getSatellitesFromDevice(
+  Device: Device
+): Promise<Satellite[]> {
+  const listSatellitesRequest = `query listSatellites{
+    listSatellites(filter:{deviceIds:"${Device.backendID}"}){
+      items{
+        Id
+        SatelliteName
+      }
+    }
+  }`;
+
+  const response: any = await grqlFetch(listSatellitesRequest);
+  const satellites: Satellite[] =
+    await response?.data?.listSatellites?.items?.map((item: any) => ({
+      Id: item.Id,
+      Name: item.SatelliteName,
+    }));
+  return satellites;
+}
+
+export async function getSatellitesCoordinate(
+  Device: Device
+): Promise<Satellite[]> {
+  const listSatellitesRequest = `query listGnss {
+    listGnss(filter: {coordinates:{x:"1", y:"2", z: "3"}}){
+      items {
+        Id
+        Coordinates{
+          x
+          y
+          z
+        }
+        azimuth
+        elevation_angle
+        distance
+      }
+    }
+  }`;
+
+  const response: any = await grqlFetch(listSatellitesRequest);
+  const satellites: Satellite[] =
+    await response?.data?.listGnss?.items?.map((item: any) => ({
+      Id: item.Id,
+      Name: item.SatelliteName,
+      x: item.Coordinates.x,
+      y: item.Coordinates.y,
+      z: item.Coordinates.z,
+      azimuth: item.azimuth,
+      elevation: item.elevation_angle,
+      range: item.distance,
     }));
   return satellites;
 }
@@ -117,11 +182,11 @@ export async function updateDevice(updateDevices: Device): Promise<Device[]> {
   return device;
 }
 
-export async function addDevice(): Promise<Device> {
+export async function addDevice(newDevice: Device): Promise<Device> {
   const addDeviceRequest = `mutation addDevice {
     gnss {
       createDevice(
-        input: {Name: "new", Description: "new", Coords: {x: "0", y: "0", z: "0"}}
+        input: {Name: "${newDevice.name}", Description: "${newDevice.description}", Coords: {x: "${newDevice.coordinates?.x}", y: "${newDevice.coordinates?.y}", z: "${newDevice.coordinates?.z}"}}
       ){
         device {
           id
@@ -158,7 +223,7 @@ export async function addDevice(): Promise<Device> {
 export async function deleteDevice(deleteDevice: Device): Promise<any> {
   const deleteDeviceRequest = `mutation deleteDevice{
     gnss{
-      deleteDevice(input:{id:""}){
+      deleteDevice(input:{id:"${deleteDevice.backendID}"}){
         _empty
       }
     }
@@ -166,6 +231,8 @@ export async function deleteDevice(deleteDevice: Device): Promise<any> {
   const response: any = await grqlFetch(deleteDeviceRequest);
   return response;
 }
+
+// ---------------------------------------------------------------------
 
 export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
@@ -176,14 +243,14 @@ export async function createTask(newTask: task): Promise<any> {
     groups.all
   )}, satelliteId: "${newTask.target?.Id}", signalType:${SIGNAL_TYPE.get(
     signals.all
-  )}}){
+  )}, deviceId:"${newTask.device?.backendID}"}){
         task{
           id
         }
       }
     }
   }`;
-  console.log(createTaskRequest);
+  // console.log(createTaskRequest);
   const response: any = await grqlFetch(createTaskRequest);
   // console.log(response);
   return response;
@@ -194,6 +261,8 @@ export async function getTasks(): Promise<task[]> {
     listTask(filter: {}) {
       items {
         id
+        title
+        description
         satelliteId
         signalType
         groupingType
@@ -231,26 +300,29 @@ export async function deleteTask(deleteTask: task): Promise<any> {
       }
     }
   }`;
-  console.log(deleteTaskRequest);
+  // console.log(deleteTaskRequest);
   const response: any = await grqlFetch(deleteTaskRequest);
   return response;
 }
 
 export async function sendTaskToDevice(task: task): Promise<any> {
   // мок запрос на устройство
-  axios.post('http://localhost:3000/sendTask', {...task, id: task.backendID})
-    .then(response => {
-        console.log('Response:', response.data);
+  axios
+    .post("http://localhost:3000/sendTask", { ...task, id: task.backendID })
+    .then((response) => {
+      console.log("Response:", response.data);
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      console.error("Error:", error);
     });
 }
 
-export async function signup(newUser: User): Promise<User | null>{
+// ---------------------------------------------------------------------
+
+export async function signup(newUser: User): Promise<User | null> {
   const signUpRequest = `mutation signup{
   authorization{
-      signup(input:{login:"${newUser.email}", password:"${newUser.password}"}){
+      signup(input:{login:"${newUser.email}", password:"${newUser.password}", email: "${newUser.email}", organizationName: "${newUser.company}", firstName: "${newUser.name}", secondName: "${newUser.surname}"}){
         userInfo{
           id
           login
@@ -259,22 +331,22 @@ export async function signup(newUser: User): Promise<User | null>{
         }
       }
     }
-  }`
+  }`;
   const response: any = await grqlFetch(signUpRequest);
   // const { data: { authorization: { signup: { userInfo } } } } = response;
   const userInfo = response?.data?.authorization?.signup?.userInfo;
-  console.log("signup ", userInfo);
+  // console.log("signup ", userInfo);
   if (!userInfo) return null;
   const user: User = {
     id: userInfo.id,
     email: userInfo.login,
     role: userInfo.role,
-    CreatedAt: userInfo.CreatedAt
+    CreatedAt: userInfo.CreatedAt,
   };
-  return user
+  return user;
 }
 
-export async function login(user: User): Promise<User | null>{
+export async function login(user: User): Promise<User | null> {
   const loginRequest = `mutation sigin{
   authorization{
       signin(input:{login:"${user?.email}", password:"${user?.password}"}){
@@ -290,18 +362,18 @@ export async function login(user: User): Promise<User | null>{
   const response: any = await grqlFetch(loginRequest);
   // const { data: { authorization: { signin: { userInfo } } } } = response;
   const userInfo = response?.data?.authorization?.signin?.userInfo;
-  console.log("login ", userInfo);
+  // console.log("login ", userInfo);
   if (!userInfo) return null;
   const serverUser: User = {
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    CreatedAt: userInfo?.CreatedAt,
   };
-  return serverUser
+  return serverUser;
 }
 
-export async function logout(): Promise<void>{
+export async function logout(): Promise<void> {
   const logoutRequest = `mutation logout{
     authorization{
       logout(input:{}){
@@ -310,11 +382,10 @@ export async function logout(): Promise<void>{
     }
   }`;
   const response: any = await grqlFetch(logoutRequest);
-  return response
+  return response;
 }
 
-
-export async function authCheck(): Promise<User | null>{
+export async function authCheck(): Promise<User | null> {
   const authRequest = `query authCheck {
     authcheck(input: {}) {
       userInfo {
@@ -328,13 +399,98 @@ export async function authCheck(): Promise<User | null>{
   const response: any = await grqlFetch(authRequest);
   // const { data: { authcheck: { userInfo } } } = response;
   const userInfo = response?.data?.authcheck?.userInfo;
-  console.log("authCheck ", userInfo);
+  // console.log("authCheck ", userInfo);
   if (!userInfo) return null;
   const serverUser: User = {
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
-    CreatedAt: userInfo?.CreatedAt
+    CreatedAt: userInfo?.CreatedAt,
   };
-  return serverUser
+  return serverUser;
+}
+
+// ---------------------------------------------------------------------
+
+export async function getMeasures(): Promise<Measure[]> {
+  const listMeasurementsRequest = `query listMeasurements{
+    listMeasurements(filter:{}){
+      items{
+        id
+        token
+        startTime
+        endTime
+        group
+        signalType
+        target
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(listMeasurementsRequest);
+  const measures: Measure[] =
+    await response?.data?.listMeasurements?.items?.map((item: any) => ({
+      id: item.id,
+      token: item.token,
+      startTime: moment(item.startTime),
+      endTime: moment(item.endTime),
+      group: item.group,
+      signalType: item.signalType,
+      target: item.target,
+    }));
+  return measures;
+}
+
+export async function getGraph(id: string): Promise<Measure[]> {
+  const listMeasurementsRequest = `query listMeasurements{
+    listMeasurements(filter:{id: "${id}"}){
+      items{
+        id
+        token
+        startTime
+        endTime
+        group
+        signalType
+        target
+        dataSpectrum{
+          spectrum
+          StartFreq
+          FreqStep
+          startTime
+        }
+        dataPower{
+          power
+          startTime
+          timeStep
+        }
+      }
+    }
+  }`;
+  const response: any = await grqlFetch(listMeasurementsRequest);
+  const measures: Measure[] =
+    await response?.data?.listMeasurements?.items?.map((item: any) => ({
+      id: item.id,
+      token: item.token,
+      startTime: moment(item.startTime),
+      endTime: moment(item.endTime),
+      group: item.group,
+      signalType: item.signalType,
+      target: item.target,
+      spectrum: item?.dataSpectrum
+        ? {
+            spectrum: item?.dataSpectrum?.spectrum,
+            StartFreq: item?.dataSpectrum?.StartFreq,
+            FreqStep: item?.dataSpectrum?.FreqStep,
+            startTime: moment(item?.dataSpectrum?.startTime),
+          }
+        : undefined,
+      power: item?.dataPower
+        ? {
+            power: item?.dataPower?.power,
+            startTime: moment(item?.dataPower?.startTime),
+            timeStep: moment(item?.dataPower?.timeStep),
+          }
+        : undefined,
+    }));
+  // console.log("getGraph", measures);
+  return measures;
 }

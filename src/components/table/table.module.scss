@@ -1,12 +1,12 @@
 .table{
     width: 600px;
-    border: 1px solid white;
+    border: 1px solid black;
     border-radius: 10px;
 }
 
 .table__header{
     height: 40px;
-    background: rgb(130, 112, 162);
+    background: #1976d2;
 }
 
 .table__header__item{
@@ -15,9 +15,9 @@
 
 .table__row{
     height: 40px;
-    border: 1px solid white;
+    border: 1px solid black;
     &:nth-child(even) {
-        background: rgb(141, 128, 163);
+        background: #EBF5FF;
     }
     &:nth-child(odd) {
         // background: rgb(141, 128, 163);

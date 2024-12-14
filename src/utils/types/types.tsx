@@ -32,13 +32,19 @@ export interface Satellite {
   Id: string;
   Name: string;
   ExternalID?: string;
+  azimuth?: number;
+  elevation?: number;
+  range?: number;
+  x?: string;
+  y?: string;
+  z?: string;
 }
 
 export interface Device {
-  id:  bigint;
+  id?:  bigint;
   backendID?: string;
-  name: string;
-  token: string;
+  name?: string;
+  token?: string;
   description?: string;
   coordinates?: {
     x: string;
@@ -60,6 +66,33 @@ export interface task {
   signal?: signalType | null;
   groupType?: groupType | null;
 }
+
+export interface Measure {
+  id: string,
+  token: string,
+  startTime: Moment,
+  endTime: Moment,
+  group: groupType,
+  signalType: signalType,
+  target: string,
+  spectrum?: SpectrumMeasure,
+  power?: PowerMeasure,
+  link?: string,
+}
+
+export interface SpectrumMeasure {
+  spectrum: number[],
+  StartFreq: number,
+  FreqStep: number,
+  startTime: Moment,
+}
+
+export interface PowerMeasure {
+  power: number[],
+  startTime: Moment
+  timeStep: Moment
+}
+
 
 export type signalType = "L1" | "L2" | "L5" | "G1" | "G2" | "G5" | "E1" | "E5" | "E6" |  "B1" | "B2" | "B3" | "all";
 export enum signals {

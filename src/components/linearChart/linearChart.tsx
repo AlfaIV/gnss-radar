@@ -38,6 +38,11 @@ const LinearChart: FC<linearChartInterface> = ({
       title: {
         text: yLabel,
       },
+      labels: {
+        formatter: (value) => {
+          return value.toFixed(2); // Ограничиваем до 2 знаков после запятой
+        },
+      },
     },
     tooltip: {
       shared: true,
@@ -45,13 +50,7 @@ const LinearChart: FC<linearChartInterface> = ({
     },
   };
 
-  return (
-    <Chart
-      options={plotConfig}
-      series={plotConfig.series}
-      height={350}
-    />
-  );
+  return <Chart options={plotConfig} series={plotConfig.series} height={350} />;
 };
 
 export default LinearChart;

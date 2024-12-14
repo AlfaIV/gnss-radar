@@ -5,8 +5,8 @@ const plotConfig: PlotParams = {
   data: [
     {
       type: "scatterpolar",
-      r: [250, 100],
-      theta: [0, 340],
+      r: [],
+      theta: [],
       fill: "toself",
       name: "GPS",
       mode: "markers",
@@ -17,8 +17,8 @@ const plotConfig: PlotParams = {
     },
     {
       type: "scatterpolar",
-      r: [150, 50],
-      theta: [90, 180],
+      r: [],
+      theta: [],
       fill: "toself",
       name: "Glonass",
       mode: "markers",
@@ -31,7 +31,7 @@ const plotConfig: PlotParams = {
   layout: {
     title: "ГНСС радар",
     plot_bgcolor: "rgba(255, 255, 255, 0.0)", // Цвет фона графика
-    paper_bgcolor: "#A48ECC", // Цвет фона всей области
+    paper_bgcolor: "#ffffff", // Цвет фона всей области
     width: 800, // Ширина графика
     height: 800, // Высота графика
     polar: {

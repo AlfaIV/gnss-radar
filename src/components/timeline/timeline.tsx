@@ -1,40 +1,35 @@
 import { FC } from "react";
 import Chart from "react-apexcharts";
+import { task } from "@utils/types/types";
+import moment from "moment";
 
-const TimelineChart: FC = () => {
-  const options: ApexCharts.ApexOptions = {
+const TimelineChart: FC<{ tasks: task[] | undefined, openInfoTask: (task: task) => void }> = ({ tasks, openInfoTask }) => {
+  const data = {
     series: [
       {
-        name: "Устройство 1",
-        data: [
-          {
-            x: "G13",
+        name: "Запланированные задачи",
+        data:
+          tasks?.map((task) => ({
+            x: task?.targetID,
             y: [
-              new Date("2019-03-05T05:00:00").getTime(), // Начало задачи в 5:00
-              new Date("2019-03-05T09:00:00").getTime(), // Конец задачи в 9:00
+              task?.startDataTime?.toDate().getTime(),
+              task?.endDataTime?.toDate().getTime(),
             ],
-          },
-          {
-            x: "G14",
-            y: [
-              new Date("2019-03-05T10:00:00").getTime(), // Начало задачи в 10:00
-              new Date("2019-03-05T12:00:00").getTime(), // Конец задачи в 12:00
-            ],
-          },
-          {
-            x: "G5",
-            y: [
-              new Date("2019-03-05T13:00:00").getTime(), // Начало задачи в 13:00
-              new Date("2019-03-05T16:00:00").getTime(), // Конец задачи в 16:00
-            ],
-          },
-        ],
+          })) || [],
       },
-      // Добавьте другие устройства по аналогии
     ],
+  };
+
+  const options: ApexCharts.ApexOptions = {
+    ...data,
     chart: {
       type: "rangeBar",
-      height: 300, // Увеличьте высоту для лучшего отображения
+      // height: 400,
+      events: {
+        dataPointSelection: function (event, chartContext, opts) {
+          if (!!tasks) openInfoTask(tasks[opts.dataPointIndex]);
+        },
+      },
     },
     plotOptions: {
       bar: {
@@ -76,6 +71,16 @@ const TimelineChart: FC = () => {
       show: true,
       position: "top",
       horizontalAlign: "left",
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val, opts) {
+        return `Название задачи: ${!!tasks ? tasks[opts.dataPointIndex].name : "Нет данных"}`;
+      },
+      style: {
+        colors: ["#f3f4f5", "#fff"],
+        // colors: ["#000"],
+      },
     },
     tooltip: {
       enabled: false,

@@ -47,7 +47,7 @@ const Login = () => {
             margin="normal"
             required
             fullWidth
-            label="Имя пользователя"
+            label="Почта"
             value={user.email}
             onChange={(e) => setUser({ ...user, email: e.target.value })}
           />
@@ -70,7 +70,6 @@ const Login = () => {
             Войти
           </Button>
           <Typography component="p" variant="body1" color="error"></Typography>
-        </Box>
         <Typography
           component="p"
           variant="body1"
@@ -88,6 +87,7 @@ const Login = () => {
         >
           Регистрация
         </Button>
+        </Box>
       </Box>
     </Container>
   );
