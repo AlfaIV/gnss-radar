@@ -23,7 +23,7 @@ import {
   getCode,
 } from "@utils/requests/requests";
 import { Device } from "@utils/types/types";
-import { Description } from "@mui/icons-material";
+import { BurstMode, Description } from "@mui/icons-material";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { copyToClipboard } from "@utils/clipboard";
@@ -76,8 +76,7 @@ const Setting = () => {
   const createDeviceMutation = useMutation("createDeviceMutation", addDevice, {
     onSuccess: (data) => {
       queryClient.invalidateQueries("getDevices");
-      createDeviceMutation.isSuccess &&
-        setCurrentDevice(createDeviceMutation.data || null);
+      setCurrentDevice(createDeviceMutation.data || null);
       setNewDeviceCreation(false);
       setErrMsg("");
       setSuccessMsg("Устройство создано");
@@ -93,6 +92,7 @@ const Setting = () => {
       queryClient.invalidateQueries("getDevices");
       setErrMsg("");
       setSuccessMsg("Устройство удалено");
+      setCurrentDevice(null);
       closeMsgTimer;
     },
   });
@@ -152,7 +152,10 @@ const Setting = () => {
         <Typography variant="h3" color="initial">
           Настройки аппаратных комплексов
         </Typography>
-        <Typography sx={{ m: 3 }} >Выберите созданное устройство или нажмите "Добавить устройство" если хотите добавить новое.</Typography>
+        <Typography sx={{ m: 3 }}>
+          Выберите созданное устройство или нажмите "Добавить устройство" если
+          хотите добавить новое.
+        </Typography>
         <Stack direction="row" spacing={2} m={3}>
           <Select
             value={Number(currentDevice?.id)}
@@ -181,7 +184,7 @@ const Setting = () => {
           </Button>
         </Stack>
         <Box sx={{ padding: "20px" }}>
-          {!!currentDevice?.id && (
+          {!!currentDevice?.token && (
             <Stack spacing={4}>
               <Typography variant="body1">
                 {newDeviceCreation
@@ -200,6 +203,9 @@ const Setting = () => {
                 variant="outlined"
                 autoComplete="off"
               />
+              <Select defaultValue="RTL-SDR" label="Модель SDR" value={currentDevice?.model}>
+                <MenuItem>RTL-SDR</MenuItem>
+              </Select>
               <TextField
                 // value={`${currentDevice?.Coords.x}.${currentDevice?.Coords.y}.${currentDevice?.Coords.z}`}
                 // value={currentDevice?.Coords.x}
@@ -304,9 +310,34 @@ const Setting = () => {
           )}
         </Box>
         <Box sx={{ padding: "20px" }}>
-          <SyntaxHighlighter language={"python"} style={coy}>
-            {getCodeQuery.data}
-          </SyntaxHighlighter>
+          {!newDeviceCreation &&
+            currentDevice?.token &&
+            !!getCodeQuery.data && (
+              <>
+                <Typography>
+                  Ниже приведен пример кода на языке Python, где формируются
+                  корректные запросы к сервису.
+                </Typography>
+                <Stack direction="row" spacing={2} sx={{ mt: 3, mb: 1 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => copyToClipboard(getCodeQuery.data)}
+                  >
+                    Скопировать код
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => copyToClipboard(getCodeQuery.data)}
+                    disabled={true}
+                  >
+                    Скачать код
+                  </Button>
+                </Stack>
+                <SyntaxHighlighter language="python" style={coy}>
+                  {getCodeQuery.data}
+                </SyntaxHighlighter>
+              </>
+            )}
         </Box>
       </Paper>
     </Container>

@@ -44,6 +44,7 @@ export interface Device {
   id?:  bigint;
   backendID?: string;
   name?: string;
+  model?: string;
   token?: string;
   description?: string;
   coordinates?: {
