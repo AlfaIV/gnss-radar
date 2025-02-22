@@ -11,18 +11,18 @@ import {
 } from "@mui/material";
 
 import Grid from "@mui/material/Grid2";
-import CreateTask from "@components/createTask/createTask";
+import CreateTask from "~/components/createTask/createTask";
 
 import { useState } from "react";
 
-import TimelineChart from "@components/timeline/timeline";
-import CardTasks from "@components/cardTasks/cardTasks";
+import TimelineChart from "~/components/timeline/timeline";
+import CardTasks from "~/components/cardTasks/cardTasks";
 
-import { getTasks } from "@utils/requests/requests";
+import { getTasks } from "~/utils/requests/requests";
 import { useQuery } from "react-query";
 
-import { task } from "@utils/types/types";
-import InfoTask from "@components/infoTask/infoTask";
+import { task } from "~/utils/types/types";
+import InfoTask from "~/components/infoTask/infoTask";
 
 const Task = () => {
   const [openCreateTask, setOpenCreateTask] = useState(false);

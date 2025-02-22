@@ -1,13 +1,12 @@
 import style from "./measure.module.scss";
 import "./measure.module.scss";
 
-import CardMeasure from "@components/cardMeasure/cardMeasure";
-import MeasureFilter from "@components/measureFilter/measureFilter";
-import filters from "@components/measureFilter/measureFilter.types";
+import CardMeasure from "~/components/cardMeasure/cardMeasure";
+import MeasureFilter from "~/components/measureFilter/measureFilter";
+import filters from "~/components/measureFilter/measureFilter.types";
 
 import moment from "moment";
 import { useState, useEffect } from "react";
-import { measure } from "@views/measure/data";
 import { debounce } from "lodash";
 
 import TuneIcon from "@mui/icons-material/Tune";
@@ -17,26 +16,23 @@ import {
   IconButton,
   Typography,
   Grid,
-  Box,
-  MenuItem,
-  Select,
 } from "@mui/material";
 
-import LinearChart from "@components/linearChart/linearChart";
-import { linearChartInterface } from "@components/linearChart/linearChart.interface";
-import RinexTable from "@components/rinexTable/rinexTable";
+import LinearChart from "~/components/linearChart/linearChart";
+import { linearChartInterface } from "~/components/linearChart/linearChart.interface";
+import RinexTable from "~/components/rinexTable/rinexTable";
 
-import { getMeasures } from "@utils/requests/requests";
+import { getMeasures } from "~/utils/requests/requests";
 import { useQuery } from "react-query";
-import { Measure as MeasureType } from "@utils/types/types";
-import { freqRange, timeRange } from "@utils/graphUtils";
+import { Measure as MeasureType } from "~/utils/types/types";
+import { freqRange, timeRange } from "~/utils/graphUtils";
 
 const Measure = () => {
-  enum visualizationType {
-    power,
-    spectrum,
-    rinex,
-  }
+  // enum visualizationType {
+  //   power,
+  //   spectrum,
+  //   rinex,
+  // }
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openGraph, setOpenGraph] = useState(false);
@@ -62,7 +58,7 @@ const Measure = () => {
 
   useEffect(() => {
     // console.log("use effect", graphData);
-    if (!!graphData) {
+    if (graphData) {
       setSpectrumGraphData({
         title: "Спектр сигнала",
         // xData: [],

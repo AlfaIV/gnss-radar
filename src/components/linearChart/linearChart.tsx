@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Chart from "react-apexcharts";
-import { linearChartInterface } from "@components/linearChart/linearChart.interface";
+import { linearChartInterface } from "~/components/linearChart/linearChart.interface";
 
 const LinearChart: FC<linearChartInterface> = ({
   title,

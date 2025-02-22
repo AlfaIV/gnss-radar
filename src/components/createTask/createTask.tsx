@@ -27,14 +27,14 @@ import {
   getSatellites,
   getDevices,
   createTask,
-} from "@utils/requests/requests";
+} from "~/utils/requests/requests";
 import {
   Device,
   Satellite,
   signalType,
   signals,
   task,
-} from "@utils/types/types";
+} from "~/utils/types/types";
 
 interface CreateTaskProps {
   open: boolean;

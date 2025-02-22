@@ -7,34 +7,30 @@ import {
   Button,
   FormControl,
   FormLabel,
-  FormGroup,
   FormHelperText,
   TextField,
   Typography,
   MenuItem,
   Select,
   Alert,
-  Box,
 } from "@mui/material";
 
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { Moment } from "moment";
-import { FC, useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { FC, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import {
   getSatellites,
   getDevices,
   createTask,
-} from "@utils/requests/requests";
+} from "~/utils/requests/requests";
 import {
-  Device,
-  Satellite,
+
   signalType,
-  signals,
   task,
-} from "@utils/types/types";
+} from "~/utils/types/types";
 
 interface CreateTaskProps {
   open: boolean;

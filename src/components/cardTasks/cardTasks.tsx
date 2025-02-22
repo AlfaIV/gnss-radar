@@ -8,9 +8,9 @@ import {
   CardActions,
   CardHeader,
 } from "@mui/material";
-import { task } from "@utils/types/types";
+import { task } from "~/utils/types/types";
 import { FC } from "react";
-import { deleteTask, sendTaskToDevice } from "@utils/requests/requests";
+import { deleteTask, sendTaskToDevice } from "~/utils/requests/requests";
 import { useQueryClient, useMutation} from "react-query";
 
 interface CardTasksProps {

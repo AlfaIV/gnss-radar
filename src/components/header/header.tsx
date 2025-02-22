@@ -9,7 +9,7 @@ import {
   } from "@mui/material";
 
 import { FC } from "react";
-import { logout } from '@utils/requests/requests';
+import { logout } from '~/utils/requests/requests';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import { Measure } from "@utils/types/types";
+import { Measure } from "~/utils/types/types";
 
 export interface linearChartInterface{
   title: string,

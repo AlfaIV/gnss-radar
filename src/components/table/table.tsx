@@ -15,7 +15,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { Satellite } from "@utils/types/types";
+import { Satellite } from "~/utils/types/types";
 // import { Satellite } from "@mui/icons-material";
 
 const TableSatellite: FC<{ satellites: Satellite[] }> = ({ satellites }) => {

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Chart from "react-apexcharts";
-import { task } from "@utils/types/types";
+import { task } from "~/utils/types/types";
 import moment from "moment";
 
 const TimelineChart: FC<{ tasks: task[] | undefined, openInfoTask: (task: task) => void }> = ({ tasks, openInfoTask }) => {
@@ -27,7 +27,7 @@ const TimelineChart: FC<{ tasks: task[] | undefined, openInfoTask: (task: task) 
       // height: 400,
       events: {
         dataPointSelection: function (event, chartContext, opts) {
-          if (!!tasks) openInfoTask(tasks[opts.dataPointIndex]);
+          if (tasks) openInfoTask(tasks[opts.dataPointIndex]);
         },
       },
     },
@@ -75,7 +75,7 @@ const TimelineChart: FC<{ tasks: task[] | undefined, openInfoTask: (task: task) 
     dataLabels: {
       enabled: true,
       formatter: function (val, opts) {
-        return `Название задачи: ${!!tasks ? tasks[opts.dataPointIndex].name : "Нет данных"}`;
+        return `Название задачи: ${tasks ? tasks[opts.dataPointIndex].name : "Нет данных"}`;
       },
       style: {
         colors: ["#f3f4f5", "#fff"],

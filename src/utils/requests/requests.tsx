@@ -1,5 +1,5 @@
 import axios from "axios";
-import grqlFetch from "@utils/grql";
+import grqlFetch from "~/utils/grql";
 import {
   Satellite,
   Device,
@@ -7,12 +7,9 @@ import {
   signals,
   User,
   Measure,
-  SpectrumMeasure,
-  PowerMeasure,
-} from "@utils/types/types";
-import { task } from "@utils/types/types";
+} from "~/utils/types/types";
+import { task } from "~/utils/types/types";
 import moment from "moment";
-import { Power } from "@mui/icons-material";
 
 const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map();
 SIGNAL_TYPE.set(signals.L1, "SIGNAL_TYPE_L1");

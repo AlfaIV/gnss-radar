@@ -1,31 +1,66 @@
+import path from 'path'
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import svgr from 'vite-plugin-svgr'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import checker from 'vite-plugin-checker'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-        '@': resolve(__dirname, 'src'),
-        '@components': resolve(__dirname, './src/components'),
-        "@assets": resolve(__dirname, './src/assets'),
-        "@views": resolve(__dirname, './src/views'),
-        "@icons": resolve(__dirname, 'src/assets/icons'),
-        "@scss": resolve(__dirname, 'src/scss'),
-        "@utils": resolve(__dirname, 'src/utils'),
+export default defineConfig(({}) => {
+
+  return {
+    base: '/',
+    server:{
+      open: true,
+      host: '0.0.0.0',
+      port: 8080,
+      proxy: {
+        //Потом айпи реального сервера тут поставим
+        '/api': {target:"http://83.166.235.140:8080/",
+
+          ws:true,
+          changeOrigin: true
+        },
+        
+      }
     },
-  },
-  build: {
-    // chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, './src'),
+      },
+    },
+    optimizeDeps: {
+      force: true,
+      exclude: ['js-big-decimal'],
+      esbuildOptions: {
+        loader: {
+          '.ts': 'tsx',
+          '.js': 'jsx'
         },
       },
     },
-  },
+    plugins: [
+      react(),
+      svgr({
+        svgrOptions: {
+          dimensions: true,
+        },
+      }),
+      checker({ typescript: true }),
+      tsconfigPaths(),
+    ],
+    build: {
+      outDir: path.resolve(__dirname, 'build'),
+      rollupOptions: {
+        output: {
+          assetFileNames: '[name].[hash].[ext]',
+          entryFileNames: '[name].[hash].min.js',
+          chunkFileNames: '[name].[hash].min.js',
+        },
+      },
+      emptyOutDir: true,
+      minify: true,
+      assetsDir: '.',
+    },
+  }
 })

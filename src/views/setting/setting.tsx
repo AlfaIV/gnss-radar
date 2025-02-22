@@ -20,9 +20,8 @@ import {
   updateDevice,
   addDevice,
   deleteDevice,
-} from "@utils/requests/requests";
-import { Device } from "@utils/types/types";
-import { Description } from "@mui/icons-material";
+} from "~/utils/requests/requests";
+import { Device } from "~/utils/types/types";
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id

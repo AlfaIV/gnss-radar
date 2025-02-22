@@ -2,7 +2,7 @@ import style from "./radar.module.scss";
 import Plot from "react-plotly.js";
 // import Button from "@components/button/button";
 import plotConfig from "./plot.config";
-import TableSatellite from "@components/table/table";
+import TableSatellite from "~/components/table/table";
 import { FC } from "react";
 import {
   Grid2,
@@ -31,8 +31,8 @@ import {
   getSatellites,
   getSatellitesFromDevice,
   getSatellitesCoordinate,
-} from "@utils/requests/requests";
-import { Device, Satellite } from "@utils/types/types";
+} from "~/utils/requests/requests";
+import { Device, Satellite } from "~/utils/types/types";
 import { forEach, min } from "lodash";
 import { Data, Layout } from "plotly.js";
 
@@ -85,7 +85,7 @@ const Radar: FC = () => {
       enabled: currentDevice !== null,
       onSuccess: (data) => {
         console.log("спутники: ", data);
-        let plotData: {
+        const plotData: {
           type: string;
           r: (number | undefined)[];
           theta: (number | undefined)[];

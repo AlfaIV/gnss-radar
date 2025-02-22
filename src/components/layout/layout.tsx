@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-import Header from "@components/header/header";
-import Footer from "@components/footer/footer";
+import Header from "~/components/header/header";
+import Footer from "~/components/footer/footer";
 
 import style from "./layout.module.scss";
 
-import { authCheck } from "@utils/requests/requests";
+import { authCheck } from "~/utils/requests/requests";
 import { useQuery } from "react-query";
 
 import { useNavigate } from "react-router-dom";

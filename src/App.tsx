@@ -1,12 +1,12 @@
 import "./App.css";
 
-import Layout from "@components/layout/layout";
-import Radar from "@components/radar/radar";
-import Measure from "@views/measure/measure";
-import Login from "@views/login/login";
-import SignUp from "@views/signup/signup";
-import Task from "@views/task/task";
-import Setting from "@views/setting/setting";
+import Layout from "~/components/layout/layout";
+import Radar from "~/components/radar/radar";
+import Measure from "~/views/measure/measure";
+import Login from "~/views/login/login";
+import SignUp from "~/views/signup/signup";
+import Task from "~/views/task/task";
+import Setting from "~/views/setting/setting";
 
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

@@ -3,8 +3,8 @@ import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
-import { login } from "@utils/requests/requests";
-import { User } from "@utils/types/types";
+import { login } from "~/utils/requests/requests";
+import { User } from "~/utils/types/types";
 import { set } from "lodash";
 
 const Login = () => {

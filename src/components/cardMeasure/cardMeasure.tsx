@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import CardMeasureProps from "./cardMeasure.type";
-import { Measure } from "@utils/types/types";
+import { Measure } from "~/utils/types/types";
 import "moment/locale/ru";
 
-import { getGraph } from "@utils/requests/requests";
+import { getGraph } from "~/utils/requests/requests";
 import { useMutation } from "react-query";
 
 //toDo подумать как сделать загрузку данных
@@ -22,7 +22,7 @@ const CardMeasure: FC<{
 }> = ({ measure, setGraphData }) => {
   const getGraphMutation = useMutation(`getGraph/${measure?.token}`, getGraph, {
     onSuccess: (data) => {
-      !!data[0] ? setGraphData(data[0]) : setGraphData(null);
+      data[0] ? setGraphData(data[0]) : setGraphData(null);
     },
   });
 

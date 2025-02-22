@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { UserForm } from "@utils/types/types";
+import { UserForm } from "~/utils/types/types";
 
-import { signup, login } from "@utils/requests/requests";
+import { signup, login } from "~/utils/requests/requests";
 import { useMutation, useQueryClient } from "react-query";
 
 const SignUp: FC = () => {
