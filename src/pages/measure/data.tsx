@@ -1,4 +1,4 @@
-import CardMeasureProps from '~/components/cardMeasure/cardMeasure.type'
+import CardMeasureProps from '~/features/cardMeasure/cardMeasure.type'
 
 export const measure: CardMeasureProps[] = [
   {

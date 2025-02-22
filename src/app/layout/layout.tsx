@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { Box, Typography } from '@mui/material'
 
 import Header from '~/features/header/header'
-import Footer from '~/components/footer/footer'
+import Footer from '~/features/footer/footer'
 import { authCheck } from '~/utils/requests/requests'
 
 import style from './layout.module.scss'

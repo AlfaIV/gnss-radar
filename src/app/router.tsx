@@ -1,9 +1,9 @@
 import { Radar, Task, Login } from '@mui/icons-material'
 import { createBrowserRouter } from 'react-router-dom'
 
-import Measure from '~/views/measure/measure'
-import Setting from '~/views/setting/setting'
-import SignUp from '~/views/signup/signup'
+import Measure from '~/pages/measure/measure'
+import Setting from '~/pages/setting/setting'
+import SignUp from '~/pages/signup/signup'
 
 import Layout from './layout/layout'
 

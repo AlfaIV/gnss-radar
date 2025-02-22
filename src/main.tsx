@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider } from '@mui/material/styles'
 
-import theme from './scss/mainTheme'
+import theme from './shared/scss/mainTheme'
 import App from './app/App'
 import './index.css'
 

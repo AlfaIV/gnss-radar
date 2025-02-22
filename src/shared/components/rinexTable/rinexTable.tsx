@@ -7,7 +7,7 @@ import {
   TableBody,
   Typography,
 } from '@mui/material'
-
+// Это имеет смысл через пропсы, как компонент
 const RinexTable = () => {
   const rinexTableStruct = {
     '2.11': {

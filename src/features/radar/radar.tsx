@@ -1,9 +1,7 @@
 import Plot from 'react-plotly.js'
 
-// import Button from "@components/button/button";
 import { FC } from 'react'
 import {
-  Grid2,
   Button,
   Typography,
   Stack,
@@ -12,19 +10,16 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
-  Paper,
   Select,
   MenuItem,
   SelectChangeEvent,
   Box,
 } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { ChangeEvent, useState, ReactNode, useEffect } from 'react'
-import { forEach, min } from 'lodash'
-import { Data, Layout } from 'plotly.js'
+import { useQuery, useQueryClient } from 'react-query'
+import { useState, ReactNode } from 'react'
+import { Data } from 'plotly.js'
 
 import {
   getDevices,
@@ -33,7 +28,7 @@ import {
   getSatellitesCoordinate,
 } from '~/utils/requests/requests'
 import { Device, Satellite } from '~/utils/types/types'
-import TableSatellite from '~/components/table/table'
+import TableSatellite from '~/features/table/table'
 
 import plotConfig from './plot.config'
 

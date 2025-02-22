@@ -15,12 +15,12 @@ import Grid from '@mui/material/Grid2'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 
-import CreateTask from '~/components/createTask/createTask'
-import TimelineChart from '~/components/timeline/timeline'
-import CardTasks from '~/components/cardTasks/cardTasks'
+import CreateTask from '~/features/createTask/createTask'
+import TimelineChart from '~/features/timeline/timeline'
+import CardTasks from '~/features/cardTasks/cardTasks'
 import { getTasks } from '~/utils/requests/requests'
 import { task } from '~/utils/types/types'
-import InfoTask from '~/components/infoTask/infoTask'
+import InfoTask from '~/features/infoTask/infoTask'
 
 const Task = () => {
   const [openCreateTask, setOpenCreateTask] = useState(false)

@@ -25,7 +25,7 @@ import { Device } from '~/utils/types/types'
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
-
+// todo прикрутить yup для валидации
 const Setting = () => {
   const [newDeviceCreation, setNewDeviceCreation] = useState(false)
   const [errMsg, setErrMsg] = useState<string>('')
