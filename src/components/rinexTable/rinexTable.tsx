@@ -6,48 +6,49 @@ import {
   TableCell,
   TableBody,
   Typography,
-} from "@mui/material";
+} from '@mui/material'
 
 const RinexTable = () => {
-
   const rinexTableStruct = {
-    "2.11": {
+    '2.11': {
       rows: [
-        "ID спутника",
-        "L1 псевдофаза",
-        "L1 SNR",
-        "L2 псевдофаза",
-        "L2 SNR",
-        "P1 псевдодальность",
-        "P1 SNR",
-        "P2 псевдодальность",
-        "P2 SNR",
-        "C1 псевдодальность",
-        "C1 SNR",
-      ]
+        'ID спутника',
+        'L1 псевдофаза',
+        'L1 SNR',
+        'L2 псевдофаза',
+        'L2 SNR',
+        'P1 псевдодальность',
+        'P1 SNR',
+        'P2 псевдодальность',
+        'P2 SNR',
+        'C1 псевдодальность',
+        'C1 SNR',
+      ],
     },
-    "2.12": {
+    '2.12': {
       rows: [
-        "ID спутника",
-        "L1 псевдофаза",
-        "L2 псевдофаза",
-        "P1 псевдодальность",
-        "P2 псевдодальность",
-        "C1 псевдодальность",
-      ]
-    }
-  };
+        'ID спутника',
+        'L1 псевдофаза',
+        'L2 псевдофаза',
+        'P1 псевдодальность',
+        'P2 псевдодальность',
+        'C1 псевдодальность',
+      ],
+    },
+  }
 
   return (
     <>
-      <Typography variant="body1" sx={{ width: "100%", textAlign: "center" }}>
+      <Typography variant='body1' sx={{ width: '100%', textAlign: 'center' }}>
         Данные с Rinex v{2.11}
       </Typography>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              {rinexTableStruct["2.11"].rows.map((element) => <TableCell key={element}>{element}</TableCell>)}
+              {rinexTableStruct['2.11'].rows.map((element) => (
+                <TableCell key={element}>{element}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -73,7 +74,7 @@ const RinexTable = () => {
         </Table>
       </TableContainer>
     </>
-  );
-};
+  )
+}
 
-export default RinexTable;
+export default RinexTable

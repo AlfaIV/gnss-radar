@@ -6,142 +6,154 @@ import {
   Select,
   MenuItem,
   Button,
-  Box,
   TextField,
   Snackbar,
   Alert,
   SelectChangeEvent,
-} from "@mui/material";
+  Box,
+} from '@mui/material'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { ChangeEvent, useState } from 'react'
 
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { ChangeEvent, useState, ReactNode, useEffect } from "react";
 import {
   getDevices,
   updateDevice,
   addDevice,
   deleteDevice,
-} from "~/utils/requests/requests";
-import { Device } from "~/utils/types/types";
+} from '~/utils/requests/requests'
+import { Device } from '~/utils/types/types'
 
 //to do - сделать точку стояния
 //to do - решить  вопрос с id
 
 const Setting = () => {
-  const [newDeviceCreation, setNewDeviceCreation] = useState(false);
-  const [errMsg, setErrMsg] = useState<string>("");
-  const [successMsg, setSuccessMsg] = useState<string>("");
+  const [newDeviceCreation, setNewDeviceCreation] = useState(false)
+  const [errMsg, setErrMsg] = useState<string>('')
+  const [successMsg, setSuccessMsg] = useState<string>('')
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const closeMsgTimer = setTimeout(() => {
-    setSuccessMsg("");
-  }, 5000);
+    setSuccessMsg('')
+  }, 5000)
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>({
     id: BigInt(0),
-    backendID: "",
-    name: "",
-    token: "",
-    description: "",
+    backendID: '',
+    name: '',
+    token: '',
+    description: '',
     coordinates: {
-      x: "",
-      y: "",
-      z: "",
+      x: '',
+      y: '',
+      z: '',
     },
-  });
+  })
 
-  const devices = useQuery("getDevices", getDevices, {
+  const devices = useQuery('getDevices', getDevices, {
     onError: () => {
-      setErrMsg("Ошибка получения устройств");
+      setErrMsg('Ошибка получения устройств')
     },
-  });
+  })
 
-  const changeDeviceMutation = useMutation("updateDevice", updateDevice, {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries("getDevices");
-      setErrMsg("");
-      setSuccessMsg("Устройство обновлено");
-      closeMsgTimer;
-    },
-    onError: () => {
-      setErrMsg("Ошибка обновления устройства");
-    },
-  });
-
-  const createDeviceMutation = useMutation("createDeviceMutation", addDevice, {
-    onSuccess: (data) => {
-      queryClient.invalidateQueries("getDevices");
-      createDeviceMutation.isSuccess &&
-        setCurrentDevice(createDeviceMutation.data || null);
-      setNewDeviceCreation(false);
-      setErrMsg("");
-      setSuccessMsg("Устройство создано");
-      closeMsgTimer;
-    },
-    onError: () => {
-      setErrMsg("Ошибка создания устройства");
-    },
-  });
-
-  const deleteDeviceMutation = useMutation("deleteDevice", deleteDevice, {
+  const changeDeviceMutation = useMutation('updateDevice', updateDevice, {
     onSuccess: () => {
-      queryClient.invalidateQueries("getDevices");
-      setErrMsg("");
-      setSuccessMsg("Устройство удалено");
-      closeMsgTimer;
+      queryClient.invalidateQueries('getDevices')
+      setErrMsg('')
+      setSuccessMsg('Устройство обновлено')
+      closeMsgTimer
     },
-  });
+    onError: () => {
+      setErrMsg('Ошибка обновления устройства')
+    },
+  })
 
-  function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
-    setNewDeviceCreation(false);
+  const createDeviceMutation = useMutation('createDeviceMutation', addDevice, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getDevices')
+      createDeviceMutation.isSuccess &&
+        setCurrentDevice(createDeviceMutation.data || null)
+      setNewDeviceCreation(false)
+      setErrMsg('')
+      setSuccessMsg('Устройство создано')
+      closeMsgTimer
+    },
+    onError: () => {
+      setErrMsg('Ошибка создания устройства')
+    },
+  })
+
+  const deleteDeviceMutation = useMutation('deleteDevice', deleteDevice, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getDevices')
+      setErrMsg('')
+      setSuccessMsg('Устройство удалено')
+      closeMsgTimer
+    },
+  })
+
+  function handleChange(event: SelectChangeEvent<number>) {
+    setNewDeviceCreation(false)
     setCurrentDevice(
       devices?.data?.find(
-        (device: Device) => Number(device?.id) === Number(event?.target?.value)
-      ) || null
-    );
+        (device: Device) => Number(device?.id) === Number(event?.target?.value),
+      ) || null,
+    )
   }
 
   function handleCreateDevice() {
     const newDefaultDevice: Device = {
       id: BigInt(0),
-      name: "Новое устройство",
-      description: "Описание нового устройства",
-      token: "Токен сгенерируется автоматически",
+      name: 'Новое устройство',
+      description: 'Описание нового устройства',
+      token: 'Токен сгенерируется автоматически',
       coordinates: {
-        x: "0",
-        y: "0",
-        z: "0",
+        x: '0',
+        y: '0',
+        z: '0',
       },
-    };
-    setCurrentDevice(newDefaultDevice);
-    setNewDeviceCreation(true);
+    }
+    setCurrentDevice(newDefaultDevice)
+    setNewDeviceCreation(true)
   }
 
   if (devices?.isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant='h2'>Идёт загрузка...</Typography>
+      </Box>
+    )
   }
 
   if (devices?.error) {
-    return <div>error</div>;
+    return <div>error</div>
   }
 
   // console.log("currentDevice", currentDevice);
   // console.log("devices.data", devices.data);
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth='lg'>
       <Paper
         elevation={0}
-        sx={{ mt: 5, md: 5, padding: "20px 10px", minHeight: "90vh" }}
+        sx={{ mt: 5, md: 5, padding: '20px 10px', minHeight: '90vh' }}
       >
-        <Typography variant="h3" color="initial">
+        <Typography variant='h3' color='initial'>
           Настройки аппаратных комплексов
         </Typography>
-        <Stack direction="row" spacing={2} m={3}>
+        <Stack direction='row' spacing={2} m={3}>
           <Select
             value={Number(currentDevice?.id)}
             onChange={handleChange}
-            autoWidth={true}
+            autoWidth
             sx={{ minWidth: 300 }}
           >
             {devices?.data?.length !== 0 &&
@@ -157,22 +169,22 @@ const Setting = () => {
           </Select>
           <Button
             onClick={() => {
-              handleCreateDevice();
+              handleCreateDevice()
             }}
-            variant="outlined"
+            variant='outlined'
           >
             Добавить устройство
           </Button>
         </Stack>
-        <Box sx={{ padding: "20px" }}>
+        <Box sx={{ padding: '20px' }}>
           <Stack spacing={4}>
-            <Typography variant="body1">
+            <Typography variant='body1'>
               {newDeviceCreation
                 ? 'Внесите изменения в параметры устройства и нажмите "Сохранить"'
-                : "В данном разделе можно редактировать параметры уже ранее добавленных устройств или добавлять новые для хранения данных с них."}
+                : 'В данном разделе можно редактировать параметры уже ранее добавленных устройств или добавлять новые для хранения данных с них.'}
             </Typography>
             <TextField
-              label="Название устройства"
+              label='Название устройства'
               value={currentDevice?.name}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setCurrentDevice({
@@ -180,27 +192,27 @@ const Setting = () => {
                   name: event.currentTarget.value,
                 } as Device)
               }
-              variant="outlined"
-              autoComplete="off"
+              variant='outlined'
+              autoComplete='off'
             />
             <TextField
               // value={`${currentDevice?.Coords.x}.${currentDevice?.Coords.y}.${currentDevice?.Coords.z}`}
               // value={currentDevice?.Coords.x}
-              label="Точка стояния"
-              variant="outlined"
+              label='Точка стояния'
+              variant='outlined'
             />
-            <Stack direction="row" spacing={2}>
+            <Stack direction='row' spacing={2}>
               <TextField
-                label="Токен"
-                variant="outlined"
-                sx={{ width: "500px" }}
+                label='Токен'
+                variant='outlined'
+                sx={{ width: '500px' }}
                 value={currentDevice?.token}
-                autoComplete="off"
+                autoComplete='off'
               />
               <Button
-                variant="contained"
+                variant='contained'
                 //  onClick={handleCopy}
-                disabled={true}
+                disabled
               >
                 Скопировать
               </Button>
@@ -211,48 +223,44 @@ const Setting = () => {
               >
                 <Alert
                   // onClose={handleCloseSnackbar}
-                  severity="success"
+                  severity='success'
                 >
                   Токен скопирован в буфер обмена!
                 </Alert>
               </Snackbar>
             </Stack>
             <TextField
-              variant="outlined"
-              label="Описание устройства"
+              variant='outlined'
+              label='Описание устройства'
               multiline
               rows={4}
               value={currentDevice?.description}
-              autoFocus={true}
+              autoFocus
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 setCurrentDevice({
                   ...currentDevice,
                   description: event.currentTarget.value,
-                } as Device);
+                } as Device)
               }}
             />
-            <TextField  
-              label="URL устройства"
-              variant="outlined"
-              disabled={true}
-            />
-            {!!errMsg && <Alert severity="error">{errMsg}</Alert>}
-            {!!successMsg && <Alert severity="success">{successMsg}</Alert>}
-            <Stack direction={"row"} spacing={2}>
+            <TextField label='URL устройства' variant='outlined' disabled />
+            {!!errMsg && <Alert severity='error'>{errMsg}</Alert>}
+            {!!successMsg && <Alert severity='success'>{successMsg}</Alert>}
+            <Stack direction='row' spacing={2}>
               <Button
                 disabled={currentDevice === null}
                 onClick={() => {
                   // console.log(currentDevice);
                   !newDeviceCreation &&
                     currentDevice &&
-                    changeDeviceMutation.mutate(currentDevice);
+                    changeDeviceMutation.mutate(currentDevice)
                   newDeviceCreation &&
                     currentDevice &&
-                    createDeviceMutation.mutate(currentDevice);
+                    createDeviceMutation.mutate(currentDevice)
                   // console.log(mutation);
                 }}
-                variant="contained"
-                sx={{ width: "150px" }}
+                variant='contained'
+                sx={{ width: '150px' }}
               >
                 Сохранить
               </Button>
@@ -260,24 +268,24 @@ const Setting = () => {
                 onClick={() => {
                   setCurrentDevice(
                     devices?.data?.find(
-                      (device: Device) => device.id === currentDevice?.id
-                    ) || null
-                  );
+                      (device: Device) => device.id === currentDevice?.id,
+                    ) || null,
+                  )
                 }}
-                variant="outlined"
-                sx={{ width: "150px" }}
+                variant='outlined'
+                sx={{ width: '150px' }}
               >
                 Отменить
               </Button>
               <Button
                 onClick={() => {
                   if (currentDevice) {
-                    deleteDeviceMutation.mutate(currentDevice);
+                    deleteDeviceMutation.mutate(currentDevice)
                   }
                 }}
-                variant="outlined"
-                color="error"
-                sx={{ width: "150px" }}
+                variant='outlined'
+                color='error'
+                sx={{ width: '150px' }}
               >
                 Удалить
               </Button>
@@ -286,10 +294,10 @@ const Setting = () => {
         </Box>
       </Paper>
     </Container>
-  );
-};
+  )
+}
 
-export default Setting;
+export default Setting
 
 // const mutation = useMutation("getGrqlData", getGrqlData);
 

@@ -1,43 +1,43 @@
-import { PlotParams } from 'react-plotly.js';
-import { Data, Layout } from 'plotly.js';
+import { PlotParams } from 'react-plotly.js'
+import { Data, Layout } from 'plotly.js'
 
 const plotConfig: PlotParams = {
   data: [
     {
-      type: "scatterpolar",
+      type: 'scatterpolar',
       r: [],
       theta: [],
-      fill: "toself",
-      name: "GPS",
-      mode: "markers",
+      fill: 'toself',
+      name: 'GPS',
+      mode: 'markers',
       marker: {
         size: 10,
-        color: "blue",
+        color: 'blue',
       },
     },
     {
-      type: "scatterpolar",
+      type: 'scatterpolar',
       r: [],
       theta: [],
-      fill: "toself",
-      name: "Glonass",
-      mode: "markers",
+      fill: 'toself',
+      name: 'Glonass',
+      mode: 'markers',
       marker: {
         size: 10,
-        color: "red",
+        color: 'red',
       },
     },
   ] as Data[],
   layout: {
-    title: "ГНСС радар",
-    plot_bgcolor: "rgba(255, 255, 255, 0.0)", // Цвет фона графика
-    paper_bgcolor: "#ffffff", // Цвет фона всей области
+    title: 'ГНСС радар',
+    plot_bgcolor: 'rgba(255, 255, 255, 0.0)', // Цвет фона графика
+    paper_bgcolor: '#ffffff', // Цвет фона всей области
     width: 800, // Ширина графика
     height: 800, // Высота графика
     polar: {
       angularaxis: {
         rotation: 90, // Установка угла начала оси (азимута)
-        direction: "clockwise", // Направление оси
+        direction: 'clockwise', // Направление оси
       },
       radialaxis: {
         visible: true,
@@ -46,7 +46,6 @@ const plotConfig: PlotParams = {
     },
     showlegend: true,
   } as Layout,
-};
+}
 
-export default plotConfig;
-
+export default plotConfig

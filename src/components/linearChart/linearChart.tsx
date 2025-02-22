@@ -1,6 +1,7 @@
-import { FC } from "react";
-import Chart from "react-apexcharts";
-import { linearChartInterface } from "~/components/linearChart/linearChart.interface";
+import { FC } from 'react'
+import Chart from 'react-apexcharts'
+
+import { linearChartInterface } from '~/components/linearChart/linearChart.interface'
 
 const LinearChart: FC<linearChartInterface> = ({
   title,
@@ -19,14 +20,14 @@ const LinearChart: FC<linearChartInterface> = ({
 
     chart: {
       height: 350,
-      type: "line",
+      type: 'line',
     },
     stroke: {
-      curve: "smooth",
+      curve: 'smooth',
     },
     title: {
       text: title,
-      align: "center",
+      align: 'center',
     },
     xaxis: {
       categories: xData,
@@ -40,7 +41,7 @@ const LinearChart: FC<linearChartInterface> = ({
       },
       labels: {
         formatter: (value) => {
-          return value.toFixed(2); // Ограничиваем до 2 знаков после запятой
+          return value.toFixed(2) // Ограничиваем до 2 знаков после запятой
         },
       },
     },
@@ -48,9 +49,9 @@ const LinearChart: FC<linearChartInterface> = ({
       shared: true,
       intersect: false,
     },
-  };
+  }
 
-  return <Chart options={plotConfig} series={plotConfig.series} height={350} />;
-};
+  return <Chart options={plotConfig} series={plotConfig.series} height={350} />
+}
 
-export default LinearChart;
+export default LinearChart

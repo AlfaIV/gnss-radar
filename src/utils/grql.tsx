@@ -1,9 +1,8 @@
-import axios from "axios";
+import axios from 'axios'
 
-
-const ip = "85.198.109.43";
+const ip = '85.198.109.43'
 // const ip = "127.0.0.1";
-const endpoint = `http://${ip}:1000/query`;
+const endpoint = `http://${ip}:1000/query`
 
 const grqlFetch = async (query: string) => {
   try {
@@ -12,18 +11,18 @@ const grqlFetch = async (query: string) => {
       { query },
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      }
-    );
-    return response.data;
+      },
+    )
+    return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("Ошибка:", error.response?.data);
+      console.error('Ошибка:', error.response?.data)
     } else {
-      console.error("Ошибка:", error);
+      console.error('Ошибка:', error)
     }
   }
-};
+}
 
-export default grqlFetch;
+export default grqlFetch

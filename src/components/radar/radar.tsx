@@ -1,9 +1,7 @@
-import style from "./radar.module.scss";
-import Plot from "react-plotly.js";
+import Plot from 'react-plotly.js'
+
 // import Button from "@components/button/button";
-import plotConfig from "./plot.config";
-import TableSatellite from "~/components/table/table";
-import { FC } from "react";
+import { FC } from 'react'
 import {
   Grid2,
   Button,
@@ -21,24 +19,29 @@ import {
   MenuItem,
   SelectChangeEvent,
   Box,
-} from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
+} from '@mui/material'
+import CheckIcon from '@mui/icons-material/Check'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { ChangeEvent, useState, ReactNode, useEffect } from 'react'
+import { forEach, min } from 'lodash'
+import { Data, Layout } from 'plotly.js'
 
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { ChangeEvent, useState, ReactNode, useEffect } from "react";
 import {
   getDevices,
   getSatellites,
   getSatellitesFromDevice,
   getSatellitesCoordinate,
-} from "~/utils/requests/requests";
-import { Device, Satellite } from "~/utils/types/types";
-import { forEach, min } from "lodash";
-import { Data, Layout } from "plotly.js";
+} from '~/utils/requests/requests'
+import { Device, Satellite } from '~/utils/types/types'
+import TableSatellite from '~/components/table/table'
+
+import plotConfig from './plot.config'
+
+import style from './radar.module.scss'
 
 const Radar: FC = () => {
-  const queryClient = useQueryClient();
-  const [errMsg, setErrMsg] = useState<string>("");
+  const queryClient = useQueryClient()
+  const [errMsg, setErrMsg] = useState<string>('')
 
   // const [currentDevice, setCurrentDevice] = useState<Device | null>({
   //   id: BigInt(0),
@@ -53,117 +56,117 @@ const Radar: FC = () => {
   //   },
   // });
 
-  const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
+  const [currentDevice, setCurrentDevice] = useState<Device | null>(null)
 
-  const devices = useQuery("getDevices", getDevices, {
+  const devices = useQuery('getDevices', getDevices, {
     onError: () => {
-      setErrMsg("Ошибка получения устройств");
+      setErrMsg('Ошибка получения устройств')
     },
-  });
+  })
 
-  const satellitesList = useQuery("getSatellites", getSatellites, {
+  const satellitesList = useQuery('getSatellites', getSatellites, {
     onError: () => {
-      setErrMsg("Ошибка получения спутников");
+      setErrMsg('Ошибка получения спутников')
     },
-  });
+  })
 
   const satellitesFromDevice = useQuery(
-    "getSatellitesFromDevice",
+    'getSatellitesFromDevice',
     () => getSatellitesFromDevice(currentDevice as Device),
     {
       enabled: currentDevice !== null,
       onError: () => {
-        setErrMsg("Ошибка получения спутников");
+        setErrMsg('Ошибка получения спутников')
       },
-    }
-  );
+    },
+  )
 
   const satellitesCoordinate = useQuery(
-    "getSatellitesCoordinate",
+    'getSatellitesCoordinate',
     () => getSatellitesCoordinate(currentDevice as Device),
     {
       enabled: currentDevice !== null,
       onSuccess: (data) => {
-        console.log("спутники: ", data);
+        console.log('спутники: ', data)
         const plotData: {
-          type: string;
-          r: (number | undefined)[];
-          theta: (number | undefined)[];
-          fill: string;
-          name: string;
-          mode: string;
+          type: string
+          r: (number | undefined)[]
+          theta: (number | undefined)[]
+          fill: string
+          name: string
+          mode: string
           marker: {
-            size: number;
-            color: string;
-          };
+            size: number
+            color: string
+          }
         }[] = [
           {
-            type: "scatterpolar",
+            type: 'scatterpolar',
             r: [],
             theta: [],
-            fill: "none",
-            name: "GPS",
-            mode: "markers",
+            fill: 'none',
+            name: 'GPS',
+            mode: 'markers',
             marker: {
               size: 10,
-              color: "blue",
+              color: 'blue',
             },
           },
           {
-            type: "scatterpolar",
+            type: 'scatterpolar',
             r: [],
             theta: [],
-            fill: "none",
-            name: "Glonass",
-            mode: "markers",
+            fill: 'none',
+            name: 'Glonass',
+            mode: 'markers',
             marker: {
               size: 10,
-              color: "red",
+              color: 'red',
             },
           },
-        ];
+        ]
         data.forEach((satellite: Satellite) => {
           if (satellite) {
             plotData[0].r.push(
-              satellite.range !== undefined ? satellite.range / 500 : 0
-            );
+              satellite.range !== undefined ? satellite.range / 500 : 0,
+            )
             plotData[0].theta.push(
-              satellite.azimuth !== undefined ? satellite.azimuth : 0
-            );
+              satellite.azimuth !== undefined ? satellite.azimuth : 0,
+            )
             // Если нужно, добавьте данные для Glonass
             // plotData[1].r.push(satellite.range);
             // plotData[1].theta.push(satellite.elevation);
           }
-        });
-        console.log(plotData);
-        plotConfig.data = plotData as Data[];
+        })
+        console.log(plotData)
+        plotConfig.data = plotData as Data[]
       },
       onError: () => {
-        setErrMsg("Ошибка получения спутников");
+        setErrMsg('Ошибка получения спутников')
       },
-    }
-  );
+    },
+  )
 
   function handleChange(event: SelectChangeEvent<number>, child: ReactNode) {
     setCurrentDevice(
       devices?.data?.find(
-        (device: Device) => Number(device?.id) === Number(event?.target?.value)
-      ) || null
-    );
-    queryClient.invalidateQueries("getSatellitesFromDevice");
-    queryClient.invalidateQueries("getSatellitesCoordinate");
+        (device: Device) => Number(device?.id) === Number(event?.target?.value),
+      ) || null,
+    )
+    queryClient.invalidateQueries('getSatellitesFromDevice')
+    queryClient.invalidateQueries('getSatellitesCoordinate')
   }
 
   return (
     <div className={style.radar}>
-      <Box sx={{minHeight: "100vh"}} className={style.radar__table}>
-        <Stack spacing={2} direction="row" alignItems={"center"}>
+      <Box sx={{ minHeight: '100vh' }} className={style.radar__table}>
+        <Stack spacing={2} direction='row' alignItems='center'>
           <Typography>Выберите устройство</Typography>
           <Select
             value={Number(currentDevice?.id)}
             onChange={handleChange}
-            autoWidth={true}
-            sx={{ maxWidth: 300, minWidth: 300, backgroundColor: "white" }}
+            autoWidth
+            sx={{ maxWidth: 300, minWidth: 300, backgroundColor: 'white' }}
           >
             {devices?.data?.length !== 0 &&
               devices?.data?.map((device: Device) => (
@@ -177,15 +180,15 @@ const Radar: FC = () => {
               ))}
           </Select>
         </Stack>
-        <Typography variant="h5">Описание устройства</Typography>
-        <Typography variant="body1">{currentDevice?.description}</Typography>
+        <Typography variant='h5'>Описание устройства</Typography>
+        <Typography variant='body1'>{currentDevice?.description}</Typography>
         <Stack
           spacing={2}
-          direction="row"
-          alignItems={"center"}
-          alignContent={"center"}
+          direction='row'
+          alignItems='center'
+          alignContent='center'
         >
-          <Typography component={"p"} variant="body1">
+          <Typography component='p' variant='body1'>
             Статус калибровки:
           </Typography>
           {/* <Alert
@@ -196,36 +199,36 @@ const Radar: FC = () => {
             Калиброван
           </Alert> */}
           <Alert
-            icon={<CheckIcon fontSize="inherit" />}
-            sx={{ maxWidth: "200px" }}
-            severity="warning"
+            icon={<CheckIcon fontSize='inherit' />}
+            sx={{ maxWidth: '200px' }}
+            severity='warning'
           >
             Нет данных
           </Alert>
           {/* <Alert icon={<CheckIcon fontSize="inherit" />} sx={{ maxWidth: "200px"}} severity="error">Калибровка отсутствует</Alert>  */}
-          <Button disabled variant="contained">
+          <Button disabled variant='contained'>
             Провести калибровку
           </Button>
         </Stack>
         <TableContainer>
-          <Table sx={{ border: "2px solid white", borderRadius: "15px" }}>
+          <Table sx={{ border: '2px solid white', borderRadius: '15px' }}>
             <TableBody>
               <TableRow>
                 <TableCell>
                   <TableRow sx={{ mb: 2 }}>
-                    Выполняется задание: {"Нет данных"}{" "}
+                    Выполняется задание: {'Нет данных'}{' '}
                   </TableRow>
                   <TableRow sx={{ mb: 2 }}>
-                    <Button variant="contained">Прервать задание</Button>
+                    <Button variant='contained'>Прервать задание</Button>
                   </TableRow>
                 </TableCell>
                 <TableCell>
-                  <TableRow sx={{ mb: 10 }}>Спутник: {"Нет данных"} </TableRow>
+                  <TableRow sx={{ mb: 10 }}>Спутник: Нет данных </TableRow>
                   <TableRow sx={{ mb: 10 }}>
-                    Начало записи: {"Нет данных"}{" "}
+                    Начало записи: {'Нет данных'}{' '}
                   </TableRow>
                   <TableRow sx={{ mb: 10 }}>
-                    Окончание записи: {"Нет данных"}
+                    Окончание записи: Нет данных
                   </TableRow>
                 </TableCell>
               </TableRow>
@@ -237,12 +240,12 @@ const Radar: FC = () => {
         )}
       </Box>
 
-      <Box sx={{m:0, p:0}} className={style.radar__plot}>
+      <Box sx={{ m: 0, p: 0 }} className={style.radar__plot}>
         {!!currentDevice && (
           <Plot data={plotConfig.data} layout={plotConfig.layout} />
         )}
       </Box>
     </div>
-  );
-};
-export default Radar;
+  )
+}
+export default Radar

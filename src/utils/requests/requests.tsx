@@ -1,5 +1,7 @@
-import axios from "axios";
-import grqlFetch from "~/utils/grql";
+import axios from 'axios'
+import moment from 'moment'
+
+import grqlFetch from '~/utils/grql'
 import {
   Satellite,
   Device,
@@ -7,31 +9,30 @@ import {
   signals,
   User,
   Measure,
-} from "~/utils/types/types";
-import { task } from "~/utils/types/types";
-import moment from "moment";
+  task,
+} from '~/utils/types/types'
 
-const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map();
-SIGNAL_TYPE.set(signals.L1, "SIGNAL_TYPE_L1");
-SIGNAL_TYPE.set(signals.L2, "SIGNAL_TYPE_L2");
-SIGNAL_TYPE.set(signals.all, "SIGNAL_TYPE_UNKNOWN");
-SIGNAL_TYPE.set("SIGNAL_TYPE_L1", signals.L1);
-SIGNAL_TYPE.set("SIGNAL_TYPE_L2", signals.L2);
-SIGNAL_TYPE.set("SIGNAL_TYPE_UNKNOWN", signals.all);
+const SIGNAL_TYPE: Map<signals | string, string | signals> = new Map()
+SIGNAL_TYPE.set(signals.L1, 'SIGNAL_TYPE_L1')
+SIGNAL_TYPE.set(signals.L2, 'SIGNAL_TYPE_L2')
+SIGNAL_TYPE.set(signals.all, 'SIGNAL_TYPE_UNKNOWN')
+SIGNAL_TYPE.set('SIGNAL_TYPE_L1', signals.L1)
+SIGNAL_TYPE.set('SIGNAL_TYPE_L2', signals.L2)
+SIGNAL_TYPE.set('SIGNAL_TYPE_UNKNOWN', signals.all)
 
-const GROUPING_TYPE: Map<groups | string, string | groups> = new Map();
-GROUPING_TYPE.set(groups.GPS, "GROUPING_TYPE_GPS");
-GROUPING_TYPE.set(groups.Glonass, "GROUPING_TYPE_GLONASS");
-GROUPING_TYPE.set(groups.Galileo, "GROUPING_TYPE_GALILEO");
-GROUPING_TYPE.set(groups.Baidou, "GROUPING_TYPE_BEIDOU");
-GROUPING_TYPE.set(groups.all, "GROUPING_TYPE_UNKNOWN");
-GROUPING_TYPE.set("GROUPING_TYPE_GPS", groups.GPS);
-GROUPING_TYPE.set("GROUPING_TYPE_GLONASS", groups.Glonass);
-GROUPING_TYPE.set("GROUPING_TYPE_GALILEO", groups.Galileo);
-GROUPING_TYPE.set("GROUPING_TYPE_BEIDOU", groups.Baidou);
-GROUPING_TYPE.set("GROUPING_TYPE_UNKNOWN", groups.all);
+const GROUPING_TYPE: Map<groups | string, string | groups> = new Map()
+GROUPING_TYPE.set(groups.GPS, 'GROUPING_TYPE_GPS')
+GROUPING_TYPE.set(groups.Glonass, 'GROUPING_TYPE_GLONASS')
+GROUPING_TYPE.set(groups.Galileo, 'GROUPING_TYPE_GALILEO')
+GROUPING_TYPE.set(groups.Baidou, 'GROUPING_TYPE_BEIDOU')
+GROUPING_TYPE.set(groups.all, 'GROUPING_TYPE_UNKNOWN')
+GROUPING_TYPE.set('GROUPING_TYPE_GPS', groups.GPS)
+GROUPING_TYPE.set('GROUPING_TYPE_GLONASS', groups.Glonass)
+GROUPING_TYPE.set('GROUPING_TYPE_GALILEO', groups.Galileo)
+GROUPING_TYPE.set('GROUPING_TYPE_BEIDOU', groups.Baidou)
+GROUPING_TYPE.set('GROUPING_TYPE_UNKNOWN', groups.all)
 
-const IdToBigInt = (id: string) => BigInt(id.replace(/\D/g, ""));
+const IdToBigInt = (id: string) => BigInt(id.replace(/\D/g, ''))
 
 export async function getSatellites(): Promise<Satellite[]> {
   const listSatellitesRequest = `query listSatellites{
@@ -41,19 +42,19 @@ export async function getSatellites(): Promise<Satellite[]> {
         SatelliteName
       }
     }
-  }`;
+  }`
 
-  const response: any = await grqlFetch(listSatellitesRequest);
+  const response: any = await grqlFetch(listSatellitesRequest)
   const satellites: Satellite[] =
     await response?.data?.listSatellites?.items?.map((item: any) => ({
       Id: item.Id,
       Name: item.SatelliteName,
-    }));
-  return satellites;
+    }))
+  return satellites
 }
 
 export async function getSatellitesFromDevice(
-  Device: Device
+  Device: Device,
 ): Promise<Satellite[]> {
   const listSatellitesRequest = `query listSatellites{
     listSatellites(filter:{deviceIds:"${Device.backendID}"}){
@@ -62,19 +63,19 @@ export async function getSatellitesFromDevice(
         SatelliteName
       }
     }
-  }`;
+  }`
 
-  const response: any = await grqlFetch(listSatellitesRequest);
+  const response: any = await grqlFetch(listSatellitesRequest)
   const satellites: Satellite[] =
     await response?.data?.listSatellites?.items?.map((item: any) => ({
       Id: item.Id,
       Name: item.SatelliteName,
-    }));
-  return satellites;
+    }))
+  return satellites
 }
 
 export async function getSatellitesCoordinate(
-  Device: Device
+  Device: Device,
 ): Promise<Satellite[]> {
   const listSatellitesRequest = `query listGnss {
     listGnss(filter: {coordinates:{x:"1", y:"2", z: "3"}}){
@@ -90,11 +91,11 @@ export async function getSatellitesCoordinate(
         distance
       }
     }
-  }`;
+  }`
 
-  const response: any = await grqlFetch(listSatellitesRequest);
-  const satellites: Satellite[] =
-    await response?.data?.listGnss?.items?.map((item: any) => ({
+  const response: any = await grqlFetch(listSatellitesRequest)
+  const satellites: Satellite[] = await response?.data?.listGnss?.items?.map(
+    (item: any) => ({
       Id: item.Id,
       Name: item.SatelliteName,
       x: item.Coordinates.x,
@@ -103,8 +104,9 @@ export async function getSatellitesCoordinate(
       azimuth: item.azimuth,
       elevation: item.elevation_angle,
       range: item.distance,
-    }));
-  return satellites;
+    }),
+  )
+  return satellites
 }
 
 export async function getDevices(): Promise<Device[]> {
@@ -122,8 +124,8 @@ export async function getDevices(): Promise<Device[]> {
         }
       }
     }
-  }`;
-  const response: any = await grqlFetch(getDevicesRequest);
+  }`
+  const response: any = await grqlFetch(getDevicesRequest)
   const devices: Device[] = await response?.data?.listDevice?.items?.map(
     (item: any) => ({
       id: IdToBigInt(item.id),
@@ -136,9 +138,9 @@ export async function getDevices(): Promise<Device[]> {
         y: item.Coords.y,
         z: item.Coords.z,
       },
-    })
-  );
-  return devices;
+    }),
+  )
+  return devices
 }
 
 export async function updateDevice(updateDevices: Device): Promise<Device[]> {
@@ -160,8 +162,8 @@ export async function updateDevice(updateDevices: Device): Promise<Device[]> {
         }
       }
     }
-  }`;
-  const response: any = await grqlFetch(updateDeviceRequest);
+  }`
+  const response: any = await grqlFetch(updateDeviceRequest)
   const device: Device[] = await response?.data?.listDevice?.items?.map(
     (item: any) => ({
       id: IdToBigInt(item.id),
@@ -174,9 +176,9 @@ export async function updateDevice(updateDevices: Device): Promise<Device[]> {
         y: item.Coords.y,
         z: item.Coords.z,
       },
-    })
-  );
-  return device;
+    }),
+  )
+  return device
 }
 
 export async function addDevice(newDevice: Device): Promise<Device> {
@@ -198,8 +200,8 @@ export async function addDevice(newDevice: Device): Promise<Device> {
         }
       }
     }
-  }`;
-  const response: any = await grqlFetch(addDeviceRequest);
+  }`
+  const response: any = await grqlFetch(addDeviceRequest)
   const device: Device = await response?.data?.listDevice?.items?.map(
     (item: any) => ({
       id: IdToBigInt(item.id),
@@ -212,9 +214,9 @@ export async function addDevice(newDevice: Device): Promise<Device> {
         y: item.Coords.y,
         z: item.Coords.z,
       },
-    })
-  );
-  return device;
+    }),
+  )
+  return device
 }
 
 export async function deleteDevice(deleteDevice: Device): Promise<any> {
@@ -224,9 +226,9 @@ export async function deleteDevice(deleteDevice: Device): Promise<any> {
         _empty
       }
     }
-  }`;
-  const response: any = await grqlFetch(deleteDeviceRequest);
-  return response;
+  }`
+  const response: any = await grqlFetch(deleteDeviceRequest)
+  return response
 }
 
 // ---------------------------------------------------------------------
@@ -235,22 +237,22 @@ export async function createTask(newTask: task): Promise<any> {
   const createTaskRequest = `mutation createTask{
   gnss{
       createTask(input:{title:"${newTask.name}", description:"${
-    newTask.description
-  }", startAt: "${newTask.startDataTime.toISOString()}", endAt:"${newTask.endDataTime.toISOString()}", groupingType:${GROUPING_TYPE.get(
-    groups.all
-  )}, satelliteId: "${newTask.target?.Id}", signalType:${SIGNAL_TYPE.get(
-    signals.all
-  )}, deviceId:"${newTask.device?.backendID}"}){
+        newTask.description
+      }", startAt: "${newTask.startDataTime.toISOString()}", endAt:"${newTask.endDataTime.toISOString()}", groupingType:${GROUPING_TYPE.get(
+        groups.all,
+      )}, satelliteId: "${newTask.target?.Id}", signalType:${SIGNAL_TYPE.get(
+        signals.all,
+      )}, deviceId:"${newTask.device?.backendID}"}){
         task{
           id
         }
       }
     }
-  }`;
+  }`
   // console.log(createTaskRequest);
-  const response: any = await grqlFetch(createTaskRequest);
+  const response: any = await grqlFetch(createTaskRequest)
   // console.log(response);
-  return response;
+  return response
 }
 
 export async function getTasks(): Promise<task[]> {
@@ -268,9 +270,9 @@ export async function getTasks(): Promise<task[]> {
         CreatedAt
       }
     }
-  }`;
+  }`
 
-  const response: any = await grqlFetch(getTasksRequest);
+  const response: any = await grqlFetch(getTasksRequest)
   const taskList: task[] = await response?.data?.listTask?.items?.map(
     (item: any) => ({
       // device:
@@ -284,9 +286,9 @@ export async function getTasks(): Promise<task[]> {
       startDataTime: moment(item.startAt),
       endDataTime: moment(item.endAt),
       // item.CreatedAt
-    })
-  );
-  return taskList;
+    }),
+  )
+  return taskList
 }
 
 export async function deleteTask(deleteTask: task): Promise<any> {
@@ -296,22 +298,22 @@ export async function deleteTask(deleteTask: task): Promise<any> {
         _empty
       }
     }
-  }`;
+  }`
   // console.log(deleteTaskRequest);
-  const response: any = await grqlFetch(deleteTaskRequest);
-  return response;
+  const response: any = await grqlFetch(deleteTaskRequest)
+  return response
 }
 
 export async function sendTaskToDevice(task: task): Promise<any> {
   // мок запрос на устройство
   axios
-    .post("http://localhost:3000/sendTask", { ...task, id: task.backendID })
+    .post('http://localhost:3000/sendTask', { ...task, id: task.backendID })
     .then((response) => {
-      console.log("Response:", response.data);
+      console.log('Response:', response.data)
     })
     .catch((error) => {
-      console.error("Error:", error);
-    });
+      console.error('Error:', error)
+    })
 }
 
 // ---------------------------------------------------------------------
@@ -328,19 +330,19 @@ export async function signup(newUser: User): Promise<User | null> {
         }
       }
     }
-  }`;
-  const response: any = await grqlFetch(signUpRequest);
+  }`
+  const response: any = await grqlFetch(signUpRequest)
   // const { data: { authorization: { signup: { userInfo } } } } = response;
-  const userInfo = response?.data?.authorization?.signup?.userInfo;
+  const userInfo = response?.data?.authorization?.signup?.userInfo
   // console.log("signup ", userInfo);
-  if (!userInfo) return null;
+  if (!userInfo) return null
   const user: User = {
     id: userInfo.id,
     email: userInfo.login,
     role: userInfo.role,
     CreatedAt: userInfo.CreatedAt,
-  };
-  return user;
+  }
+  return user
 }
 
 export async function login(user: User): Promise<User | null> {
@@ -355,19 +357,19 @@ export async function login(user: User): Promise<User | null> {
         }
       }
     }
-  }`;
-  const response: any = await grqlFetch(loginRequest);
+  }`
+  const response: any = await grqlFetch(loginRequest)
   // const { data: { authorization: { signin: { userInfo } } } } = response;
-  const userInfo = response?.data?.authorization?.signin?.userInfo;
+  const userInfo = response?.data?.authorization?.signin?.userInfo
   // console.log("login ", userInfo);
-  if (!userInfo) return null;
+  if (!userInfo) return null
   const serverUser: User = {
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
     CreatedAt: userInfo?.CreatedAt,
-  };
-  return serverUser;
+  }
+  return serverUser
 }
 
 export async function logout(): Promise<void> {
@@ -377,9 +379,9 @@ export async function logout(): Promise<void> {
         _empty
       }
     }
-  }`;
-  const response: any = await grqlFetch(logoutRequest);
-  return response;
+  }`
+  const response: any = await grqlFetch(logoutRequest)
+  return response
 }
 
 export async function authCheck(): Promise<User | null> {
@@ -392,19 +394,19 @@ export async function authCheck(): Promise<User | null> {
         CreatedAt
       }
     }
-  }`;
-  const response: any = await grqlFetch(authRequest);
+  }`
+  const response: any = await grqlFetch(authRequest)
   // const { data: { authcheck: { userInfo } } } = response;
-  const userInfo = response?.data?.authcheck?.userInfo;
+  const userInfo = response?.data?.authcheck?.userInfo
   // console.log("authCheck ", userInfo);
-  if (!userInfo) return null;
+  if (!userInfo) return null
   const serverUser: User = {
     id: userInfo?.id,
     email: userInfo?.login,
     role: userInfo?.role,
     CreatedAt: userInfo?.CreatedAt,
-  };
-  return serverUser;
+  }
+  return serverUser
 }
 
 // ---------------------------------------------------------------------
@@ -422,8 +424,8 @@ export async function getMeasures(): Promise<Measure[]> {
         target
       }
     }
-  }`;
-  const response: any = await grqlFetch(listMeasurementsRequest);
+  }`
+  const response: any = await grqlFetch(listMeasurementsRequest)
   const measures: Measure[] =
     await response?.data?.listMeasurements?.items?.map((item: any) => ({
       id: item.id,
@@ -433,8 +435,8 @@ export async function getMeasures(): Promise<Measure[]> {
       group: item.group,
       signalType: item.signalType,
       target: item.target,
-    }));
-  return measures;
+    }))
+  return measures
 }
 
 export async function getGraph(id: string): Promise<Measure[]> {
@@ -461,8 +463,8 @@ export async function getGraph(id: string): Promise<Measure[]> {
         }
       }
     }
-  }`;
-  const response: any = await grqlFetch(listMeasurementsRequest);
+  }`
+  const response: any = await grqlFetch(listMeasurementsRequest)
   const measures: Measure[] =
     await response?.data?.listMeasurements?.items?.map((item: any) => ({
       id: item.id,
@@ -487,7 +489,7 @@ export async function getGraph(id: string): Promise<Measure[]> {
             timeStep: moment(item?.dataPower?.timeStep),
           }
         : undefined,
-    }));
+    }))
   // console.log("getGraph", measures);
-  return measures;
+  return measures
 }
