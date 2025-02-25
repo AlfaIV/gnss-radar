@@ -1,9 +1,9 @@
 export type ResolveSignUpRequest = {
-    login: string
-    resolution: string
+  login: string
+  resolution: string
 }
 
 export type GivePermissionsRequest = {
-    login: string
-    newRole: string
+  login: string
+  newRole: string
 }

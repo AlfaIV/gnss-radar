@@ -23,13 +23,14 @@ function createStore<S>(fn: StoreFunction<S>, options?: CreateStoreOptions<S>) {
 
   const equalityFnGeneric = options?.partialize
     ? <T>(a: T, b: T): boolean =>
-        JSON.stringify(options.partialize!(a as unknown as S)) === JSON.stringify(options.partialize!(b as unknown as S))
+        JSON.stringify(options.partialize!(a as unknown as S)) ===
+        JSON.stringify(options.partialize!(b as unknown as S))
     : defaultEqualityFn
 
   if (process.env.NODE_ENV === 'development') {
     return createWithEqualityFn(middleware(fn), equalityFnGeneric)
   }
-  
+
   return createWithEqualityFn(fn, equalityFnGeneric)
 }
 

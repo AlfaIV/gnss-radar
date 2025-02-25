@@ -1,19 +1,18 @@
 import { useMemo } from 'react'
 
 import useAuthService from './auth/authService'
-import useUserService from './user/userService';
+import useUserService from './user/userService'
 
 const useService = () => {
-
-  const authService = useAuthService();
-  const userService = useUserService();
+  const authService = useAuthService()
+  const userService = useUserService()
 
   return useMemo(
     () => ({
       ...authService,
-      ...userService
+      ...userService,
     }),
-    [authService, userService]
+    [authService, userService],
   )
 }
 

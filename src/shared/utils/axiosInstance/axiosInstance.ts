@@ -1,11 +1,11 @@
 import axios, { AxiosError, AxiosInstance } from 'axios'
 
-type ErrorHandler = (status: number) => Promise<void>;
+type ErrorHandler = (status: number) => Promise<void>
 
-let globalErrorHandler: ErrorHandler | null = null;
+let globalErrorHandler: ErrorHandler | null = null
 
 export const setGlobalErrorHandler = (handler: ErrorHandler) => {
-  globalErrorHandler = handler;
+  globalErrorHandler = handler
 }
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -29,17 +29,17 @@ export const axiosInstanceMultipart: AxiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.response.use(
-  response => response,
+  (response) => response,
   async (error: AxiosError) => {
-    const status = error.response?.status;
-    
+    const status = error.response?.status
+
     if (status && globalErrorHandler) {
-      await globalErrorHandler(status);
+      await globalErrorHandler(status)
     }
 
-    return Promise.reject(error);
-  }
-);
+    return Promise.reject(error)
+  },
+)
 
 export default axiosInstance
 

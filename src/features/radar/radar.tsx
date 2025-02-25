@@ -1,6 +1,5 @@
 import Plot from 'react-plotly.js'
-
-import { FC } from 'react'
+import { FC, useState, ReactNode } from 'react'
 import {
   Button,
   Typography,
@@ -18,7 +17,6 @@ import {
 } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { useQuery, useQueryClient } from 'react-query'
-import { useState, ReactNode } from 'react'
 import { Data } from 'plotly.js'
 
 import {
