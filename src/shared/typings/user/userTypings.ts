@@ -1,3 +1,5 @@
+import useService from "~/entities/useService"
+
 export type ResolveSignUpRequest = {
   login: string
   resolution: string
@@ -19,4 +21,5 @@ export interface UserType {
   api: string[]
   setUser: (values: UserType) => void
   clearUser: () => void
+  verifyAuth: (service: ReturnType<typeof useService>) => void
 }

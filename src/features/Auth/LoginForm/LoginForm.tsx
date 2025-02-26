@@ -4,7 +4,7 @@ import useService from "~/entities/useService";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { LoginFormType, LoginRequestType } from "~/shared/typings/auth/authTypings";
-import useUserStore from "~/shared/store/UserStore/useUserStore";
+import useUserStore from "~/entities/store/UserStore/useUserStore";
 import { UserType } from "~/shared/typings/user/userTypings";
 import { Container, Box, TextField, Button, Typography } from "@mui/material";
 
