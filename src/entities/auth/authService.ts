@@ -7,6 +7,8 @@ import {
 } from '~/shared/typings/auth/authTypings'
 import axiosInstance from '~/shared/utils/axiosInstance/axiosInstance'
 
+import { API_URLS } from '~/shared/config/constants'
+
 const useAuthService = () => {
   const login = useCallback(
     async (values: LoginRequestType): Promise<UserInfoResponseType> => {

@@ -21,3 +21,8 @@ export type SignUpRequestType = {
   surname: string
   organizationName: string
 }
+
+export type LoginFormType = {
+    login: string | null
+    password: string | null
+}
