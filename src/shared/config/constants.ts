@@ -7,6 +7,10 @@ export const API_URLS: Record<string, string> = {
   GIVE_PERMISSIONS: '/givePermissions',
 }
 
+export const ROUTES: Record<string, string> = {
+    SIGNUP: '/signup'
+}
+
 export const USER_DEFAULT_STATE = {
   id: '',
   login: '',

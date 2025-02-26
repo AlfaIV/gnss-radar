@@ -27,8 +27,8 @@ const LoginForm = () => {
       .min(8, "Пароль должен содержать минимум 8 символов")
       .required("Обязательное поле")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Пароль должен быть не менее 8 символов, содержать заглавные и строчные буквы, цифру и специальный символ"
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        "Пароль должен быть не менее 8 символов, содержать заглавные и строчные буквы, цифру и специальный символ @$!%*#?&"
       )
       .nullable(),
   });
@@ -104,14 +104,14 @@ const LoginForm = () => {
           helperText={formik.touched.password && formik.errors.password}
           variant="outlined"
         />
+        <Button color="primary" variant="contained" type="submit" fullWidth>
+          Войти
+        </Button>
         {!!formError && (
           <Typography color="error" variant="body2">
             {formError}
           </Typography>
         )}
-        <Button color="primary" variant="contained" type="submit" fullWidth>
-          Войти
-        </Button>
       </Box>
     </Container>
   );
