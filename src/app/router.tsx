@@ -3,12 +3,12 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
-import SignUp from '~/pages/signup/signup'
 
 import Layout from './layout/layout'
 import lazyLoad from '~/shared/lazyLoad'
 
 const LoginPage = lazyLoad(() => import('~/pages/LoginPage/LoginPage'))
+const SignUpPage = lazyLoad(() => import('~/pages/SignUp/SignUpPage'))
 
 const router = createBrowserRouter([
   {
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/signup',
-    element: <SignUp />,
+    element: <SignUpPage />,
   },
 ])
 

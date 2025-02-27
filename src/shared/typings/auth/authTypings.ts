@@ -26,3 +26,20 @@ export type LoginFormType = {
     login: string | null
     password: string | null
 }
+
+export type SignUpFormType = {
+  surname: string | null,
+  name: string | null,
+  company: string | null,
+  login: string | null,
+  email: string | null,
+  password: string | null,
+  confirmPassword: string | null,
+  role: Role;
+}
+
+export enum Role {
+  customer='customer',
+  engineer='engineer',
+  administrator='administrator',
+}
