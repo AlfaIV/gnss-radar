@@ -24,32 +24,32 @@ const menu: Array<MenuButtonProps> = [
   {
     menuText: 'Состояние',
     logo: RouterIcon,
-    link: `state/`,
-    role: [ROLE_ADMIN, ROLE_SUPERVISOR, ROLE_USER],
+    link: `/state`,
+    role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
   },
   {
     menuText: 'Измерения',
     logo: TimelineIcon,
-    link: `measure/`,
-    role: [ROLE_ADMIN, ROLE_SUPERVISOR, ROLE_USER],
+    link: `/measure`,
+    role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
   },
   {
     menuText: 'Задания',
     logo: TaskIcon,
-    link: `task/`,
-    role: [ROLE_ADMIN, ROLE_SUPERVISOR, ROLE_USER],
+    link: `/task`,
+    role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
   },
   {
     menuText: 'Настройки',
     logo: SettingsApplicationsIcon,
-    link: `setting/`,
-    role: [ROLE_ADMIN, ROLE_SUPERVISOR, ROLE_USER],
+    link: `/settings`,
+    role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
   },
   {
     menuText: 'Администрирование',
     logo: SupervisorAccountIcon,
-    link: `setting/`,
-    role: [ROLE_ADMIN],
+    link: `/admin/welcome`,
+    role: [ROLE_ADMIN.value],
   },
 ]
 

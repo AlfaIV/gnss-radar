@@ -5,9 +5,10 @@ import { useMutation } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
 import useService from '~/entities/useService'
-import MenuBar from './MenuBar'
 import useUserStore from '~/entities/store/UserStore/useUserStore'
 import { UserType } from '~/shared/typings/user/userTypings'
+
+import MenuBar from './MenuBar'
 
 const Header: FC = () => {
   const { logout } = useService()
@@ -19,7 +20,10 @@ const Header: FC = () => {
     },
   })
 
-  const [name, surname] = useUserStore((state: UserType) => [state.name, state.surname])
+  const [name, surname] = useUserStore((state: UserType) => [
+    state.name,
+    state.surname,
+  ])
 
   return (
     <AppBar position='static'>
@@ -41,13 +45,14 @@ const Header: FC = () => {
         </Stack>
         <Button
           color='inherit'
-          onClick={() => logoutMutation.mutate()} sx={{gap: '10px'}}
+          onClick={() => logoutMutation.mutate()}
+          sx={{ gap: '10px' }}
         >
-          <Typography 
-          sx={{ textTransform: 'capitalize', fontSize: 24 }}
+          <Typography
+            sx={{ textTransform: 'capitalize', fontSize: 24 }}
           >{`${name} ${surname}`}</Typography>
-          
-          <LogoutOutlinedIcon sx={{fontSize: 32}} />
+
+          <LogoutOutlinedIcon sx={{ fontSize: 32 }} />
         </Button>
       </Container>
     </AppBar>

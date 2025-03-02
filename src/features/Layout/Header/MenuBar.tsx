@@ -15,20 +15,23 @@ const MenuBar = memo(() => {
 
   return (
     <>
-      {menu.filter((item: MenuButtonProps) => item.role.includes(role)).map((item: MenuButtonProps) => (
+      {menu
+        .filter((item: MenuButtonProps) => item.role.includes(role))
+        .map((item: MenuButtonProps) => (
           <Button
             color='inherit'
             onClick={() => navigate(item.link)}
-            sx={{gap: '10px', alignItems: 'center'}}
+            sx={{ gap: '10px', alignItems: 'center' }}
+            key={item.menuText}
           >
-                      <item.logo
-            sx={{ fontSize: 32 }}
-          />
-            <Typography textTransform={'capitalize'} fontSize={24}>{item.menuText}</Typography>
+            <item.logo sx={{ fontSize: 32 }} />
+            <Typography textTransform='capitalize' fontSize={24}>
+              {item.menuText}
+            </Typography>
           </Button>
-      ))}
+        ))}
     </>
   )
 })
 
-export default MenuBar;
+export default MenuBar
