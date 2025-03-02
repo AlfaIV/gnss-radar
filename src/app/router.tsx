@@ -7,19 +7,20 @@ import Setting from '~/pages/setting/setting'
 import lazyLoad from '~/shared/lazyLoad'
 
 import Layout from './layout/layout'
+import { withSuspended } from '~/shared/components/Suspended/Suspended'
 
-const LoginPage = lazyLoad(() => import('~/pages/LoginPage/LoginPage'))
-const AdminPage = lazyLoad(() => import('~/pages/AdminPage/AdminPage'))
-const RequestsWidget = lazyLoad(
-  () => import('~/widgets/Admin/SignUpRequest/SignUpRequest'),
+const LoginPage = withSuspended(lazyLoad(() => import('~/pages/LoginPage/LoginPage')))
+const AdminPage = withSuspended(lazyLoad(() => import('~/pages/AdminPage/AdminPage')))
+const RequestsWidget = withSuspended(lazyLoad(
+  () => import('~/widgets/Admin/SignUpRequest/SignUpRequest')),
 )
-const AdminWelcomeWidget = lazyLoad(
-  () => import('~/widgets/Admin/Welcome/Welcome'),
+const AdminWelcomeWidget = withSuspended(lazyLoad(
+  () => import('~/widgets/Admin/Welcome/Welcome')),
 )
-const AdminUserRole = lazyLoad(
-  () => import('~/widgets/Admin/UserRole/UserRole'),
+const AdminUserRole = withSuspended(lazyLoad(
+  () => import('~/widgets/Admin/UserRole/UserRole')),
 )
-const SignUpPage = lazyLoad(() => import('~/pages/SignUp/SignUpPage'))
+const SignUpPage = withSuspended(lazyLoad(() => import('~/pages/SignUp/SignUpPage')))
 
 const router = createBrowserRouter([
   {
