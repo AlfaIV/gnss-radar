@@ -1,18 +1,19 @@
+import { useEffect } from 'react'
+
 import { USER_DEFAULT_STATE } from '~/shared/config/constants'
 import { UserType } from '~/shared/typings/user/userTypings'
 import createStore from '~/shared/utils/createStore/createStore'
 import useService from '~/entities/useService'
 import { User } from '~/utils/types/types'
-import { useEffect } from 'react'
 
 const useUserStore = createStore<UserType>(
   (set, get) => ({
     id: '',
     login: '',
     email: '',
-    name: '',
-    surname: '',
-    role: '',
+    name: 'Александр',
+    surname: 'Цветков',
+    role: 'ADMIN',
     organizationName: '',
     api: [],
     setUser: (values: UserType) =>
@@ -24,13 +25,13 @@ const useUserStore = createStore<UserType>(
         ...USER_DEFAULT_STATE,
       }),
     verifyAuth: async (service: ReturnType<typeof useService>) => {
-          try {
-            const userData = await service.me()
-            get().setUser(userData as UserType)
-          } catch (error) {
-            get().clearUser()
-          }        
-    }
+      try {
+        const userData = await service.me()
+        get().setUser(userData as UserType)
+      } catch (error) {
+        get().clearUser()
+      }
+    },
   }),
   {
     name: 'userStore',
@@ -47,11 +48,11 @@ const useUserStore = createStore<UserType>(
 
 export const useUserAuth = () => {
   const service = useService()
-  const verifyAuth = useUserStore(state => state.verifyAuth)
+  const verifyAuth = useUserStore((state) => state.verifyAuth)
 
   useEffect(() => {
     verifyAuth(service)
   }, [verifyAuth, service])
 }
 
-export default useUserStore;
+export default useUserStore
