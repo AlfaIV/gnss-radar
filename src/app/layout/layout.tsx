@@ -2,13 +2,9 @@ import { FC, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 
-import Header from '~/features/header/header'
-import Footer from '~/features/footer/footer'
-
 import style from './layout.module.scss'
 
 const Layout: FC = () => {
-
   return (
     <Suspense
       fallback={
@@ -26,11 +22,7 @@ const Layout: FC = () => {
       }
     >
       <div className={style.app}>
-        <Header />
-        <div className={style.body}>
-          <Outlet />
-        </div>
-        <Footer />
+        <Outlet />
       </div>
     </Suspense>
   )

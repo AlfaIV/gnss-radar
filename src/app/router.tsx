@@ -1,13 +1,24 @@
-import { Radar, Task} from '@mui/icons-material'
+import { Radar, Task } from '@mui/icons-material'
 import { createBrowserRouter } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
 
-import Layout from './layout/layout'
 import lazyLoad from '~/shared/lazyLoad'
 
+import Layout from './layout/layout'
+
 const LoginPage = lazyLoad(() => import('~/pages/LoginPage/LoginPage'))
+const AdminPage = lazyLoad(() => import('~/pages/AdminPage/AdminPage'))
+const RequestsWidget = lazyLoad(
+  () => import('~/widgets/Admin/SignUpRequest/SignUpRequest'),
+)
+const AdminWelcomeWidget = lazyLoad(
+  () => import('~/widgets/Admin/Welcome/Welcome'),
+)
+const AdminUserRole = lazyLoad(
+  () => import('~/widgets/Admin/UserRole/UserRole'),
+)
 const SignUpPage = lazyLoad(() => import('~/pages/SignUp/SignUpPage'))
 
 const router = createBrowserRouter([
@@ -17,29 +28,47 @@ const router = createBrowserRouter([
     // errorElement: <ErrorPage />,
     children: [
       {
-        path: '/state/',
+        path: '/state',
         element: <Radar />,
       },
       {
-        path: '/measure/',
+        path: '/measure',
         element: <Measure />,
       },
       {
-        path: '/task/',
+        path: '/task',
         element: <Task />,
       },
       {
-        path: '/setting/',
+        path: '/settings',
         element: <Setting />,
+      },
+      {
+        path: '/admin',
+        element: <AdminPage />,
+        children: [
+          {
+            path: 'welcome',
+            element: <AdminWelcomeWidget />,
+          },
+          {
+            path: 'requests',
+            element: <RequestsWidget />,
+          },
+          {
+            path: 'permissions',
+            element: <AdminUserRole />
+          }
+        ],
       },
     ],
   },
   {
-    path: '/login',
+    path: 'login',
     element: <LoginPage />,
   },
   {
-    path: '/signup',
+    path: 'signup',
     element: <SignUpPage />,
   },
 ])

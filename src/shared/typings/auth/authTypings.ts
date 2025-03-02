@@ -1,3 +1,5 @@
+import { UserRoleType } from "../user/userTypings"
+
 export type UserInfoResponseType = {
   id: string
   login: string
@@ -35,11 +37,5 @@ export type SignUpFormType = {
   email: string | null,
   password: string | null,
   confirmPassword: string | null,
-  role: Role;
-}
-
-export enum Role {
-  customer='customer',
-  engineer='engineer',
-  administrator='administrator',
+  role: UserRoleType;
 }
