@@ -14,21 +14,21 @@ import { Form, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from 'react-query'
 import * as Yup from 'yup'
 
-import { signup } from '~/utils/requests/requests'
-import { Role, SignUpFormType } from '~/shared/typings/auth/authTypings'
+import { Role, SignUpFormType, SignUpRequestType } from '~/shared/typings/auth/authTypings'
 import { useFormik } from 'formik'
 import { ROUTES } from '~/shared/config/constants'
+import useService from '~/entities/useService'
 
 const SignUpForm: FC = () => {
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
-  const [formError, setFormError] = useState('')
+  const navigate = useNavigate();
 
-  const signUpMutation = useMutation('signUpMutation', signup, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('signUpCheck')
-    },
-  })
+  const { signUp } = useService();
+
+  const queryClient = useQueryClient();
+
+  const [formError, setFormError] = useState('');
+
+  const signUpMutation = useMutation('signUpMutation', signUp)
 
   const initialValues: SignUpFormType = {
     surname: '',
@@ -80,10 +80,15 @@ const SignUpForm: FC = () => {
     validationSchema,
     onSubmit: async (values, { setFieldError }) => {
       try {
-        console.log('onSubmit')
-        console.log(values)
-        // const response = await logInMutation.mutateAsync(values as LoginRequestType);
-        // setUser(response as UserType);
+        const signUpRequestValue: SignUpRequestType = {
+          login: values.login ?? '',
+          email: values.email ?? '',
+          name: values.name ?? '',
+          surname: values.surname ?? '',
+          organizationName: values.company ?? ''
+        };
+        const response = await signUpMutation.mutateAsync(signUpRequestValue);
+        navigate(ROUTES.LOGIN);
       } catch (error: any) {
         if (error.response) {
           switch (error.response.status) {
