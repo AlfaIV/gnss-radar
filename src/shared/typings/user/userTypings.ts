@@ -1,4 +1,4 @@
-import useService from "~/entities/useService"
+import useService from '~/entities/useService'
 
 export type ResolveSignUpRequest = {
   login: string

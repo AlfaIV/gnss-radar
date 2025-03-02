@@ -5,7 +5,6 @@ import {
   ResolveSignUpRequest,
 } from '~/shared/typings/user/userTypings'
 import axiosInstance from '~/shared/utils/axiosInstance/axiosInstance'
-
 import { API_URLS } from '~/shared/config/constants'
 
 const useUserService = () => {

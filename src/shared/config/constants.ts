@@ -8,7 +8,7 @@ export const API_URLS: Record<string, string> = {
 }
 
 export const ROUTES: Record<string, string> = {
-    SIGNUP: '/signup'
+  SIGNUP: '/signup',
 }
 
 export const USER_DEFAULT_STATE = {
@@ -21,3 +21,9 @@ export const USER_DEFAULT_STATE = {
   organizationName: '',
   api: [],
 }
+
+export const ROLE_USER = 'USER'
+
+export const ROLE_SUPERVISOR = 'SUPERVISOR'
+
+export const ROLE_ADMIN = 'ADMIN'

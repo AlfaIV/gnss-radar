@@ -23,6 +23,6 @@ export type SignUpRequestType = {
 }
 
 export type LoginFormType = {
-    login: string | null
-    password: string | null
+  login: string | null
+  password: string | null
 }

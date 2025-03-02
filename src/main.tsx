@@ -7,6 +7,6 @@ import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <ThemeProvider theme={theme}>
-      <App />
+    <App />
   </ThemeProvider>,
 )

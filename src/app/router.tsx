@@ -1,12 +1,12 @@
-import { Radar, Task} from '@mui/icons-material'
+import { Radar, Task } from '@mui/icons-material'
 import { createBrowserRouter } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
 import SignUp from '~/pages/signup/signup'
+import lazyLoad from '~/shared/lazyLoad'
 
 import Layout from './layout/layout'
-import lazyLoad from '~/shared/lazyLoad'
 
 const LoginPage = lazyLoad(() => import('~/pages/LoginPage/LoginPage'))
 
