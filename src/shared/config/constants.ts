@@ -10,7 +10,8 @@ export const API_URLS: Record<string, string> = {
 }
 
 export const ROUTES: Record<string, string> = {
-  SIGNUP: '/signup',
+    SIGNUP: '/signup',
+    LOGIN: '/login',
 }
 
 export const USER_DEFAULT_STATE = {

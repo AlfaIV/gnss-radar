@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
-import SignUp from '~/pages/signup/signup'
+
 import lazyLoad from '~/shared/lazyLoad'
 
 import Layout from './layout/layout'
@@ -19,6 +19,7 @@ const AdminWelcomeWidget = lazyLoad(
 const AdminUserRole = lazyLoad(
   () => import('~/widgets/Admin/UserRole/UserRole'),
 )
+const SignUpPage = lazyLoad(() => import('~/pages/SignUp/SignUpPage'))
 
 const router = createBrowserRouter([
   {
@@ -68,7 +69,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'signup',
-    element: <SignUp />,
+    element: <SignUpPage />,
   },
 ])
 
