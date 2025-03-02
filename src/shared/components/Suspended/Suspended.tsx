@@ -32,6 +32,7 @@ import { HOCProps } from '~/shared/typings/common/common'
       </Suspense>
     )) as MemoExoticComponent<ComponentType<TProps>>
   
+    //Для дебага
     WrappedComponent.displayName = `withSuspended(${
       Component.displayName || Component.name || 'Component'
     })`
