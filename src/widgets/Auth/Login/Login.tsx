@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 import LoginForm from '~/features/Auth/LoginForm/LoginForm'
@@ -20,9 +20,6 @@ const Login = () => {
       }}
     >
       <LoginForm />
-      <Typography onClick={() => navigate(ROUTES.SIGNUP)}>
-        Регистрация
-      </Typography>
     </Box>
   )
 }

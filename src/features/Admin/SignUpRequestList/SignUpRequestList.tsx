@@ -74,7 +74,7 @@ const SignUpRequestList = memo(() => {
       p: 5
     }}>
       <Typography fontSize={24} color='error'>
-        {error.message || 'Неизвестная ошибка'}
+        {'Неизвестная ошибка'}
       </Typography>
     </Box>
   )

@@ -57,9 +57,9 @@ const Sidebar = memo((props: SidebarProps) => {
           {items.map((item: SidebarItemProps) => (
             <Link to={item.link} key={item.link}>
             <Button sx={{width: '100%'}}>
-                <Box flexDirection={'row'} display={'flex'} width={'100%'} justifyContent={isOpen ? 'start' : 'center'} alignItems={'center'}>
+                <Box flexDirection={'row'} display={'flex'} width={'100%'} justifyContent={isOpen ? 'start' : 'center'} alignItems={'center'} gap={2}>
                     <item.logo sx={{fontSize: '40px'}} />
-                    {isOpen && <Typography flexGrow={1} fontSize={'32px'}>{item.menuText}</Typography>}
+                    {isOpen && <Typography textAlign={'left'} flexGrow={1} fontSize={'32px'}>{item.menuText}</Typography>}
                 </Box>
             </Button>
             </Link>

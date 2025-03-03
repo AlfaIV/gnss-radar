@@ -6,25 +6,9 @@ import style from './layout.module.scss'
 
 const Layout: FC = () => {
   return (
-    <Suspense
-      fallback={
-        <Box
-          sx={{
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant='h2'>Идёт загрузка...</Typography>
-        </Box>
-      }
-    >
       <div className={style.app}>
         <Outlet />
       </div>
-    </Suspense>
   )
 }
 

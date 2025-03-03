@@ -54,7 +54,7 @@ const UserRoleList = memo(() => {
 
   if (isLoading) return <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', p: 5}}><CircularProgress size={80} /></Box>
   if (isError) return <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', p: 5}}>
-    <Typography fontSize={24} color='error'>{error.response?.data.message || 'Неизвестная ошибка'}</Typography>
+    <Typography fontSize={24} color='error'>{'Неизвестная ошибка'}</Typography>
     </Box>
 
   return (
