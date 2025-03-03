@@ -26,8 +26,6 @@ const SignUpForm: FC = () => {
 
   const { signUp } = useService();
 
-  const queryClient = useQueryClient();
-
   const [formError, setFormError] = useState('');
 
   const signUpMutation = useMutation('signUpMutation', signUp)
@@ -87,21 +85,17 @@ const SignUpForm: FC = () => {
           email: values.email ?? '',
           name: values.name ?? '',
           surname: values.surname ?? '',
-          organizationName: values.company ?? ''
+          organizationName: values.company ?? '',
+          password: values.password ?? '',
+          role: values.role ?? '',
         };
-        const response = await signUpMutation.mutateAsync(signUpRequestValue);
+        await signUpMutation.mutateAsync(signUpRequestValue);
         navigate(ROUTES.LOGIN);
       } catch (error: any) {
         if (error.response) {
           switch (error.response.status) {
             case 401:
               setFieldError('password', 'Неверные учетные данные.')
-              break
-            case 403:
-              setFieldError(
-                'password',
-                'Дождитесь подтверждения администрацией комплекса.',
-              )
               break
             case 500:
               setFormError('Внутренняя ошибка сервера.')
