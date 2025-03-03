@@ -1,3 +1,5 @@
+import { UserRoleType } from "../typings/user/userTypings"
+
 export const API_URLS: Record<string, string> = {
   LOGIN: '/login',
   SIGNUP: '/signup',
@@ -5,8 +7,8 @@ export const API_URLS: Record<string, string> = {
   LOGOUT: '/logout',
   RESOLVE_SIGN_UP: '/resolveSignUp',
   GIVE_PERMISSIONS: '/givePermissions',
-  GET_USER_LIST: '/getUserList',
-  GET_SIGNUP_REQUESTS: '/getSignUpRequests'
+  GET_USER_LIST: '/getListUsers',
+  GET_SIGNUP_REQUESTS: '/getSignUpRequestions'
 }
 
 export const ROUTES: Record<string, string> = {
@@ -20,7 +22,7 @@ export const USER_DEFAULT_STATE = {
   email: '',
   name: '',
   surname: '',
-  role: '',
+  role: 'USER' as UserRoleType,
   organizationName: '',
   api: [],
 }
