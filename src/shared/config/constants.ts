@@ -1,14 +1,18 @@
 import { UserRoleType } from "../typings/user/userTypings"
 
-export const API_URLS: Record<string, string> = {
-  LOGIN: '/login',
-  SIGNUP: '/signup',
-  ME: '/me',
-  LOGOUT: '/logout',
-  RESOLVE_SIGN_UP: '/resolveSignUp',
-  GIVE_PERMISSIONS: '/givePermissions',
-  GET_USER_LIST: '/getListUsers',
-  GET_SIGNUP_REQUESTS: '/getSignUpRequestions'
+export const API_URLS: Record<string, Record<string, string>> = {
+  AUTH: {
+    LOGIN: '/auth/login',
+    SIGNUP: '/auth/signup',
+    ME: '/auth/me',
+    LOGOUT: '/auth/logout',
+  },
+  USER: {
+    RESOLVE_SIGN_UP: '/user/resolveSignUp',
+    GIVE_PERMISSIONS: '/user/givePermissions',
+    GET_USER_LIST: '/user/getListUsers',
+    GET_SIGNUP_REQUESTS: '/user/getSignUpRequestions'
+  }
 }
 
 export const ROUTES: Record<string, string> = {

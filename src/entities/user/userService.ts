@@ -13,21 +13,21 @@ import { PaginatedQueryType } from '~/shared/typings/common/common'
 const useUserService = () => {
   const resolveSignUp = useCallback(
     async (values: ResolveSignUpRequest): Promise<void> => {
-      await axiosInstance.patch(API_URLS.RESOLVE_SIGN_UP, values)
+      await axiosInstance.patch(API_URLS.USER.RESOLVE_SIGN_UP, values)
     },
     [],
   )
 
   const givePermissions = useCallback(
     async (values: GivePermissionsRequest): Promise<void> => {
-      await axiosInstance.patch(API_URLS.GIVE_PERMISSIONS, values)
+      await axiosInstance.patch(API_URLS.USER.GIVE_PERMISSIONS, values)
     },
     [],
   )
 
   const getUserList = useCallback(
     async (values: PaginatedQueryType, signal?: AbortSignal): Promise<UserRoleResponseType> => {
-      const response: UserRoleResponseType = await axiosInstance.get(API_URLS.GET_USER_LIST, {
+      const response: UserRoleResponseType = await axiosInstance.get(API_URLS.USER.GET_USER_LIST, {
         signal,
         params: {
           ...values
@@ -41,7 +41,7 @@ const useUserService = () => {
 
   const getSignUpRequestList = useCallback(
     async (values: PaginatedQueryType, signal?: AbortSignal): Promise<SignUpRequestionType> => {
-      const response: SignUpRequestionType = await axiosInstance.get(API_URLS.GET_SIGNUP_REQUESTS, {
+      const response: SignUpRequestionType = await axiosInstance.get(API_URLS.USER.GET_SIGNUP_REQUESTS, {
         signal,
         params: {
           ...values
