@@ -16,7 +16,7 @@ export type GivePermissionsRequest = {
 export interface UserType {
   id: string
   login: string
-  role: string
+  role: UserRoleType
   email: string | null
   name: string
   surname: string
