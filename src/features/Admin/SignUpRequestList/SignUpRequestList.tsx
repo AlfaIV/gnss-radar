@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useIntersection } from '@mantine/hooks'
 import { AxiosError } from 'axios'
 
-import { SignUpRequestProps } from '~/shared/typings/user/userTypings'
+import { SignUpRequestionType, SignUpRequestProps } from '~/shared/typings/user/userTypings'
 import SignUpRequest from './SignUpRequest'
 import useService from '~/entities/useService'
 import { ErrorResponse, PaginatedQueryType } from '~/shared/typings/common/common'
@@ -21,11 +21,11 @@ const SignUpRequestList = memo(() => {
     isLoading,
     isError,
     error,
-  } = useInfiniteQuery({
-    queryKey: ['signup-requests'],
+  } = useInfiniteQuery<SignUpRequestionType, AxiosError<ErrorResponse>>({
+    queryKey: ['requestions'],
     queryFn: async ({ pageParam = 1, signal }) => {
       const params: PaginatedQueryType = { 
-        page: pageParam,
+        page: pageParam as number,
         size: PAGE_SIZE
       }
       
@@ -34,13 +34,13 @@ const SignUpRequestList = memo(() => {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const totalItems = lastPage.requestions.length
-      const loadedItems = allPages.reduce((acc, page) => acc + page.requestions.length, 0)
-      return loadedItems < totalItems ? allPages.length + 1 : undefined
+      const totalItems = lastPage.data.users?.length
+      const loadedItems = allPages.reduce((acc, page) => acc + page.data.users?.length, 0)
+      return loadedItems < totalItems ? allPages?.length + 1 : undefined
     }
   })
 
-  const { ref: lastRequestRef, entry } = useIntersection({
+  const { ref: lastRowRef, entry } = useIntersection<HTMLTableRowElement>({
     root: null,
     threshold: 1,
   })
@@ -51,7 +51,8 @@ const SignUpRequestList = memo(() => {
     }
   }, [entry, hasNextPage, isFetchingNextPage])
 
-  const allRequests = data?.pages.flatMap(page => page.requestions) || []
+  const allRequests = data?.pages.flatMap(page => page.data.users) || []
+
 
   if (isLoading) return (
     <Box sx={{ 
@@ -93,11 +94,11 @@ const SignUpRequestList = memo(() => {
         padding: 4,
       }}
     >
-      {allRequests.map((request, index) => (
+      {!!allRequests.length && allRequests.map((request, index) => !!request && (
         <SignUpRequest 
           key={request.login} 
           {...request}
-          ref={index === allRequests.length - 1 ? lastRequestRef : null}
+          ref={index === allRequests.length - 1 ? lastRowRef : null}
         />
       ))}
 

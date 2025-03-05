@@ -32,6 +32,8 @@ export type SignUpRequestProps = {
   email: string
   name: string
   surname: string
+  organizationName: string
+  role: string
 }
 
 export type UserRoleProps = {
@@ -51,7 +53,9 @@ export type UserRoleResponseEntityType = {
 }
 
 export type UserRoleResponseType = {
-    users: UserRoleResponseEntityType[]
+    data: {
+      users: UserRoleResponseEntityType[]
+    }
 }
 
 export type SignUpRequestionEntityType = {
@@ -59,8 +63,10 @@ export type SignUpRequestionEntityType = {
     name: string
     surname: string
     email: string
+    organizationName: string
+    role: string
 }
 
 export type SignUpRequestionType = {
-    requestions: SignUpRequestionEntityType[]
+    data: {users: SignUpRequestionEntityType[]}
 }

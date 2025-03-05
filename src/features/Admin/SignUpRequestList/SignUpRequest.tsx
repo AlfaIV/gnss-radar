@@ -8,11 +8,16 @@ import {
     styled,
     IconButton,
     Tooltip,
+    CircularProgress,
   } from '@mui/material'
   import { memo, forwardRef } from 'react'
   import DoneIcon from '@mui/icons-material/Done'
   import CloseIcon from '@mui/icons-material/Close'
-  import { SignUpRequestProps } from '~/shared/typings/user/userTypings'
+  import { ResolveSignUpRequest, SignUpRequestProps } from '~/shared/typings/user/userTypings'
+import { ROLES } from '~/shared/config/constants'
+import { useMutation } from '@tanstack/react-query'
+import useService from '~/entities/useService'
+import { useQueryClient } from '@tanstack/react-query'
   
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': {
@@ -27,7 +32,28 @@ import {
   
   const SignUpRequest = memo(
     forwardRef<HTMLDivElement, SignUpRequestProps>((props, ref) => {
-      const { name, surname, login, email } = props
+      const { name, surname, login, email, organizationName, role } = props
+
+      const { resolveSignUp } = useService();
+
+      const queryClient = useQueryClient();
+
+      const { mutateAsync: makeResolution, isPending } = useMutation({
+        mutationKey: ['update-role'],
+        mutationFn: (values: ResolveSignUpRequest) => 
+          resolveSignUp(values),
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['signup-resolution'] })
+        }
+      })
+
+      const handleMakeResolution = async (resolution: 'APPROVED' | 'DECLINED') => {
+        try {
+          await makeResolution({ login, resolution })
+        } catch (e) {
+          console.error('Role change failed:', e)
+        }
+      }
   
       return (
         <Box
@@ -100,19 +126,35 @@ import {
                 </StyledTableCell>
                 <StyledTableCell>{email}</StyledTableCell>
               </StyledTableRow>
+
+              <StyledTableRow>
+                <StyledTableCell sx={{ verticalAlign: 'top' }}>
+                  <Typography fontWeight='bold'>Организация</Typography>
+                </StyledTableCell>
+                <StyledTableCell>{organizationName}</StyledTableCell>
+              </StyledTableRow>
+
+              <StyledTableRow>
+                <StyledTableCell sx={{ verticalAlign: 'top' }}>
+                  <Typography fontWeight='bold'>Роль</Typography>
+                </StyledTableCell>
+                <StyledTableCell>{ROLES.find(item => item.value === role)?.label}</StyledTableCell>
+              </StyledTableRow>
+
             </TableBody>
           </Table>
           <Box display='flex' width='100%' justifyContent='space-around'>
-            <Tooltip title='Согласовать'>
-              <IconButton>
+{!isPending &&           (<><Tooltip title='Согласовать'>
+              <IconButton onClick={()=>handleMakeResolution('APPROVED')}>
                 <DoneIcon sx={{ color: 'green', fontSize: '32px' }} />
               </IconButton>
             </Tooltip>
             <Tooltip title='Отклонить'>
-              <IconButton>
+              <IconButton onClick={()=>handleMakeResolution('DECLINED')}>
                 <CloseIcon sx={{ color: 'red', fontSize: '32px' }} />
               </IconButton>
-            </Tooltip>
+            </Tooltip></>)}
+            {isPending && <CircularProgress size={'32px'}/>}
           </Box>
         </Box>
       )

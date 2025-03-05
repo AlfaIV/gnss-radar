@@ -33,9 +33,9 @@ const UserRoleList = memo(() => {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const totalItems = lastPage.users.length
-      const loadedItems = allPages.reduce((acc, page) => acc + page.users.length, 0)
-      return loadedItems < totalItems ? allPages.length + 1 : undefined
+      const totalItems = lastPage.data.users?.length
+      const loadedItems = allPages.reduce((acc, page) => acc + page.data.users?.length, 0)
+      return loadedItems < totalItems ? allPages?.length + 1 : undefined
     }
   })
 
@@ -50,7 +50,7 @@ const UserRoleList = memo(() => {
     }
   }, [entry, hasNextPage, isFetchingNextPage])
 
-  const allUsers = data?.pages.flatMap(page => page.users) || []
+  const allUsers = data?.pages.flatMap(page => page.data.users) || []
 
   if (isLoading) return <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', p: 5}}><CircularProgress size={80} /></Box>
   if (isError) return <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', p: 5}}>
