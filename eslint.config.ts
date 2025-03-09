@@ -118,6 +118,7 @@ export default [
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/interface-name-prefix": "off",
       "@typescript-eslint/no-duplicate-enum-values": "off",
+      "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

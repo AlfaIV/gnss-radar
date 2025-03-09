@@ -1,12 +1,8 @@
-import { Box, Button, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Box } from '@mui/material'
 
 import LoginForm from '~/features/Auth/LoginForm/LoginForm'
-import { ROUTES } from '~/shared/config/constants'
 
 const Login = () => {
-  const navigate = useNavigate()
-
   return (
     <Box
       sx={{

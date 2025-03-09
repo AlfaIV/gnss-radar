@@ -1,4 +1,4 @@
-import { UserRoleType } from "../typings/user/userTypings"
+import { UserRoleType } from '../typings/user/userTypings'
 
 export const API_URLS: Record<string, Record<string, string>> = {
   AUTH: {
@@ -11,13 +11,19 @@ export const API_URLS: Record<string, Record<string, string>> = {
     RESOLVE_SIGN_UP: '/user/resolveSignUp',
     GIVE_PERMISSIONS: '/user/givePermissions',
     GET_USER_LIST: '/user/getListUsers',
-    GET_SIGNUP_REQUESTS: '/user/getSignUpRequestions'
-  }
+    GET_SIGNUP_REQUESTS: '/user/getSignUpRequestions',
+  },
+  MEASUREMENTS: {
+    GET_EPHEMERIS: '/measurements/getEphemeris',
+  },
+  SATELLITES: {
+    GET_SATELLITES: '/satellites/getSatellites',
+  },
 }
 
 export const ROUTES: Record<string, string> = {
-    SIGNUP: '/signup',
-    LOGIN: '/login',
+  SIGNUP: '/signup',
+  LOGIN: '/login',
 }
 
 export const USER_DEFAULT_STATE = {
@@ -32,18 +38,18 @@ export const USER_DEFAULT_STATE = {
 }
 
 export const ROLE_USER = {
-    label: 'Инженер',
-    value:'USER'
+  label: 'Инженер',
+  value: 'USER',
 }
 
 export const ROLE_SUPERVISOR = {
-    label: 'Руководитель',
-    value:'SUPERVISOR'
+  label: 'Руководитель',
+  value: 'SUPERVISOR',
 }
 
 export const ROLE_ADMIN = {
-    label: 'Администратор',
-    value: 'ADMIN'
+  label: 'Администратор',
+  value: 'ADMIN',
 }
 
 export const ROLES = [ROLE_USER, ROLE_SUPERVISOR, ROLE_ADMIN]

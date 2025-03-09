@@ -309,9 +309,11 @@ export async function sendTaskToDevice(task: task): Promise<any> {
   axios
     .post('http://localhost:3000/sendTask', { ...task, id: task.backendID })
     .then((response) => {
+      //eslint-disable-next-line no-console
       console.log('Response:', response.data)
     })
     .catch((error) => {
+      //eslint-disable-next-line no-console
       console.error('Error:', error)
     })
 }

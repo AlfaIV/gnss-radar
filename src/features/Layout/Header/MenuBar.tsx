@@ -1,6 +1,5 @@
 import React, { memo } from 'react'
-import { Stack, Button, Typography } from '@mui/material'
-import RouterOutlinedIcon from '@mui/icons-material/RouterOutlined'
+import { Button, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 import { UserType } from '~/shared/typings/user/userTypings'

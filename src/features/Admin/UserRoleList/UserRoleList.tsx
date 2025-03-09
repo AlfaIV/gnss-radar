@@ -1,12 +1,29 @@
-import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, CircularProgress } from '@mui/material'
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  CircularProgress,
+} from '@mui/material'
 import { memo, useEffect } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useIntersection } from '@mantine/hooks'
 import { AxiosError } from 'axios'
-import UserRoleRow from './UserRoleRow'
+
 import useService from '~/entities/useService'
-import { UserRoleResponseEntityType, UserRoleResponseType } from '~/shared/typings/user/userTypings'
-import { ErrorResponse, PaginatedQueryType } from '~/shared/typings/common/common'
+import {
+  UserRoleResponseEntityType,
+  UserRoleResponseType,
+} from '~/shared/typings/user/userTypings'
+import {
+  ErrorResponse,
+  PaginatedQueryType,
+} from '~/shared/typings/common/common'
+
+import UserRoleRow from './UserRoleRow'
 
 const UserRoleList = memo(() => {
   const { getUserList } = useService()
@@ -19,24 +36,26 @@ const UserRoleList = memo(() => {
     isFetchingNextPage,
     isLoading,
     isError,
-    error,
   } = useInfiniteQuery<UserRoleResponseType, AxiosError<ErrorResponse>>({
     queryKey: ['users'],
     queryFn: async ({ pageParam = 1, signal }) => {
-      const params: PaginatedQueryType = { 
+      const params: PaginatedQueryType = {
         page: pageParam as number,
-        size: PAGE_SIZE
+        size: PAGE_SIZE,
       }
-      
+
       const response = await getUserList(params, signal)
       return response
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const totalItems = lastPage.data.users?.length
-      const loadedItems = allPages.reduce((acc, page) => acc + page.data.users?.length, 0)
+      const loadedItems = allPages.reduce(
+        (acc, page) => acc + page.data.users?.length,
+        0,
+      )
       return loadedItems < totalItems ? allPages?.length + 1 : undefined
-    }
+    },
   })
 
   const { ref: lastRowRef, entry } = useIntersection<HTMLTableRowElement>({
@@ -48,14 +67,40 @@ const UserRoleList = memo(() => {
     if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }
-  }, [entry, hasNextPage, isFetchingNextPage])
+  }, [entry, hasNextPage, isFetchingNextPage, isFetchingNextPage])
 
-  const allUsers = data?.pages.flatMap(page => page.data.users) || []
+  const allUsers = data?.pages.flatMap((page) => page.data.users) || []
 
-  if (isLoading) return <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', p: 5}}><CircularProgress size={80} /></Box>
-  if (isError) return <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', p: 5}}>
-    <Typography fontSize={24} color='error'>{'Неизвестная ошибка'}</Typography>
-    </Box>
+  if (isLoading)
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          p: 5,
+        }}
+      >
+        <CircularProgress size={80} />
+      </Box>
+    )
+  if (isError)
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          p: 5,
+        }}
+      >
+        <Typography fontSize={24} color='error'>
+          Неизвестная ошибка
+        </Typography>
+      </Box>
+    )
 
   return (
     <Box
@@ -82,7 +127,7 @@ const UserRoleList = memo(() => {
           </TableRow>
         </TableHead>
         <TableBody
-          component="div"
+          component='div'
           sx={{
             overflowY: 'auto',
             overflowX: 'hidden',
@@ -97,12 +142,10 @@ const UserRoleList = memo(() => {
               background: '#888',
               borderRadius: '4px',
             },
-          }}>
+          }}
+        >
           {allUsers.map((item: UserRoleResponseEntityType) => (
-            <UserRoleRow 
-              key={item.login} 
-              {...item}
-            />
+            <UserRoleRow key={item.login} {...item} />
           ))}
           <TableRow ref={lastRowRef}>
             <TableCell colSpan={4} sx={{ textAlign: 'center', height: 60 }}>

@@ -1,26 +1,35 @@
-import { Radar, Task } from '@mui/icons-material'
+import { Task } from '@mui/icons-material'
 import { createBrowserRouter } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
-
 import lazyLoad from '~/shared/lazyLoad'
-
-import Layout from './layout/layout'
 import { withSuspended } from '~/shared/components/Suspended/Suspended'
 
-const LoginPage = withSuspended(lazyLoad(() => import('~/pages/LoginPage/LoginPage')))
-const AdminPage = withSuspended(lazyLoad(() => import('~/pages/AdminPage/AdminPage')))
-const RequestsWidget = withSuspended(lazyLoad(
-  () => import('~/widgets/Admin/SignUpRequest/SignUpRequest')),
+import Layout from './layout/layout'
+
+const LoginPage = withSuspended(
+  lazyLoad(() => import('~/pages/LoginPage/LoginPage')),
 )
-const AdminWelcomeWidget = withSuspended(lazyLoad(
-  () => import('~/widgets/Admin/Welcome/Welcome')),
+const AdminPage = withSuspended(
+  lazyLoad(() => import('~/pages/AdminPage/AdminPage')),
 )
-const AdminUserRole = withSuspended(lazyLoad(
-  () => import('~/widgets/Admin/UserRole/UserRole')),
+const RequestsWidget = withSuspended(
+  lazyLoad(() => import('~/widgets/Admin/SignUpRequest/SignUpRequest')),
 )
-const SignUpPage = withSuspended(lazyLoad(() => import('~/pages/SignUp/SignUpPage')))
+const AdminWelcomeWidget = withSuspended(
+  lazyLoad(() => import('~/widgets/Admin/Welcome/Welcome')),
+)
+const AdminUserRole = withSuspended(
+  lazyLoad(() => import('~/widgets/Admin/UserRole/UserRole')),
+)
+const SignUpPage = withSuspended(
+  lazyLoad(() => import('~/pages/SignUp/SignUpPage')),
+)
+
+const StatePage = withSuspended(
+  lazyLoad(() => import('~/pages/StatePage/StatePage')),
+)
 
 const router = createBrowserRouter([
   {
@@ -30,7 +39,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/state',
-        element: <Radar />,
+        element: <StatePage />,
       },
       {
         path: '/measure',
@@ -58,8 +67,8 @@ const router = createBrowserRouter([
           },
           {
             path: 'permissions',
-            element: <AdminUserRole />
-          }
+            element: <AdminUserRole />,
+          },
         ],
       },
     ],

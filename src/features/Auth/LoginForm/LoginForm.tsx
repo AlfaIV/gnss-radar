@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { Container, Box, TextField, Button, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 import useService from '~/entities/useService'
 import {
@@ -11,14 +12,13 @@ import {
 } from '~/shared/typings/auth/authTypings'
 import useUserStore from '~/entities/store/UserStore/useUserStore'
 import { UserType } from '~/shared/typings/user/userTypings'
-import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '~/shared/config/constants'
 
 const LoginForm = () => {
   const queryClient = useQueryClient()
   const { login } = useService()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [formError, setFormError] = useState<string>('')
 
@@ -117,7 +117,13 @@ const LoginForm = () => {
           helperText={formik.touched.password && formik.errors.password}
           variant='outlined'
         />
-        <Button color='primary' variant='contained' type='submit' fullWidth sx={{ py: 2 }}>
+        <Button
+          color='primary'
+          variant='contained'
+          type='submit'
+          fullWidth
+          sx={{ py: 2 }}
+        >
           Войти
         </Button>
         {!!formError && (
@@ -125,7 +131,14 @@ const LoginForm = () => {
             {formError}
           </Typography>
         )}
-        <Button color='primary' variant='outlined' type='submit' fullWidth sx={{ py: 2 }} onClick={()=>navigate(ROUTES.SIGNUP)}>
+        <Button
+          color='primary'
+          variant='outlined'
+          type='submit'
+          fullWidth
+          sx={{ py: 2 }}
+          onClick={() => navigate(ROUTES.SIGNUP)}
+        >
           Регистрация
         </Button>
       </Box>

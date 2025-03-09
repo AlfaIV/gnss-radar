@@ -4,7 +4,6 @@ import { USER_DEFAULT_STATE } from '~/shared/config/constants'
 import { UserType } from '~/shared/typings/user/userTypings'
 import createStore from '~/shared/utils/createStore/createStore'
 import useService from '~/entities/useService'
-import { User } from '~/utils/types/types'
 
 const useUserStore = createStore<UserType>(
   (set, get) => ({
@@ -28,7 +27,7 @@ const useUserStore = createStore<UserType>(
       try {
         const userData = await service.me()
         get().setUser(userData as UserType)
-      } catch (error) {
+      } catch {
         get().clearUser()
       }
     },

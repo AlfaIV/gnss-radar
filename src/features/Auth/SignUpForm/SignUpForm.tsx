@@ -4,29 +4,35 @@ import {
   Button,
   Container,
   Typography,
-  FormGroup,
-  Stack,
   Select,
   MenuItem,
   InputLabel,
   Grid,
 } from '@mui/material'
 import { Form, useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation } from 'react-query'
 import * as Yup from 'yup'
-
-import { SignUpFormType, SignUpRequestType } from '~/shared/typings/auth/authTypings'
 import { useFormik } from 'formik'
-import { ROLE_ADMIN, ROLE_SUPERVISOR, ROLE_USER, ROUTES } from '~/shared/config/constants'
+
+import {
+  SignUpFormType,
+  SignUpRequestType,
+} from '~/shared/typings/auth/authTypings'
+import {
+  ROLE_ADMIN,
+  ROLE_SUPERVISOR,
+  ROLE_USER,
+  ROUTES,
+} from '~/shared/config/constants'
 import useService from '~/entities/useService'
 import { UserRoleType } from '~/shared/typings/user/userTypings'
 
 const SignUpForm: FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const { signUp } = useService();
+  const { signUp } = useService()
 
-  const [formError, setFormError] = useState('');
+  const [formError, setFormError] = useState('')
 
   const signUpMutation = useMutation('signUpMutation', signUp)
 
@@ -88,9 +94,9 @@ const SignUpForm: FC = () => {
           organizationName: values.company ?? '',
           password: values.password ?? '',
           role: values.role ?? '',
-        };
-        await signUpMutation.mutateAsync(signUpRequestValue);
-        navigate(ROUTES.LOGIN);
+        }
+        await signUpMutation.mutateAsync(signUpRequestValue)
+        navigate(ROUTES.LOGIN)
       } catch (error: any) {
         if (error.response) {
           switch (error.response.status) {
@@ -130,7 +136,12 @@ const SignUpForm: FC = () => {
       >
         Регистрация
       </Typography>
-      <Typography variant='body1' component='p' color='initial' textAlign={'center'}>
+      <Typography
+        variant='body1'
+        component='p'
+        color='initial'
+        textAlign='center'
+      >
         Регистрация в информационной системе комплекса мониторинга ГНСС сигналов
       </Typography>
       <Form onSubmit={formik.handleSubmit}>
@@ -223,7 +234,9 @@ const SignUpForm: FC = () => {
                 value={formik.values.password || ''}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                error={formik.touched.password && Boolean(formik.errors.password)}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
                 helperText={formik.touched.password && formik.errors.password}
               />
             </Grid>
@@ -242,7 +255,9 @@ const SignUpForm: FC = () => {
                 onChange={formik.handleChange}
               >
                 <MenuItem value={ROLE_USER.value}>{ROLE_USER.label}</MenuItem>
-                <MenuItem value={ROLE_SUPERVISOR.value}>{ROLE_SUPERVISOR.label}</MenuItem>
+                <MenuItem value={ROLE_SUPERVISOR.value}>
+                  {ROLE_SUPERVISOR.label}
+                </MenuItem>
                 <MenuItem value={ROLE_ADMIN.value}>{ROLE_ADMIN.label}</MenuItem>
               </Select>
             </Grid>
@@ -262,7 +277,8 @@ const SignUpForm: FC = () => {
                   Boolean(formik.errors.confirmPassword)
                 }
                 helperText={
-                  formik.touched.confirmPassword && formik.errors.confirmPassword
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
                 }
               />
             </Grid>

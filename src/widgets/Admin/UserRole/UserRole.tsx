@@ -1,10 +1,7 @@
-import UserRoleList from "~/features/Admin/UserRoleList/UserRoleList"
-
+import UserRoleList from '~/features/Admin/UserRoleList/UserRoleList'
 
 const UserRole = () => {
-  return (
-      <UserRoleList />
-  )
+  return <UserRoleList />
 }
 
 export default UserRole

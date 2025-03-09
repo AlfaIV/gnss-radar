@@ -18,8 +18,10 @@ const grqlFetch = async (query: string) => {
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      //eslint-disable-next-line no-console
       console.error('Ошибка:', error.response?.data)
     } else {
+      //eslint-disable-next-line no-console
       console.error('Ошибка:', error)
     }
   }

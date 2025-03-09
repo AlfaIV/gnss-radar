@@ -21,6 +21,7 @@
     "@types/plotly.js": "^2.33.4",
     "apexcharts": "^4.0.0",
     "axios": "^1.7.7",
+    "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",

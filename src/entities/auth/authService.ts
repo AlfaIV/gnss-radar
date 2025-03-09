@@ -33,7 +33,9 @@ const useAuthService = () => {
   }, [])
 
   const me = useCallback(async (): Promise<UserInfoResponseType> => {
-    const response: UserInfoResponseType = await axiosInstance.get(API_URLS.AUTH.ME)
+    const response: UserInfoResponseType = await axiosInstance.get(
+      API_URLS.AUTH.ME,
+    )
 
     return response
   }, [])

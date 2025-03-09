@@ -7,6 +7,7 @@ function lazyLoad<T extends ComponentType<any>>(
     try {
       return await importFunc()
     } catch (error) {
+      //eslint-disable-next-line no-console
       console.error('Error loading component:', error)
       throw error
     }

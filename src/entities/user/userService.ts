@@ -26,29 +26,41 @@ const useUserService = () => {
   )
 
   const getUserList = useCallback(
-    async (values: PaginatedQueryType, signal?: AbortSignal): Promise<UserRoleResponseType> => {
-      const response: UserRoleResponseType = await axiosInstance.get(API_URLS.USER.GET_USER_LIST, {
-        signal,
-        params: {
-          ...values
-        }
-      })
+    async (
+      values: PaginatedQueryType,
+      signal?: AbortSignal,
+    ): Promise<UserRoleResponseType> => {
+      const response: UserRoleResponseType = await axiosInstance.get(
+        API_URLS.USER.GET_USER_LIST,
+        {
+          signal,
+          params: {
+            ...values,
+          },
+        },
+      )
 
-      return response;
+      return response
     },
     [],
   )
 
   const getSignUpRequestList = useCallback(
-    async (values: PaginatedQueryType, signal?: AbortSignal): Promise<SignUpRequestionType> => {
-      const response: SignUpRequestionType = await axiosInstance.get(API_URLS.USER.GET_SIGNUP_REQUESTS, {
-        signal,
-        params: {
-          ...values
-        }
-      })
+    async (
+      values: PaginatedQueryType,
+      signal?: AbortSignal,
+    ): Promise<SignUpRequestionType> => {
+      const response: SignUpRequestionType = await axiosInstance.get(
+        API_URLS.USER.GET_SIGNUP_REQUESTS,
+        {
+          signal,
+          params: {
+            ...values,
+          },
+        },
+      )
 
-      return response;
+      return response
     },
     [],
   )
@@ -60,7 +72,7 @@ const useUserService = () => {
       resolveSignUp,
       givePermissions,
     }),
-    [resolveSignUp, givePermissions, getUserList,getSignUpRequestList],
+    [resolveSignUp, givePermissions, getUserList, getSignUpRequestList],
   )
 }
 

@@ -5,10 +5,15 @@ export type HOCProps = {
 }
 
 export type PaginatedQueryType = {
-    page: number
-    size: number
+  page: number
+  size: number
 }
 
 export type ErrorResponse = {
-    message: string
-  }
+  message: string
+}
+
+export type Pagination = {
+  page: number
+  total: number
+}

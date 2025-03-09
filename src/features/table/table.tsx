@@ -1,10 +1,5 @@
 import { FC } from 'react'
 import {
-  Grid2,
-  Button,
-  Typography,
-  Stack,
-  Alert,
   Table,
   TableBody,
   TableCell,
@@ -16,10 +11,7 @@ import {
 
 import { Satellite } from '~/utils/types/types'
 
-import gnssTable from './table.config'
-
 import style from './table.module.scss'
-// import { Satellite } from "@mui/icons-material";
 
 const TableSatellite: FC<{ satellites: Satellite[] }> = ({ satellites }) => {
   return (

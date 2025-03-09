@@ -1,10 +1,10 @@
 import React, { memo, useState } from 'react'
-import { Box, IconButton, Drawer, Typography, Button, Stack } from '@mui/material'
+import { Box, IconButton, Drawer, Typography, Button } from '@mui/material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import { Link } from 'react-router-dom'
 
 import { SidebarItemProps, SidebarProps } from '~/shared/typings/Layout/layout'
-import { Link } from 'react-router-dom'
 
 const Sidebar = memo((props: SidebarProps) => {
   const { items, children } = props
@@ -56,12 +56,23 @@ const Sidebar = memo((props: SidebarProps) => {
         <Box sx={{ p: isOpen ? 2 : 1 }}>
           {items.map((item: SidebarItemProps) => (
             <Link to={item.link} key={item.link}>
-            <Button sx={{width: '100%'}}>
-                <Box flexDirection={'row'} display={'flex'} width={'100%'} justifyContent={isOpen ? 'start' : 'center'} alignItems={'center'} gap={2}>
-                    <item.logo sx={{fontSize: '40px'}} />
-                    {isOpen && <Typography textAlign={'left'} flexGrow={1} fontSize={'32px'}>{item.menuText}</Typography>}
+              <Button sx={{ width: '100%' }}>
+                <Box
+                  flexDirection='row'
+                  display='flex'
+                  width='100%'
+                  justifyContent={isOpen ? 'start' : 'center'}
+                  alignItems='center'
+                  gap={2}
+                >
+                  <item.logo sx={{ fontSize: '40px' }} />
+                  {isOpen && (
+                    <Typography textAlign='left' flexGrow={1} fontSize='32px'>
+                      {item.menuText}
+                    </Typography>
+                  )}
                 </Box>
-            </Button>
+              </Button>
             </Link>
           ))}
         </Box>

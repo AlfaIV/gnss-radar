@@ -37,36 +37,36 @@ export type SignUpRequestProps = {
 }
 
 export type UserRoleProps = {
-    login: string
-    name: string
-    surname: string
-    organizationName: string
-    role: UserRoleType
+  login: string
+  name: string
+  surname: string
+  organizationName: string
+  role: UserRoleType
 }
 
 export type UserRoleResponseEntityType = {
-    login: string
-    name: string
-    surname: string
-    organizationName: string
-    role: UserRoleType
+  login: string
+  name: string
+  surname: string
+  organizationName: string
+  role: UserRoleType
 }
 
 export type UserRoleResponseType = {
-    data: {
-      users: UserRoleResponseEntityType[]
-    }
+  data: {
+    users: UserRoleResponseEntityType[]
+  }
 }
 
 export type SignUpRequestionEntityType = {
-    login: string
-    name: string
-    surname: string
-    email: string
-    organizationName: string
-    role: string
+  login: string
+  name: string
+  surname: string
+  email: string
+  organizationName: string
+  role: string
 }
 
 export type SignUpRequestionType = {
-    data: {users: SignUpRequestionEntityType[]}
+  data: { users: SignUpRequestionEntityType[] }
 }

@@ -1,4 +1,4 @@
-import { UserRoleType, UserStatusType } from "../user/userTypings"
+import { UserRoleType, UserStatusType } from '../user/userTypings'
 
 export type UserInfoResponseType = {
   id: string
@@ -27,17 +27,17 @@ export type SignUpRequestType = {
 }
 
 export type LoginFormType = {
-    login: string | null
-    password: string | null
+  login: string | null
+  password: string | null
 }
 
 export type SignUpFormType = {
-  surname: string | null,
-  name: string | null,
-  company: string | null,
-  login: string | null,
-  email: string | null,
-  password: string | null,
-  confirmPassword: string | null,
-  role: UserRoleType;
+  surname: string | null
+  name: string | null
+  company: string | null
+  login: string | null
+  email: string | null
+  password: string | null
+  confirmPassword: string | null
+  role: UserRoleType
 }
