@@ -23,7 +23,6 @@ import {
 } from '~/shared/components/styled/table/StyledTable'
 import useService from '~/entities/useService'
 import {
-  EphemerisResponseEntityType,
   EphemerisResponseType,
 } from '~/shared/typings/ephemeris/ephemeris'
 
@@ -105,7 +104,7 @@ const EphemerisDisplayTable = memo(() => {
             <StyledTableRow>
               <StyledTableCell
                 sx={{
-                  fontSize: { xs: 14, sm: 16 },
+                  fontSize: { xs: 10, sm: 12 },
                   '&:before': {
                     [theme.breakpoints.down('sm')]: {
                       content: '"Название: "',
@@ -142,6 +141,7 @@ const EphemerisDisplayTable = memo(() => {
             <StyledTableRow key={index}>
               <StyledTableCell
                 sx={{
+                  padding: '6px',
                   fontSize: { xs: 14, sm: 16 },
                   '&:before': {
                     [theme.breakpoints.down('sm')]: {
@@ -157,6 +157,7 @@ const EphemerisDisplayTable = memo(() => {
 
               <StyledTableCell
                 sx={{
+                    padding: '6px',
                   fontSize: { xs: 14, sm: 16 },
                   '&:before': {
                     [theme.breakpoints.down('sm')]: {
