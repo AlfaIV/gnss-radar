@@ -1,5 +1,5 @@
-import { useState, memo } from 'react'
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useState, memo, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
   Box,
   IconButton,
@@ -12,6 +12,7 @@ import {
   TableRow,
   Typography,
   useTheme,
+  Skeleton,
 } from '@mui/material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -22,9 +23,8 @@ import {
   StyledTableRow,
 } from '~/shared/components/styled/table/StyledTable'
 import useService from '~/entities/useService'
-import {
-  EphemerisResponseType,
-} from '~/shared/typings/ephemeris/ephemeris'
+import { EphemerisResponseType } from '~/shared/typings/ephemeris/ephemeris'
+import { useFileContext } from '../context/StateContext'
 
 const PAGE_SIZE = 10
 
@@ -33,7 +33,9 @@ const EphemerisDisplayTable = memo(() => {
   const { getEphemeris } = useService()
   const theme = useTheme()
 
-  const { data, isLoading, isError, isFetching } = useQuery<
+  const {hasLoadedFile, setHasLoadedFile} = useFileContext();
+
+  const { data, isLoading, isError, isFetching, refetch } = useQuery<
     EphemerisResponseType,
     Error,
     EphemerisResponseType
@@ -52,6 +54,13 @@ const EphemerisDisplayTable = memo(() => {
 
   const totalPages = Math.ceil((data?.data.total || 0) / PAGE_SIZE)
 
+  useEffect(() => {
+    (async function(){
+        await refetch();
+        setHasLoadedFile(false);
+    })
+  }, [hasLoadedFile, setHasLoadedFile])
+
   return (
     <Box
       sx={{
@@ -60,6 +69,7 @@ const EphemerisDisplayTable = memo(() => {
         maxWidth: '100%',
         padding: 2,
         overflowX: 'auto',
+        flexGrow: 1,
       }}
     >
       <Typography
@@ -100,25 +110,42 @@ const EphemerisDisplayTable = memo(() => {
         </TableHead>
 
         <TableBody>
-          {isLoading && (
-            <StyledTableRow>
-              <StyledTableCell
-                sx={{
-                  fontSize: { xs: 10, sm: 12 },
-                  '&:before': {
-                    [theme.breakpoints.down('sm')]: {
-                      content: '"Название: "',
-                      fontWeight: theme.typography.fontWeightBold,
-                      marginRight: theme.spacing(1),
+          {isLoading || isFetching ? (
+            // Скелетоны для 10 строк при загрузке
+            Array.from({ length: PAGE_SIZE }).map((_, index) => (
+              <StyledTableRow key={`skeleton-${index}`}>
+                <StyledTableCell
+                  sx={{
+                    padding: '6px',
+                    '&:before': {
+                      [theme.breakpoints.down('sm')]: {
+                        content: '"Название: "',
+                        fontWeight: theme.typography.fontWeightBold,
+                        marginRight: theme.spacing(1),
+                      },
                     },
-                  },
-                }}
-              >
-                Загрузка списка эфемерид
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-          {isError && (
+                  }}
+                >
+                  <Skeleton variant='text' animation='wave' />
+                </StyledTableCell>
+                <StyledTableCell
+                  sx={{
+                    padding: '6px',
+                    '&:before': {
+                      [theme.breakpoints.down('sm')]: {
+                        content: '"Дата: "',
+                        fontWeight: theme.typography.fontWeightBold,
+                        marginRight: theme.spacing(1),
+                      },
+                    },
+                  }}
+                >
+                  <Skeleton variant='text' animation='wave' />
+                </StyledTableCell>
+              </StyledTableRow>
+            ))
+          ) : isError ? (
+            // Сообщение об ошибке
             <StyledTableRow>
               <StyledTableCell
                 sx={{
@@ -136,42 +163,44 @@ const EphemerisDisplayTable = memo(() => {
                 Произошла ошибка
               </StyledTableCell>
             </StyledTableRow>
-          )}
-          {data?.data.ephemeris.map((item, index) => (
-            <StyledTableRow key={index}>
-              <StyledTableCell
-                sx={{
-                  padding: '6px',
-                  fontSize: { xs: 14, sm: 16 },
-                  '&:before': {
-                    [theme.breakpoints.down('sm')]: {
-                      content: '"Название: "',
-                      fontWeight: theme.typography.fontWeightBold,
-                      marginRight: theme.spacing(1),
-                    },
-                  },
-                }}
-              >
-                {item.name}
-              </StyledTableCell>
-
-              <StyledTableCell
-                sx={{
+          ) : (
+            // Рендер реальных данных
+            data?.data.ephemeris.map((item, index) => (
+              <StyledTableRow key={index}>
+                <StyledTableCell
+                  sx={{
                     padding: '6px',
-                  fontSize: { xs: 14, sm: 16 },
-                  '&:before': {
-                    [theme.breakpoints.down('sm')]: {
-                      content: '"Дата: "',
-                      fontWeight: theme.typography.fontWeightBold,
-                      marginRight: theme.spacing(1),
+                    fontSize: { xs: 14, sm: 16 },
+                    '&:before': {
+                      [theme.breakpoints.down('sm')]: {
+                        content: '"Название: "',
+                        fontWeight: theme.typography.fontWeightBold,
+                        marginRight: theme.spacing(1),
+                      },
                     },
-                  },
-                }}
-              >
-                {dayjs(item.datetime).format('DD.MM.YYYY, HH:mm:ss')}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+                  }}
+                >
+                  {item.name}
+                </StyledTableCell>
+
+                <StyledTableCell
+                  sx={{
+                    padding: '6px',
+                    fontSize: { xs: 14, sm: 16 },
+                    '&:before': {
+                      [theme.breakpoints.down('sm')]: {
+                        content: '"Дата: "',
+                        fontWeight: theme.typography.fontWeightBold,
+                        marginRight: theme.spacing(1),
+                      },
+                    },
+                  }}
+                >
+                  {dayjs(item.datetime).format('DD.MM.YYYY, HH:mm:ss')}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))
+          )}
         </TableBody>
 
         <TableFooter
@@ -210,7 +239,7 @@ const EphemerisDisplayTable = memo(() => {
           </Box>
         </TableFooter>
       </Table>
-      {isLoading && <LinearProgress color='success' />}
+      {isFetching && <LinearProgress color='success' />}
     </Box>
   )
 })

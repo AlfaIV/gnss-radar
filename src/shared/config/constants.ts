@@ -15,7 +15,7 @@ export const API_URLS: Record<string, Record<string, string>> = {
   },
   MEASUREMENTS: {
     GET_EPHEMERIS: '/measurements/getEphemeris',
-    UPLOAD_EPHEMERIS: '/measurements/uploadEphemeris'
+    UPLOAD_EPHEMERIS: '/measurements/uploadEphemeris',
   },
   SATELLITES: {
     GET_SATELLITES: '/satellites/getSatellites',
@@ -76,6 +76,6 @@ export const USER_STATUS_ARRAY = [
   STATUS_DECLINED,
 ]
 
-export const ALLOWED_FILE_TYPES = ['.sp3', '.eph', '.txt', '.bin'];
+export const ALLOWED_FILE_TYPES = ['.sp3', '.eph', '.txt', '.bin']
 
 export const MAX_FILE_SIZE = 100
