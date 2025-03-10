@@ -15,6 +15,22 @@ const useSatellitesService = () => {
       )
 
       return response
+
+      // return {satettiles: [{
+      //   name: 'Спутник 1',
+      //   azimuth: 51.4,
+      //   range: 1000
+      // },
+      // {
+      //   name: 'Спутник 2',
+      //   azimuth: 57.12,
+      //   range: 1200
+      // },
+      // {
+      //   name: 'Спутник 3',
+      //   azimuth: 60,
+      //   range: 1500
+      // }]}
     },
     [],
   )

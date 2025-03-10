@@ -10,10 +10,11 @@ import {
 import { memo, forwardRef } from 'react'
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import {
   ResolveSignUpRequest,
+  SignUpRequestionType,
   SignUpRequestProps,
 } from '~/shared/typings/user/userTypings'
 import { ROLES } from '~/shared/config/constants'
@@ -35,7 +36,23 @@ const SignUpRequest = memo(
       mutationKey: ['update-role'],
       mutationFn: (values: ResolveSignUpRequest) => resolveSignUp(values),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['signup-resolution'] })
+        queryClient.setQueryData<InfiniteData<SignUpRequestionType>>(
+            ['requestions'], 
+            (oldData) => {
+              if (!oldData) return oldData;
+              
+              return {
+                ...oldData,
+                pages: oldData.pages.map(page => ({
+                  ...page,
+                  data: {
+                    ...page.data,
+                    users: page.data.users?.filter(user => user.login !== login) || []
+                  }
+                }))
+              };
+            }
+          );
       },
     })
 
