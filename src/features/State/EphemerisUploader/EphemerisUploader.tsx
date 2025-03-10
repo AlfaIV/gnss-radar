@@ -30,7 +30,7 @@ const EphemerisUploader = () => {
     mutationKey: ['upload-ephemeris'],
     mutationFn: (file: File) => uploadEphemeris(file),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['upload-ephemeris-key'] })
+      queryClient.invalidateQueries({ queryKey: ['ephemeris'] })
     },
   })
 

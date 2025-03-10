@@ -18,7 +18,7 @@ export const API_URLS: Record<string, Record<string, string>> = {
     UPLOAD_EPHEMERIS: '/measurements/uploadEphemeris',
   },
   SATELLITES: {
-    GET_SATELLITES: '/satellites/getSatellites',
+    GET_SATELLITES: '/satellites/getSatellitesPosition',
   },
 }
 
