@@ -10,7 +10,11 @@ import {
 import { memo, forwardRef } from 'react'
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 
 import {
   ResolveSignUpRequest,
@@ -37,22 +41,24 @@ const SignUpRequest = memo(
       mutationFn: (values: ResolveSignUpRequest) => resolveSignUp(values),
       onSuccess: () => {
         queryClient.setQueryData<InfiniteData<SignUpRequestionType>>(
-            ['requestions'], 
-            (oldData) => {
-              if (!oldData) return oldData;
-              
-              return {
-                ...oldData,
-                pages: oldData.pages.map(page => ({
-                  ...page,
-                  data: {
-                    ...page.data,
-                    users: page.data.users?.filter(user => user.login !== login) || []
-                  }
-                }))
-              };
+          ['requestions'],
+          (oldData) => {
+            if (!oldData) return oldData
+
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                data: {
+                  ...page.data,
+                  users:
+                    page.data.users?.filter((user) => user.login !== login) ||
+                    [],
+                },
+              })),
             }
-          );
+          },
+        )
       },
     })
 

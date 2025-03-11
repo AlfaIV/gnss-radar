@@ -14,15 +14,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from '~/shared/config/constants'
 import useService from '~/entities/useService'
+
 import { useFileContext } from '../context/StateContext'
 
 const EphemerisUploader = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { uploadEphemeris } = useService();
+  const { uploadEphemeris } = useService()
 
-  const {setHasLoadedFile} = useFileContext();
+  const { setHasLoadedFile } = useFileContext()
 
   const queryClient = useQueryClient()
 

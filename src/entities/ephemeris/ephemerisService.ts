@@ -25,41 +25,41 @@ const useEphemerisService = () => {
 
       return response
 
-    //   return {data: {
-    //     total: 50,
-    //     page: 1,
-    //     ephemeris: [{
-    //         name: `${values.page}xx`,
-    //         datetime: '2020-11-12T13:19:33+03:00'
-    //     },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   },{
-    //       name: `${values.page}xx`,
-    //       datetime: '2020-11-12T13:19:33+03:00'
-    //   }]
-    //   }}
+      //   return {data: {
+      //     total: 50,
+      //     page: 1,
+      //     ephemeris: [{
+      //         name: `${values.page}xx`,
+      //         datetime: '2020-11-12T13:19:33+03:00'
+      //     },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   },{
+      //       name: `${values.page}xx`,
+      //       datetime: '2020-11-12T13:19:33+03:00'
+      //   }]
+      //   }}
     },
     [],
   )

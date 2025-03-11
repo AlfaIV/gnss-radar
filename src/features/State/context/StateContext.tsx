@@ -27,10 +27,10 @@ export const FileProvider = (props: HOCProps) => {
 }
 
 export const useFileContext = () => {
-    const context = useContext(FileContext);
-    if(!context) {
-        throw new Error('useFileContext must me used within a File Provider')
-    }
+  const context = useContext(FileContext)
+  if (!context) {
+    throw new Error('useFileContext must me used within a File Provider')
+  }
 
-    return context
+  return context
 }

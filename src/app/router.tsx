@@ -1,5 +1,5 @@
 import { Task } from '@mui/icons-material'
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
@@ -33,10 +33,13 @@ const StatePage = withSuspended(
 
 const router = createBrowserRouter([
   {
-    path: '/',
     element: <Layout />,
     // errorElement: <ErrorPage />,
     children: [
+      {
+        path: '/',
+        element: <Navigate to='/state' />,
+      },
       {
         path: '/state',
         element: <StatePage />,

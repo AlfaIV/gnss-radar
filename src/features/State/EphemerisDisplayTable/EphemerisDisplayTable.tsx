@@ -24,6 +24,7 @@ import {
 } from '~/shared/components/styled/table/StyledTable'
 import useService from '~/entities/useService'
 import { EphemerisResponseType } from '~/shared/typings/ephemeris/ephemeris'
+
 import { useFileContext } from '../context/StateContext'
 
 const PAGE_SIZE = 10
@@ -33,7 +34,7 @@ const EphemerisDisplayTable = memo(() => {
   const { getEphemeris } = useService()
   const theme = useTheme()
 
-  const {hasLoadedFile, setHasLoadedFile} = useFileContext();
+  const { hasLoadedFile, setHasLoadedFile } = useFileContext()
 
   const { data, isLoading, isError, isFetching, refetch } = useQuery<
     EphemerisResponseType,
@@ -55,9 +56,9 @@ const EphemerisDisplayTable = memo(() => {
   const totalPages = Math.ceil((data?.data.total || 0) / PAGE_SIZE)
 
   useEffect(() => {
-    (async function(){
-        await refetch();
-        setHasLoadedFile(false);
+    ;(async function () {
+      await refetch()
+      setHasLoadedFile(false)
     })
   }, [hasLoadedFile, setHasLoadedFile])
 

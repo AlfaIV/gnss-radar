@@ -1,23 +1,28 @@
-import { memo, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import useUserStore from "~/entities/store/UserStore/useUserStore";
-import { UserType } from "~/shared/typings/user/userTypings";
+import { memo, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+
+import useUserStore from '~/entities/store/UserStore/useUserStore'
+import { UserType } from '~/shared/typings/user/userTypings'
 
 const AuthGuard = memo(() => {
-  const navigate = useNavigate();
-  const id = useUserStore((state: UserType) => state.id);
+  const navigate = useNavigate()
+  const id = useUserStore((state: UserType) => state.id)
 
   useEffect(() => {
     if (!id) {
-      navigate("/login", { replace: true });
+      navigate('/login', { replace: true })
     }
-  }, [id, navigate]);
+  }, [id, navigate])
 
   if (!id) {
-    return null;
+    return null
   }
 
-  return <><Outlet /></>;
-});
+  return (
+    <>
+      <Outlet />
+    </>
+  )
+})
 
-export default AuthGuard;
+export default AuthGuard
