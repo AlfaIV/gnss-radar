@@ -61,6 +61,8 @@ const EphemerisDisplayTable = memo(() => {
     })
   }, [hasLoadedFile, setHasLoadedFile])
 
+  console.log(data?.data)
+
   return (
     <Box
       sx={{
@@ -165,7 +167,7 @@ const EphemerisDisplayTable = memo(() => {
             </StyledTableRow>
           ) : (
             // Рендер реальных данных
-            data?.data.ephemeris.map((item, index) => (
+            data?.data?.ephemeris?.map((item, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell
                   sx={{
