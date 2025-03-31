@@ -23,7 +23,7 @@ export const API_URLS: Record<string, Record<string, string>> = {
   TASKS: {
     CREATE_TASK: '/tasks/createTask',
     GET_TASKS: '/tasks/getTasks',
-    DELETE_TASK: '/tasks/deleteTask/',
+    DELETE_TASK: '/tasks/deleteTask',
     UPDATE_TASK: '/tasks/updateTask',
   }
 }

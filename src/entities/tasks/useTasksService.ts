@@ -43,8 +43,11 @@ const useTasksService = () => {
 
     const deleteTask = useCallback(
         async (id: string, signal?: AbortSignal): Promise<void> => {
-          await axiosInstance.delete(
-            `${API_URLS.TASKS.DELETE_TASK}${id}`,
+          await axiosInstance.post(
+            API_URLS.TASKS.DELETE_TASK,
+            {
+                id
+            },
             {
                 signal
             }
