@@ -20,6 +20,12 @@ export const API_URLS: Record<string, Record<string, string>> = {
   SATELLITES: {
     GET_SATELLITES: '/satellites/getSatellitesPosition',
   },
+  TASKS: {
+    CREATE_TASK: '/tasks/createTask',
+    GET_TASKS: '/tasks/getTasks',
+    DELETE_TASK: '/tasks/deleteTask/',
+    UPDATE_TASK: '/tasks/updateTask',
+  }
 }
 
 export const ROUTES: Record<string, string> = {
