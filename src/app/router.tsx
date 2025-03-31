@@ -1,4 +1,3 @@
-import { Task } from '@mui/icons-material'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 import Measure from '~/pages/measure/measure'
@@ -31,6 +30,10 @@ const StatePage = withSuspended(
   lazyLoad(() => import('~/pages/StatePage/StatePage')),
 )
 
+const TasksPage = withSuspended(
+  lazyLoad(() => import('~/pages/TasksPage/TasksPage')),
+)
+
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -50,7 +53,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/task',
-        element: <Task />,
+        element: <TasksPage />,
       },
       {
         path: '/settings',
