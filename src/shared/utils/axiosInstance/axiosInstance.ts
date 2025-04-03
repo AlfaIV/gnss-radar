@@ -11,7 +11,7 @@ export const setGlobalErrorHandler = (handler: ErrorHandler) => {
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${window.location.origin}/api/v1/`,
   withCredentials: true,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     credentials: 'include',
     'Content-Type': 'application/json',
