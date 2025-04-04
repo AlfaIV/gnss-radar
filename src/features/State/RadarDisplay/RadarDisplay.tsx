@@ -29,7 +29,7 @@ const RadarDisplay = () => {
 
       return getSatellites(abortControllerRef.current.signal)
     },
-    refetchInterval: 5000,
+    refetchInterval: 1000*60*10,
     staleTime: 0,
     select: (data) => data.data.satellites,
   })
