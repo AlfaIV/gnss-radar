@@ -15,7 +15,7 @@ export default defineConfig(({}) => {
       port: 8080,
       proxy: {
         //Потом айпи реального сервера тут поставим
-        '/api': {target:"http://localhost/",
+        '/api': {target:"http://195.19.44.32:8081",
 
           ws:true,
           changeOrigin: true
