@@ -31,7 +31,7 @@ const RadarDisplay = () => {
     },
     refetchInterval: 5000,
     staleTime: 0,
-    select: (data) => data.satettiles,
+    select: (data) => data.data.satettiles,
   })
 
   useEffect(() => {
