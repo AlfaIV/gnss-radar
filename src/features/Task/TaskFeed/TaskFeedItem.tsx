@@ -27,7 +27,7 @@ import TaskUpdateDialog from "./TaskUpdateDialog";
       userName,
       surname,
       email,
-      orgnizationName,
+      organizationName,
       satellites,
       isAll
     } = props;
@@ -112,7 +112,7 @@ import TaskUpdateDialog from "./TaskUpdateDialog";
                   {[userName, surname, email].filter(Boolean).join(' ')}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  {orgnizationName || 'Не указана организация'}
+                  {organizationName || 'Не указана организация'}
                 </Typography>
               </Stack>
             </Stack>

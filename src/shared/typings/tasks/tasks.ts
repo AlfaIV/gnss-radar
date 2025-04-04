@@ -41,7 +41,7 @@ export type TaskFeedItemProps = {
     userName: string
     surname: string
     email: string
-    orgnizationName: string
+    organizationName: string
 }
 
 export type TaskUpdateDialogProps = {
@@ -69,7 +69,7 @@ export type GetTasksResponseType = {
             userName: string
             surname: string
             email: string
-            orgnizationName: string
+            organizationName: string
         }[]
     }
 }
