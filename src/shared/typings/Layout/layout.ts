@@ -12,3 +12,7 @@ export type SidebarProps = {
   items: SidebarItemProps[]
   children?: ReactNode | string
 }
+
+export type RoleGuardProps = {
+    role?: string | string[]
+}

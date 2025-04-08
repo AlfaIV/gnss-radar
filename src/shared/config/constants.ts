@@ -31,6 +31,8 @@ export const API_URLS: Record<string, Record<string, string>> = {
 export const ROUTES: Record<string, string> = {
   SIGNUP: '/signup',
   LOGIN: '/login',
+  STATE: '/state',
+  TASK: '/task'
 }
 
 export const USER_DEFAULT_STATE = {

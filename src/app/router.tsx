@@ -6,6 +6,7 @@ import lazyLoad from '~/shared/lazyLoad'
 import { withSuspended } from '~/shared/components/Suspended/Suspended'
 
 import Layout from './layout/layout'
+import Guard from '~/shared/components/Guard/Guard'
 
 const LoginPage = withSuspended(
   lazyLoad(() => import('~/pages/LoginPage/LoginPage')),
@@ -45,23 +46,23 @@ const router = createBrowserRouter([
       },
       {
         path: '/state',
-        element: <StatePage />,
+        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><StatePage /></Guard>,
       },
       {
         path: '/measure',
-        element: <Measure />,
+        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><Measure /></Guard>,
       },
       {
         path: '/task',
-        element: <TasksPage />,
+        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><TasksPage /></Guard>,
       },
       {
         path: '/settings',
-        element: <Setting />,
+        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><Setting /></Guard>,
       },
       {
         path: '/admin',
-        element: <AdminPage />,
+        element: <Guard role={['ADMIN']}><AdminPage /></Guard>,
         children: [
           {
             path: 'welcome',

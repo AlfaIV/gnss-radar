@@ -56,6 +56,7 @@ const LoginForm = () => {
           values as LoginRequestType,
         )
         setUser(response as UserType)
+        navigate(ROUTES.STATE)
       } catch (error: any) {
         if (error.response) {
           switch (error.response.status) {
