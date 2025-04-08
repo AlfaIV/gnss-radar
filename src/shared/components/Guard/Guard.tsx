@@ -7,7 +7,7 @@ import RoleGuard from "./RoleGuard";
 
 const Guard = memo((props: HOCProps & RoleGuardProps) => {
 
-    const { children, role='USER' } = props;
+    const { children, role=['USER'] } = props;
 
     return (<AuthGuard>
         <RoleGuard role={role}>

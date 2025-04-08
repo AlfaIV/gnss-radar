@@ -8,14 +8,14 @@ import { UserType } from "~/shared/typings/user/userTypings";
 
 const RoleGuard = memo((props: HOCProps & RoleGuardProps) => {
 
-    const { children, role='USER' } = props;
+    const { children, role=['USER'] } = props;
 
     const navigate = useNavigate();
 
     const [id, userRole] = useUserStore((state: UserType) => [state.id, state.role])
 
     useEffect(() => {
-        if(!id || userRole !== role) {
+        if(!id || !role.find(r => r === userRole)) {
             navigate('/state')
         }
     })
