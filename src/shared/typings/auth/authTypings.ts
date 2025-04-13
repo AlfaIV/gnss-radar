@@ -1,14 +1,14 @@
-import { UserRoleType, UserStatusType } from '../user/userTypings'
+import { UserRoleType } from '../user/userTypings'
 
 export type UserInfoResponseType = {
-  id: string
+data:{  id: string
   login: string
   role: string
   email: string
   name: string
   surname: string
   organizationName: string
-  api: string[]
+  api: string[]}
 }
 
 export type LoginRequestType = {

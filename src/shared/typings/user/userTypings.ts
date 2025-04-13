@@ -24,7 +24,6 @@ export interface UserType {
   api: string[]
   setUser: (values: UserType) => void
   clearUser: () => void
-  verifyAuth: (service: ReturnType<typeof useService>) => void
 }
 
 export type SignUpRequestProps = {

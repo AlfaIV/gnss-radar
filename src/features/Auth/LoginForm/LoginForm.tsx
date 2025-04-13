@@ -55,7 +55,7 @@ const LoginForm = () => {
         const response = await logInMutation.mutateAsync(
           values as LoginRequestType,
         )
-        setUser(response as UserType)
+        setUser(response.data as UserType)
         navigate(ROUTES.STATE)
       } catch (error: any) {
         if (error.response) {
