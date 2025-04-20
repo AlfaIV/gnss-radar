@@ -57,7 +57,7 @@ export const configuratePlotPolar = (satellites: SatellitesType[]): Data[] => {
         '<b>Название</b>: %{text}<br>' +
         '<b>Азимут</b>: %{theta:.2f}°<br>' +
         '<b>Расстояние</b>: %{r:.2f} м<extra></extra>',
-      name: 'Satellites',
+      name: 'Спутиник',
     } as unknown as Data,
   ]
 }
@@ -68,27 +68,35 @@ export const configurateLayoutSpherical = (
 ): Partial<Layout> => {
   return {
     polar: {
+      bgcolor: '#f0f0f0',
+      gridshape: 'circular',         // рисуем сетку кругами
       radialaxis: {
         visible: true,
-        range: satellites
-          ? [0, Math.max(...satellites.map((s) => s.range)) + 1000]
-          : [0, 1000],
+        showgrid: true,               // включаем сетку по радиусу
+        gridcolor: '#ccc',            // цвет линий сетки
+        gridwidth: 1,                 // толщина линий сетки
+        range: [0, 90],
+        dtick: 15,                    // шаг сетки: каждые 15°
         angle: 90,
         tickangle: 90,
         tickfont: { size: 10 },
-        title: { text: 'Расстояние (м)' }
+        title: { text: 'Угол места (°)' }
       },
       angularaxis: {
+        showgrid: true, 
+        gridcolor: '#ddd',
+        gridwidth: 1,
         direction: 'clockwise',
         rotation: 90,
         showline: true,
-        tickmode: 'array',
+        tickmode: 'linear',
+        tick0: 0,
+        dtick: 15,
         tickvals: [0, 90, 180, 270],
         ticktext: ['N', 'E', 'S', 'W'],
         tickfont: { size: 12 },
-        title: { text: 'Azimuth (°)' }
+        title: { text: 'Азимут (°)' }
       },
-      bgcolor: '#f0f0f0',
     },
     showlegend: false,
     margin: { t: 50, b: 30, l: 100, r: 100 },
@@ -103,29 +111,22 @@ export const configuratePlotSpherical = (satellites: SatellitesType[]): Data[] =
     {
       type: 'scatterpolar',
       mode: 'markers+text',
-      r: satellites?.map((sat) => sat.range),
+      r: satellites?.map((sat) => sat.elevation),
       theta: satellites?.map((sat) => sat.azimuth),
       text: satellites?.map((sat) => sat.name),
       textposition: 'top center',
       textfont: { size: 12, color: '#000' },
+      hoverinfo: 'none',
       marker: {
         size: 12,
-        color: satellites?.map((sat) => sat.elevation),
-        colorscale: 'Viridis',
-        colorbar: {
-          title: 'Угол места (°)',
-          titleside: 'right',
-        },
+        color: '#FF0000',
         symbol: 'circle',
-        showscale: true,
       },
-      hoverinfo: 'none',
       hovertemplate:
         '<b>Название</b>: %{text}<br>' +
         '<b>Азимут</b>: %{theta:.2f}°<br>' +
-        '<b>Расстояние</b>: %{r:.2f} м<br>' +
-        '<b>Угол места</b>: %{marker.color:.2f}°<extra></extra>',
-      name: 'Satellites',
+        '<b>Угол места</b>: %{r:.2f}°<br>',
+      name: 'Спутник',
     } as unknown as Data,
   ]
 }
