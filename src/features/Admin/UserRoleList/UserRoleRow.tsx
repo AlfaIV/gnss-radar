@@ -64,7 +64,7 @@ const UserRoleRow = memo((props: UserRoleProps) => {
     <StyledTableRow>
       <StyledTableCell
         sx={{
-          width: '25%',
+          width: '20%',
           wordBreak: 'break-word',
           whiteSpace: 'normal',
         }}
@@ -73,7 +73,7 @@ const UserRoleRow = memo((props: UserRoleProps) => {
       </StyledTableCell>
       <StyledTableCell
         sx={{
-          width: '25%',
+          width: '20%',
           wordBreak: 'break-word',
           whiteSpace: 'normal',
         }}
@@ -82,7 +82,7 @@ const UserRoleRow = memo((props: UserRoleProps) => {
       </StyledTableCell>
       <StyledTableCell
         sx={{
-          width: '25%',
+          width: '20%',
           wordBreak: 'break-word',
           whiteSpace: 'normal',
         }}
@@ -92,7 +92,7 @@ const UserRoleRow = memo((props: UserRoleProps) => {
 
       <StyledTableCell
         sx={{
-          width: '25%',
+          width: '20%',
           wordBreak: 'break-word',
           whiteSpace: 'normal',
         }}
@@ -102,7 +102,7 @@ const UserRoleRow = memo((props: UserRoleProps) => {
 
       <StyledTableCell
         sx={{
-          width: '25%',
+          width: '20%',
           wordBreak: 'break-word',
           whiteSpace: 'normal',
         }}

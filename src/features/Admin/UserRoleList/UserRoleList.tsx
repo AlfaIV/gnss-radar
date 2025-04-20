@@ -117,15 +117,65 @@ const UserRoleList = memo(() => {
       }}
     >
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontSize: 24 }}>Имя</TableCell>
-            <TableCell sx={{ fontSize: 24 }}>Фамилия</TableCell>
-            <TableCell sx={{ fontSize: 24 }}>Логин</TableCell>
-            <TableCell sx={{ fontSize: 24 }}>Организация</TableCell>
-            <TableCell sx={{ fontSize: 24 }}>Права</TableCell>
-          </TableRow>
-        </TableHead>
+      <TableHead>
+  <TableRow>
+    <TableCell 
+      sx={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        width: '10%', // Set proportional widths
+        verticalAlign: 'middle',
+        py: 2 // Vertical padding
+      }}
+    >
+      Имя
+    </TableCell>
+    <TableCell 
+      sx={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        width: '20%',
+        verticalAlign: 'middle',
+        py: 2
+      }}
+    >
+      Фамилия
+    </TableCell>
+    <TableCell 
+      sx={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        width: '20%',
+        verticalAlign: 'middle',
+        py: 2
+      }}
+    >
+      Логин
+    </TableCell>
+    <TableCell 
+      sx={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        width: '20%',
+        verticalAlign: 'middle',
+        py: 2
+      }}
+    >
+      Организация
+    </TableCell>
+    <TableCell 
+      sx={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        width: '20%',
+        verticalAlign: 'middle',
+        py: 2
+      }}
+    >
+      Права
+    </TableCell>
+  </TableRow>
+</TableHead>
         <TableBody
           component='div'
           sx={{
