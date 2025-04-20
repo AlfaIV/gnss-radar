@@ -84,6 +84,18 @@ export const USER_STATUS_ARRAY = [
   STATUS_DECLINED,
 ]
 
-export const ALLOWED_FILE_TYPES = ['.sp3', '.eph', '.txt', '.bin']
+export const ALLOWED_FILE_TYPES = ['.sp3', '.eph', '.txt', '.bin', '.tle']
 
 export const MAX_FILE_SIZE = 100
+
+export const RADAR_TYPE_POLAR = {
+    label: 'Полярная система координат',
+    value: 'POLAR'
+}
+
+export const RADAR_TYPE_SPHERE = {
+    label: 'Сферическая система координат',
+    value: 'SPHERE'
+}
+
+export const RADAR_TYPE = [RADAR_TYPE_POLAR, RADAR_TYPE_SPHERE]

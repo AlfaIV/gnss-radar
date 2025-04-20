@@ -84,7 +84,7 @@ const EphemerisUploader = () => {
   }
 
   return (
-    <Box sx={{ p: 3, width: '100%' }}>
+    <Box sx={{ p: 3 }}>
       <Stack spacing={2}>
         <Typography variant='h6' gutterBottom>
           Загрузка файла эфемерид

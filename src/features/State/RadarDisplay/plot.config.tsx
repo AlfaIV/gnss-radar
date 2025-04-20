@@ -2,7 +2,7 @@ import { Data, Layout } from 'plotly.js'
 
 import { SatellitesType } from '~/shared/typings/radar/radar'
 
-export const configurateLayout = (
+export const configurateLayoutPolar = (
   satellites: SatellitesType[],
 ): Partial<Layout> => {
   return {
@@ -37,7 +37,7 @@ export const configurateLayout = (
   }
 }
 
-export const configuratePlot = (satellites: SatellitesType[]): Data[] => {
+export const configuratePlotPolar = (satellites: SatellitesType[]): Data[] => {
   return [
     {
       type: 'scatterpolar',
@@ -57,6 +57,74 @@ export const configuratePlot = (satellites: SatellitesType[]): Data[] => {
         '<b>Название</b>: %{text}<br>' +
         '<b>Азимут</b>: %{theta:.2f}°<br>' +
         '<b>Расстояние</b>: %{r:.2f} м<extra></extra>',
+      name: 'Satellites',
+    } as unknown as Data,
+  ]
+}
+
+
+export const configurateLayoutSpherical = (
+  satellites: SatellitesType[],
+): Partial<Layout> => {
+  return {
+    polar: {
+      radialaxis: {
+        visible: true,
+        range: satellites
+          ? [0, Math.max(...satellites.map((s) => s.range)) + 1000]
+          : [0, 1000],
+        angle: 90,
+        tickangle: 90,
+        tickfont: { size: 10 },
+        title: { text: 'Расстояние (м)' }
+      },
+      angularaxis: {
+        direction: 'clockwise',
+        rotation: 90,
+        showline: true,
+        tickmode: 'array',
+        tickvals: [0, 90, 180, 270],
+        ticktext: ['N', 'E', 'S', 'W'],
+        tickfont: { size: 12 },
+        title: { text: 'Azimuth (°)' }
+      },
+      bgcolor: '#f0f0f0',
+    },
+    showlegend: false,
+    margin: { t: 50, b: 30, l: 100, r: 100 },
+    title: 'Позиции спутников',
+    font: { family: 'Arial, sans-serif', size: 14 },
+    colorway: ['#1f77b4'],
+  }
+}
+
+export const configuratePlotSpherical = (satellites: SatellitesType[]): Data[] => {
+  return [
+    {
+      type: 'scatterpolar',
+      mode: 'markers+text',
+      r: satellites?.map((sat) => sat.range),
+      theta: satellites?.map((sat) => sat.azimuth),
+      text: satellites?.map((sat) => sat.name),
+      textposition: 'top center',
+      textfont: { size: 12, color: '#000' },
+      marker: {
+        size: 12,
+        color: satellites?.map((sat) => sat.elevation),
+        colorscale: 'Viridis',
+        colorbar: {
+          title: 'Угол места (°)',
+          titleside: 'right',
+        },
+        symbol: 'circle',
+        showscale: true,
+      },
+      hoverinfo: 'none',
+      hovertemplate:
+        '<b>Название</b>: %{text}<br>' +
+        '<b>Азимут</b>: %{theta:.2f}°<br>' +
+        '<b>Расстояние</b>: %{r:.2f} м<br>' +
+        '<b>Угол места</b>: %{marker.color:.2f}°<extra></extra>',
       name: 'Satellites',
     } as unknown as Data,
   ]
