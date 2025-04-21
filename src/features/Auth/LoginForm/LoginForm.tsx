@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
-import { useMutation, useQueryClient } from 'react-query'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { Container, Box, TextField, Button, Typography } from '@mui/material'
+import {
+  Container,
+  Box,
+  TextField,
+  Button,
+  Typography,
+  CircularProgress,
+} from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 
 import useService from '~/entities/useService'
 import {
@@ -15,7 +23,6 @@ import { UserType } from '~/shared/typings/user/userTypings'
 import { ROUTES } from '~/shared/config/constants'
 
 const LoginForm = () => {
-  const queryClient = useQueryClient()
   const { login } = useService()
 
   const navigate = useNavigate()
@@ -41,44 +48,49 @@ const LoginForm = () => {
       .nullable(),
   })
 
-  const logInMutation = useMutation('updateDevice', login, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('authCheck')
+  const { mutateAsync: signin, isPending } = useMutation({
+    mutationKey: ['login'],
+    mutationFn: (values: LoginFormType) => login(values as LoginRequestType),
+    onSuccess: (response) => {
+      setUser(response.data as UserType)
+      navigate(ROUTES.STATE)
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            setFormError('Некорректный запрос')
+            break
+          case 401:
+            setFormError('Неверные учетные данные')
+            break
+          case 403:
+            setFormError('Дождитесь подтверждения администрацией комплекса')
+            break
+          case 404:
+            setFormError('Ресурс не найден')
+            break
+          case 500:
+            setFormError('Внутренняя ошибка сервера')
+            break
+          default:
+            setFormError(
+              error.response.data?.message || 'Произошла неизвестная ошибка',
+            )
+        }
+      } else if (error.request) {
+        setFormError('Ошибка сети или сервер не отвечает')
+      } else {
+        setFormError('Произошла ошибка при настройке запроса')
+      }
     },
   })
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values, { setFieldError }) => {
-      try {
-        const response = await logInMutation.mutateAsync(
-          values as LoginRequestType,
-        )
-        setUser(response.data as UserType)
-        navigate(ROUTES.STATE)
-      } catch (error: any) {
-        if (error.response) {
-          switch (error.response.status) {
-            case 401:
-              setFieldError('password', 'Неверные учетные данные.')
-              break
-            case 403:
-              setFieldError(
-                'password',
-                'Дождитесь подтверждения администрацией комплекса.',
-              )
-              break
-            case 500:
-              setFormError('Внутренняя ошибка сервера.')
-              break
-            default:
-              setFormError('Произошла неизвестная ошибка.')
-          }
-        } else {
-          setFormError('Ошибка сети или сервер не отвечает.')
-        }
-      }
+    onSubmit: async (values) => {
+      await signin(values)
     },
     enableReinitialize: true,
   })
@@ -124,8 +136,9 @@ const LoginForm = () => {
           type='submit'
           fullWidth
           sx={{ py: 2 }}
+          disabled={isPending}
         >
-          Войти
+          {isPending ? <CircularProgress /> : 'Войти'}
         </Button>
         {!!formError && (
           <Typography color='error' variant='body2'>

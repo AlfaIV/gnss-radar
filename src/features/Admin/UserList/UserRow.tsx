@@ -16,11 +16,7 @@ import {
   StyledTableCell,
 } from '~/shared/components/styled/table/StyledTable'
 
-interface UserRowProps extends UserProps {
-  isLoading?: boolean
-}
-
-const UserRow = memo((props: UserRowProps) => {
+const UserRow = memo((props: UserProps) => {
   const {
     name,
     surname,

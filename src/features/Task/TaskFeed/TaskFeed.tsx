@@ -70,11 +70,13 @@ const TaskFeed = memo(() => {
         justifyContent: 'start',
       }}
     >
-      {(isLoading || isError) && <>
-      <TaskFeedItemSkeleton />
-      <TaskFeedItemSkeleton />
-      <TaskFeedItemSkeleton />
-      </>}
+      {(isLoading || isError) && (
+        <>
+          <TaskFeedItemSkeleton />
+          <TaskFeedItemSkeleton />
+          <TaskFeedItemSkeleton />
+        </>
+      )}
       {!!allRequests.length &&
         allRequests.map((task, index) => (
           <TaskFeedItem

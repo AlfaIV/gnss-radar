@@ -8,11 +8,13 @@ import {
   MenuItem,
   InputLabel,
   Grid,
+  CircularProgress,
 } from '@mui/material'
 import { Form, useNavigate } from 'react-router-dom'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
+import { AxiosError } from 'axios'
 
 import {
   SignUpFormType,
@@ -34,7 +36,29 @@ const SignUpForm: FC = () => {
 
   const [formError, setFormError] = useState('')
 
-  const signUpMutation = useMutation('signUpMutation', signUp)
+  const { mutateAsync: register, isPending } = useMutation({
+    mutationKey: ['login'],
+    mutationFn: (values: SignUpRequestType) => signUp(values),
+    onSuccess: () => {
+      navigate(ROUTES.LOGIN)
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            setFormError('Неверные учетные данные.')
+            break
+          case 500:
+            setFormError('Внутренняя ошибка сервера.')
+            break
+          default:
+            setFormError('Произошла неизвестная ошибка.')
+        }
+      } else {
+        setFormError('Ошибка сети или сервер не отвечает.')
+      }
+    },
+  })
 
   const initialValues: SignUpFormType = {
     surname: '',
@@ -84,35 +108,17 @@ const SignUpForm: FC = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values, { setFieldError }) => {
-      try {
-        const signUpRequestValue: SignUpRequestType = {
-          login: values.login ?? '',
-          email: values.email ?? '',
-          name: values.name ?? '',
-          surname: values.surname ?? '',
-          organizationName: values.company ?? '',
-          password: values.password ?? '',
-          role: values.role ?? '',
-        }
-        await signUpMutation.mutateAsync(signUpRequestValue)
-        navigate(ROUTES.LOGIN)
-      } catch (error: any) {
-        if (error.response) {
-          switch (error.response.status) {
-            case 401:
-              setFieldError('password', 'Неверные учетные данные.')
-              break
-            case 500:
-              setFormError('Внутренняя ошибка сервера.')
-              break
-            default:
-              setFormError('Произошла неизвестная ошибка.')
-          }
-        } else {
-          setFormError('Ошибка сети или сервер не отвечает.')
-        }
+    onSubmit: async (values) => {
+      const signUpRequestValue: SignUpRequestType = {
+        login: values.login ?? '',
+        email: values.email ?? '',
+        name: values.name ?? '',
+        surname: values.surname ?? '',
+        organizationName: values.company ?? '',
+        password: values.password ?? '',
+        role: values.role ?? '',
       }
+      await register(signUpRequestValue)
     },
     enableReinitialize: true,
   })
@@ -297,8 +303,9 @@ const SignUpForm: FC = () => {
               color='primary'
               type='submit'
               sx={{ py: 2 }}
+              disabled={isPending}
             >
-              Зарегистрироваться
+              {isPending ? <CircularProgress /> : 'Зарегистрироваться'}
             </Button>
           </Grid>
           <Grid item xs={6}>
