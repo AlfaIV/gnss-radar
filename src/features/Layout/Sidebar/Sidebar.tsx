@@ -67,7 +67,7 @@ const Sidebar = memo((props: SidebarProps) => {
                 >
                   <item.logo sx={{ fontSize: '40px' }} />
                   {isOpen && (
-                    <Typography textAlign='left' flexGrow={1} fontSize='32px'>
+                    <Typography textAlign='left' flexGrow={1} fontSize='18px'>
                       {item.menuText}
                     </Typography>
                   )}
@@ -83,6 +83,8 @@ const Sidebar = memo((props: SidebarProps) => {
         sx={{
           flexGrow: 1,
           transition: 'margin 0.3s ease',
+          overflowY: 'auto',
+          overflowX: 'hidden'
         }}
       >
         {children}

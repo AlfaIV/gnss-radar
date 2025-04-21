@@ -12,6 +12,9 @@ export const API_URLS: Record<string, Record<string, string>> = {
     GIVE_PERMISSIONS: '/user/givePermissions',
     GET_USER_LIST: '/user/getListUsers',
     GET_SIGNUP_REQUESTS: '/user/getSignUpRequestions',
+    DELETE_USER: '/user/deleteUser',
+    RESTORE_USER: '/user/restoreUser',
+    GET_DELETED_USER_LIST: '/user/getListDeletedUsers',
   },
   MEASUREMENTS: {
     GET_EPHEMERIS: '/measurements/getEphemeris',

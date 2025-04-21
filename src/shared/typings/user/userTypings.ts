@@ -43,17 +43,19 @@ export type UserRoleProps = {
   role: UserRoleType
 }
 
-export type UserRoleResponseEntityType = {
+export type GetUserResponseEntityType = {
+  id: string
   login: string
   name: string
   surname: string
   organizationName: string
+  email: string
   role: UserRoleType
 }
 
-export type UserRoleResponseType = {
+export type GetUserResponseType = {
   data: {
-    users: UserRoleResponseEntityType[]
+    users: GetUserResponseEntityType[]
   }
 }
 
@@ -69,3 +71,18 @@ export type SignUpRequestionEntityType = {
 export type SignUpRequestionType = {
   data: { users: SignUpRequestionEntityType[] }
 }
+
+export type UserListProps = {
+    isDeletedUsers?: boolean
+    isLoading?: boolean
+}
+
+export type UserProps = {
+    id: string
+    login: string
+    name: string
+    surname: string
+    organizationName: string
+    email: string
+} & UserListProps
+

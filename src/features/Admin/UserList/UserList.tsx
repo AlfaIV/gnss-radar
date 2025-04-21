@@ -17,18 +17,19 @@ import useService from '~/entities/useService'
 import {
   GetUserResponseEntityType,
   GetUserResponseType,
+  UserListProps,
 } from '~/shared/typings/user/userTypings'
 import {
   ErrorResponse,
   PaginatedQueryType,
 } from '~/shared/typings/common/common'
 
-import UserRoleRow from './UserRoleRow'
-import UserRoleRowSkeleton from './UserRoleRowSkeleton'
+import UserRow from './UserRow'
 import { StyledTableCell } from '~/shared/components/styled/table/StyledTable'
 
-const UserRoleList = memo(() => {
-  const { getUserList } = useService()
+const UserList = memo((props: UserListProps) => {
+  const { isDeletedUsers=false } = props;
+  const { getUserList, getDeletedUserList } = useService()
   const PAGE_SIZE = 10
 
   const {
@@ -39,14 +40,16 @@ const UserRoleList = memo(() => {
     isLoading,
     isError,
   } = useInfiniteQuery<GetUserResponseType, AxiosError<ErrorResponse>>({
-    queryKey: ['users'],
+    queryKey: [`${isDeletedUsers ? 'deleted-user-table' : 'user-table'}`],
     queryFn: async ({ pageParam = 1, signal }) => {
       const params: PaginatedQueryType = {
         page: pageParam as number,
         size: PAGE_SIZE,
       }
 
-      const response = await getUserList(params, signal)
+      const requestFunc = isDeletedUsers ? getDeletedUserList : getUserList
+
+      const response = await requestFunc(params, signal)
       return response
     },
     initialPageParam: 1,
@@ -89,11 +92,19 @@ const UserRoleList = memo(() => {
       <Table>
       <TableHead>
   <TableRow>
+  <StyledTableCell 
+      sx={{
+        fontSize: 24,
+        fontWeight: 'bold',
+        verticalAlign: 'middle',
+        py: 2
+      }}
+    >
+    </StyledTableCell>
     <TableCell 
       sx={{
         fontSize: 24,
         fontWeight: 'bold',
-        width: '10%',
         verticalAlign: 'middle',
         py: 2
       }}
@@ -104,7 +115,6 @@ const UserRoleList = memo(() => {
       sx={{
         fontSize: 24,
         fontWeight: 'bold',
-        width: '20%',
         verticalAlign: 'middle',
         py: 2
       }}
@@ -115,7 +125,6 @@ const UserRoleList = memo(() => {
       sx={{
         fontSize: 24,
         fontWeight: 'bold',
-        width: '20%',
         verticalAlign: 'middle',
         py: 2
       }}
@@ -126,23 +135,21 @@ const UserRoleList = memo(() => {
       sx={{
         fontSize: 24,
         fontWeight: 'bold',
-        width: '20%',
         verticalAlign: 'middle',
         py: 2
       }}
     >
-      Организация
+      Email
     </TableCell>
     <TableCell 
       sx={{
         fontSize: 24,
         fontWeight: 'bold',
-        width: '20%',
         verticalAlign: 'middle',
         py: 2
       }}
     >
-      Права
+      Организация
     </TableCell>
   </TableRow>
 </TableHead>
@@ -165,14 +172,14 @@ const UserRoleList = memo(() => {
           }}
         >
           {(isLoading || isError) && <>
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
+            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
+            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
+            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
+            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
+            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
           </>}
           {allUsers.map((item: GetUserResponseEntityType) => (
-            <UserRoleRow key={item.login} {...item} />
+            <UserRow key={item.login} {...item} isDeletedUsers={isDeletedUsers} />
           ))}
           <TableRow ref={lastRowRef}>
             <StyledTableCell colSpan={4} sx={{ textAlign: 'center', height: 60 }}>
@@ -185,4 +192,4 @@ const UserRoleList = memo(() => {
   )
 })
 
-export default UserRoleList
+export default UserList

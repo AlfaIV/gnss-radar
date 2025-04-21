@@ -69,14 +69,14 @@ export const configurateLayoutSpherical = (
   return {
     polar: {
       bgcolor: '#f0f0f0',
-      gridshape: 'circular',         // рисуем сетку кругами
+      gridshape: 'circular',
       radialaxis: {
         visible: true,
-        showgrid: true,               // включаем сетку по радиусу
-        gridcolor: '#ccc',            // цвет линий сетки
-        gridwidth: 1,                 // толщина линий сетки
-        range: [0, 90],
-        dtick: 15,                    // шаг сетки: каждые 15°
+        showgrid: true,
+        gridcolor: '#ccc',
+        gridwidth: 1,
+        range: [90, 0],
+        dtick: 15,
         angle: 90,
         tickangle: 90,
         tickfont: { size: 10 },

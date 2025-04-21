@@ -17,6 +17,9 @@ const AdminPage = withSuspended(
 const RequestsWidget = withSuspended(
   lazyLoad(() => import('~/widgets/Admin/SignUpRequest/SignUpRequest')),
 )
+const UsersListWidget = withSuspended(
+  lazyLoad(() => import('~/widgets/Admin/UserWatchList/UserWatchList')),
+)
 const AdminWelcomeWidget = withSuspended(
   lazyLoad(() => import('~/widgets/Admin/Welcome/Welcome')),
 )
@@ -76,6 +79,14 @@ const router = createBrowserRouter([
             path: 'permissions',
             element: <AdminUserRole />,
           },
+          {
+            path: 'users',
+            element: <UsersListWidget />
+          },
+          {
+            path: 'restore',
+            element: <UsersListWidget isDeletedUsers={true} />
+          }
         ],
       },
     ],

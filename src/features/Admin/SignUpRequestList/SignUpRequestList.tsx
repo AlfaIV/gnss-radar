@@ -12,6 +12,7 @@ import {
 } from '~/shared/typings/common/common'
 
 import SignUpRequest from './SignUpRequest'
+import SignUpRequestSkeleton from './SignUpRequestSkeleton'
 
 const SignUpRequestList = memo(() => {
   const { getSignUpRequestList } = useService()
@@ -60,38 +61,6 @@ const SignUpRequestList = memo(() => {
 
   const allRequests = data?.pages.flatMap((page) => page.data.users) || []
 
-  if (isLoading)
-    return (
-      <Box
-        sx={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          p: 5,
-        }}
-      >
-        <CircularProgress size={80} />
-      </Box>
-    )
-
-  if (isError)
-    return (
-      <Box
-        sx={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          p: 5,
-        }}
-      >
-        <Typography fontSize={24} color='error'>
-          Неизвестная ошибка
-        </Typography>
-      </Box>
-    )
-
   return (
     <Box
       sx={{
@@ -106,6 +75,14 @@ const SignUpRequestList = memo(() => {
         padding: 4,
       }}
     >
+
+      {(isLoading || isError) && <>
+        <SignUpRequestSkeleton />
+        <SignUpRequestSkeleton />
+        <SignUpRequestSkeleton />
+        <SignUpRequestSkeleton />
+      </>}
+
       {!!allRequests.length &&
         allRequests.map(
           (request, index) =>
@@ -124,7 +101,7 @@ const SignUpRequestList = memo(() => {
         </Box>
       )}
 
-      {!hasNextPage && (
+      {!hasNextPage && !isLoading && (
         <Typography sx={{ py: 2, color: 'text.secondary' }}>
           Запросы на регистрацию закончились
         </Typography>
