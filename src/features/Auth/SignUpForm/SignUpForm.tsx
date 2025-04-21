@@ -258,7 +258,6 @@ const SignUpForm: FC = () => {
                 <MenuItem value={ROLE_SUPERVISOR.value}>
                   {ROLE_SUPERVISOR.label}
                 </MenuItem>
-                <MenuItem value={ROLE_ADMIN.value}>{ROLE_ADMIN.label}</MenuItem>
               </Select>
             </Grid>
             <Grid item xs={6}>
