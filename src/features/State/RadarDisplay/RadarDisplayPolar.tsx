@@ -10,10 +10,12 @@ import {
 } from '~/shared/typings/radar/radar'
 
 import { configurateLayoutPolar, configuratePlotPolar } from './plot.config'
+import { useGroupContext } from '../context/GroupContext'
 
 const RadarDisplayPolar = () => {
   const { getSatellites } = useService()
   const abortControllerRef = useRef<AbortController>()
+  const { selectedGroups, setAvailableGroups } = useGroupContext();
 
   const {
     data: satellitesData,
@@ -34,10 +36,13 @@ const RadarDisplayPolar = () => {
   })
 
   useEffect(() => {
+    if(!!satellitesData) {
+        setAvailableGroups(satellitesData.map(s => s.group))
+    }
     return () => {
       abortControllerRef.current?.abort()
     }
-  }, [])
+  }, [satellitesData])
 
   return (
     <>
@@ -47,9 +52,9 @@ const RadarDisplayPolar = () => {
         </Container>
       </Collapse>
       <Plot
-        data={configuratePlotPolar(satellitesData as SatellitesType[])}
+        data={configuratePlotPolar((satellitesData as SatellitesType[])?.filter(s => selectedGroups.length === 0 || selectedGroups.includes(s.group)))}
         layout={{
-          ...configurateLayoutPolar(satellitesData as SatellitesType[]),
+          ...configurateLayoutPolar((satellitesData as SatellitesType[])?.filter(s => selectedGroups.length === 0 || selectedGroups.includes(s.group))),
           autosize: true,
         }}
         config={{

@@ -13,10 +13,13 @@ import {
   configurateLayoutSpherical,
   configuratePlotSpherical,
 } from './plot.config'
+import { useGroupContext } from '../context/GroupContext'
 
 const RadarDisplaySphere = () => {
   const { getSatellites } = useService()
   const abortControllerRef = useRef<AbortController>()
+
+  const { selectedGroups, setAvailableGroups } = useGroupContext();
 
   const {
     data: satellitesData,
@@ -37,10 +40,13 @@ const RadarDisplaySphere = () => {
   })
 
   useEffect(() => {
+    if(!!satellitesData) {
+        setAvailableGroups(satellitesData.map(s => s.group))
+    }
     return () => {
       abortControllerRef.current?.abort()
     }
-  }, [])
+  }, [satellitesData])
 
   return (
     <>
@@ -50,9 +56,9 @@ const RadarDisplaySphere = () => {
         </Container>
       </Collapse>
       <Plot
-        data={configuratePlotSpherical(satellitesData as SatellitesType[])}
+        data={configuratePlotSpherical((satellitesData as SatellitesType[])?.filter(s => selectedGroups.length === 0 || selectedGroups.includes(s.group)))}
         layout={{
-          ...configurateLayoutSpherical(satellitesData as SatellitesType[]),
+          ...configurateLayoutSpherical((satellitesData as SatellitesType[])?.filter(s => selectedGroups.length === 0 || selectedGroups.includes(s.group))),
           autosize: true,
         }}
         config={{

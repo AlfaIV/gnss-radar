@@ -16,24 +16,27 @@ const useSatellitesService = () => {
 
       return response
 
-      //   return {data: {satellites: [{
-      //     name: 'Спутник 1',
-      //     azimuth: 51.4,
-      //     elevation: 45,
-      //     range: 1000
-      //   },
-      //   {
-      //     name: 'Спутник 2',
-      //     azimuth: 57.12,
-      //     elevation: 30,
-      //     range: 1200
-      //   },
-      //   {
-      //     name: 'Спутник 3',
-      //     azimuth: 60,
-      //     elevation: 67.5,
-      //     range: 1500
-      //   }]}}
+        // return {data: {satellites: [{
+        //   name: 'Спутник 1',
+        //   azimuth: 51.4,
+        //   elevation: 45,
+        //   range: 1000,
+        //   group: 'Группа 1'
+        // },
+        // {
+        //   name: 'Спутник 2',
+        //   azimuth: 57.12,
+        //   elevation: 30,
+        //   range: 1200,
+        //   group: 'Группа 1'
+        // },
+        // {
+        //   name: 'Спутник 3',
+        //   azimuth: 60,
+        //   elevation: 67.5,
+        //   range: 1500,
+        //   group: 'Группа 2'
+        // }]}}
     },
     [],
   )

@@ -6,6 +6,7 @@ import {
   SelectChangeEvent,
   Collapse,
   Box,
+  Skeleton,
 } from '@mui/material'
 import { memo, useState } from 'react'
 
@@ -17,11 +18,14 @@ import {
 
 import RadarDisplayPolar from './RadarDisplayPolar'
 import RadarDisplaySphere from './RadarDisplaySphere'
+import { GroupProvider, useGroupContext } from '../context/GroupContext'
 
 const RadarDisplay = memo(() => {
   const [currentRadar, setCurrentRadar] = useState<string>(
     RADAR_TYPE_POLAR.value,
   )
+
+  const { groups, setSelectedGroups, selectedGroups } = useGroupContext()
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setCurrentRadar(event.target.value)
@@ -37,17 +41,75 @@ const RadarDisplay = memo(() => {
         flex={1}
       >
         <Box width='100%' justifyContent='center' display='flex'>
+        <FormControl fullWidth sx={{ width: '259.5px', height: '56px', px: 1}} size='medium'>
+          <InputLabel id='group-select-label'>Группы спутников</InputLabel>
+          <Select
+            multiple
+            labelId='group-select-label'
+            id='group-select'
+            label='Группы спутников'
+            value={selectedGroups}
+            onChange={(e) => setSelectedGroups(e.target.value as string[])}
+            renderValue={(selected) =>
+              selected.join(', ')
+            }
+          >
+            {!!groups.length && groups.map((group) => (
+              <MenuItem
+                key={`key__${group}`}
+                value={group}
+              >{group}</MenuItem>
+            ))}
+            {!groups.length && (
+              <>
+                <MenuItem disabled>
+                  <Skeleton
+                    width='100%'
+                    height={32}
+                    sx={{
+                      borderRadius: '4px',
+                      transform: 'none',
+                      my: 0.5,
+                    }}
+                  />
+                </MenuItem>
+                <MenuItem disabled>
+                  <Skeleton
+                    width='80%'
+                    height={32}
+                    sx={{
+                      borderRadius: '4px',
+                      transform: 'none',
+                      my: 0.5,
+                    }}
+                  />
+                </MenuItem>
+                <MenuItem disabled>
+                  <Skeleton
+                    width='90%'
+                    height={32}
+                    sx={{
+                      borderRadius: '4px',
+                      transform: 'none',
+                      my: 0.5,
+                    }}
+                  />
+                </MenuItem>
+              </>
+            )}
+          </Select>
+        </FormControl>
           <FormControl
             fullWidth
             size='medium'
-            sx={{ width: '259.5px', height: '56px', padding: '10px' }}
+            sx={{ width: '259.5px', height: '56px', px: 1 }}
           >
             <InputLabel id='radar-select-label'>Тип радара</InputLabel>
             <Select
               labelId='radar-select-label'
               id='radar-select'
               value={currentRadar}
-              label='Предмет'
+              label='Тип радара'
               onChange={handleChange}
               defaultValue={RADAR_TYPE_POLAR.value}
             >
@@ -62,7 +124,7 @@ const RadarDisplay = memo(() => {
         {currentRadar === RADAR_TYPE_POLAR.value && <RadarDisplayPolar />}
         {currentRadar === RADAR_TYPE_SPHERE.value && <RadarDisplaySphere />}
       </Box>
-    </>
+      </>
   )
 })
 
