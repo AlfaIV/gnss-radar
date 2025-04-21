@@ -89,7 +89,7 @@ const TaskFeed = memo(() => {
         </Box>
       )}
 
-      {!hasNextPage && (
+      {!hasNextPage && !isLoading && !isError && (
         <Typography sx={{ py: 2, color: 'text.secondary' }}>
           Задачи закончились
         </Typography>
