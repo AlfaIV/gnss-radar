@@ -52,7 +52,7 @@ const UserRow = memo((props: UserRowProps) => {
     return (
       <StyledTableRow>
         <StyledTableCell sx={{ width: '5%' }}>
-          <Skeleton variant="circular" width={40} height={40} />
+          <Skeleton variant='circular' width={40} height={40} />
         </StyledTableCell>
         {Array(5)
           .fill(null)
@@ -65,8 +65,8 @@ const UserRow = memo((props: UserRowProps) => {
               }}
             >
               <Skeleton
-                variant="text"
-                width="60%"
+                variant='text'
+                width='60%'
                 height={32}
                 sx={{ fontSize: '24px' }}
               />
@@ -102,7 +102,7 @@ const UserRow = memo((props: UserRowProps) => {
       >
         <Typography fontSize={24}>{name}</Typography>
       </StyledTableCell>
-      
+
       <StyledTableCell
         sx={{
           wordBreak: 'break-word',
@@ -111,7 +111,7 @@ const UserRow = memo((props: UserRowProps) => {
       >
         <Typography fontSize={24}>{surname}</Typography>
       </StyledTableCell>
-      
+
       <StyledTableCell
         sx={{
           wordBreak: 'break-word',

@@ -9,7 +9,10 @@ import {
   SatellitesType,
 } from '~/shared/typings/radar/radar'
 
-import { configurateLayoutSpherical, configuratePlotSpherical } from './plot.config'
+import {
+  configurateLayoutSpherical,
+  configuratePlotSpherical,
+} from './plot.config'
 
 const RadarDisplaySphere = () => {
   const { getSatellites } = useService()
@@ -28,7 +31,7 @@ const RadarDisplaySphere = () => {
 
       return getSatellites(abortControllerRef.current.signal)
     },
-    refetchInterval: 1000*60*10,
+    refetchInterval: 1000 * 60 * 10,
     staleTime: 0,
     select: (data) => data.data.satellites,
   })
@@ -58,7 +61,7 @@ const RadarDisplaySphere = () => {
         }}
         style={{
           width: '600px',
-          height: '600px'
+          height: '600px',
         }}
       />
       {(isLoading || isRefetching) && (
@@ -66,7 +69,7 @@ const RadarDisplaySphere = () => {
           <LinearProgress color='success' />
         </Box>
       )}
-      </>
+    </>
   )
 }
 

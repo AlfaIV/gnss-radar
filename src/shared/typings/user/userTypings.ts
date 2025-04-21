@@ -73,16 +73,15 @@ export type SignUpRequestionType = {
 }
 
 export type UserListProps = {
-    isDeletedUsers?: boolean
-    isLoading?: boolean
+  isDeletedUsers?: boolean
+  isLoading?: boolean
 }
 
 export type UserProps = {
-    id: string
-    login: string
-    name: string
-    surname: string
-    organizationName: string
-    email: string
+  id: string
+  login: string
+  name: string
+  surname: string
+  organizationName: string
+  email: string
 } & UserListProps
-

@@ -35,33 +35,36 @@ const EphemerisUploader = () => {
     },
   })
 
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setError(null);
-    const file = event.target.files?.[0];
-    const inputElement = event.target;
-  
-    try {
-      if (inputElement) inputElement.value = '';
-  
-      if (!file) return;
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setError(null)
+    const file = event.target.files?.[0]
+    const inputElement = event.target
 
-      const maxSizeBytes = MAX_FILE_SIZE * 1024 * 1024;
+    try {
+      if (inputElement) inputElement.value = ''
+
+      if (!file) return
+
+      const maxSizeBytes = MAX_FILE_SIZE * 1024 * 1024
       if (file.size > maxSizeBytes) {
-        throw new Error(`Превышен максимальный размер файла (${MAX_FILE_SIZE} МБ)`);
+        throw new Error(
+          `Превышен максимальный размер файла (${MAX_FILE_SIZE} МБ)`,
+        )
       }
-  
-      setSelectedFile(file);
-  
+
+      setSelectedFile(file)
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setError(err.message)
       } else {
-        setError('Произошла ошибка при выборе файла');
+        setError('Произошла ошибка при выборе файла')
       }
     } finally {
-      if (inputElement) inputElement.value = '';
+      if (inputElement) inputElement.value = ''
     }
-  };
+  }
 
   const handleUpload = async () => {
     if (!selectedFile) return

@@ -14,5 +14,5 @@ export type SidebarProps = {
 }
 
 export type RoleGuardProps = {
-    role?: string[]
+  role?: string[]
 }

@@ -75,13 +75,14 @@ const SignUpRequestList = memo(() => {
         padding: 4,
       }}
     >
-
-      {(isLoading || isError) && <>
-        <SignUpRequestSkeleton />
-        <SignUpRequestSkeleton />
-        <SignUpRequestSkeleton />
-        <SignUpRequestSkeleton />
-      </>}
+      {(isLoading || isError) && (
+        <>
+          <SignUpRequestSkeleton />
+          <SignUpRequestSkeleton />
+          <SignUpRequestSkeleton />
+          <SignUpRequestSkeleton />
+        </>
+      )}
 
       {!!allRequests.length &&
         allRequests.map(

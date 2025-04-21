@@ -1,9 +1,11 @@
-import RadarDisplay from "~/features/State/RadarDisplay/RadarDisplay"
+import RadarDisplay from '~/features/State/RadarDisplay/RadarDisplay'
 
 const Radar = () => {
-  return (<>
-  <RadarDisplay />
-  </>)
+  return (
+    <>
+      <RadarDisplay />
+    </>
+  )
 }
 
 export default Radar

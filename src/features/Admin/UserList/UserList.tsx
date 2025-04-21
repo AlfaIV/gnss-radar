@@ -23,12 +23,12 @@ import {
   ErrorResponse,
   PaginatedQueryType,
 } from '~/shared/typings/common/common'
-
-import UserRow from './UserRow'
 import { StyledTableCell } from '~/shared/components/styled/table/StyledTable'
 
+import UserRow from './UserRow'
+
 const UserList = memo((props: UserListProps) => {
-  const { isDeletedUsers=false } = props;
+  const { isDeletedUsers = false } = props
   const { getUserList, getDeletedUserList } = useService()
   const PAGE_SIZE = 10
 
@@ -90,69 +90,68 @@ const UserList = memo((props: UserListProps) => {
       }}
     >
       <Table>
-      <TableHead>
-  <TableRow>
-  <StyledTableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-    </StyledTableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Имя
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Фамилия
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Логин
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Email
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Организация
-    </TableCell>
-  </TableRow>
-</TableHead>
+        <TableHead>
+          <TableRow>
+            <StyledTableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            />
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Имя
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Фамилия
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Логин
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Email
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Организация
+            </TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody
           component='div'
           sx={{
@@ -171,18 +170,72 @@ const UserList = memo((props: UserListProps) => {
             },
           }}
         >
-          {(isLoading || isError) && <>
-            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
-            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
-            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
-            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
-            <UserRow id='0' login='' name='' surname='' email='' organizationName='' isLoading isDeletedUsers={isDeletedUsers} />
-          </>}
+          {(isLoading || isError) && (
+            <>
+              <UserRow
+                id='0'
+                login=''
+                name=''
+                surname=''
+                email=''
+                organizationName=''
+                isLoading
+                isDeletedUsers={isDeletedUsers}
+              />
+              <UserRow
+                id='0'
+                login=''
+                name=''
+                surname=''
+                email=''
+                organizationName=''
+                isLoading
+                isDeletedUsers={isDeletedUsers}
+              />
+              <UserRow
+                id='0'
+                login=''
+                name=''
+                surname=''
+                email=''
+                organizationName=''
+                isLoading
+                isDeletedUsers={isDeletedUsers}
+              />
+              <UserRow
+                id='0'
+                login=''
+                name=''
+                surname=''
+                email=''
+                organizationName=''
+                isLoading
+                isDeletedUsers={isDeletedUsers}
+              />
+              <UserRow
+                id='0'
+                login=''
+                name=''
+                surname=''
+                email=''
+                organizationName=''
+                isLoading
+                isDeletedUsers={isDeletedUsers}
+              />
+            </>
+          )}
           {allUsers.map((item: GetUserResponseEntityType) => (
-            <UserRow key={item.login} {...item} isDeletedUsers={isDeletedUsers} />
+            <UserRow
+              key={item.login}
+              {...item}
+              isDeletedUsers={isDeletedUsers}
+            />
           ))}
           <TableRow ref={lastRowRef}>
-            <StyledTableCell colSpan={4} sx={{ textAlign: 'center', height: 60 }}>
+            <StyledTableCell
+              colSpan={4}
+              sx={{ textAlign: 'center', height: 60 }}
+            >
               {isFetchingNextPage && <CircularProgress size={40} />}
             </StyledTableCell>
           </TableRow>

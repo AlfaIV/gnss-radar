@@ -84,7 +84,7 @@ const Sidebar = memo((props: SidebarProps) => {
           flexGrow: 1,
           transition: 'margin 0.3s ease',
           overflowY: 'auto',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
         }}
       >
         {children}

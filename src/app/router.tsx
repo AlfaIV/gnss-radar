@@ -4,9 +4,9 @@ import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
 import lazyLoad from '~/shared/lazyLoad'
 import { withSuspended } from '~/shared/components/Suspended/Suspended'
+import Guard from '~/shared/components/Guard/Guard'
 
 import Layout from './layout/layout'
-import Guard from '~/shared/components/Guard/Guard'
 
 const LoginPage = withSuspended(
   lazyLoad(() => import('~/pages/LoginPage/LoginPage')),
@@ -49,23 +49,43 @@ const router = createBrowserRouter([
       },
       {
         path: '/state',
-        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><StatePage /></Guard>,
+        element: (
+          <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}>
+            <StatePage />
+          </Guard>
+        ),
       },
       {
         path: '/measure',
-        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><Measure /></Guard>,
+        element: (
+          <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}>
+            <Measure />
+          </Guard>
+        ),
       },
       {
         path: '/task',
-        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><TasksPage /></Guard>,
+        element: (
+          <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}>
+            <TasksPage />
+          </Guard>
+        ),
       },
       {
         path: '/settings',
-        element: <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><Setting /></Guard>,
+        element: (
+          <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}>
+            <Setting />
+          </Guard>
+        ),
       },
       {
         path: '/admin',
-        element: <Guard role={['ADMIN']}><AdminPage /></Guard>,
+        element: (
+          <Guard role={['ADMIN']}>
+            <AdminPage />
+          </Guard>
+        ),
         children: [
           {
             path: 'welcome',
@@ -81,12 +101,12 @@ const router = createBrowserRouter([
           },
           {
             path: 'users',
-            element: <UsersListWidget />
+            element: <UsersListWidget />,
           },
           {
             path: 'restore',
-            element: <UsersListWidget isDeletedUsers={true} />
-          }
+            element: <UsersListWidget isDeletedUsers />,
+          },
         ],
       },
     ],

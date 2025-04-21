@@ -22,10 +22,10 @@ import {
   ErrorResponse,
   PaginatedQueryType,
 } from '~/shared/typings/common/common'
+import { StyledTableCell } from '~/shared/components/styled/table/StyledTable'
 
 import UserRoleRow from './UserRoleRow'
 import UserRoleRowSkeleton from './UserRoleRowSkeleton'
-import { StyledTableCell } from '~/shared/components/styled/table/StyledTable'
 
 const UserRoleList = memo(() => {
   const { getUserList } = useService()
@@ -87,65 +87,65 @@ const UserRoleList = memo(() => {
       }}
     >
       <Table>
-      <TableHead>
-  <TableRow>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        width: '10%',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Имя
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        width: '20%',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Фамилия
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        width: '20%',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Логин
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        width: '20%',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Организация
-    </TableCell>
-    <TableCell 
-      sx={{
-        fontSize: 24,
-        fontWeight: 'bold',
-        width: '20%',
-        verticalAlign: 'middle',
-        py: 2
-      }}
-    >
-      Права
-    </TableCell>
-  </TableRow>
-</TableHead>
+        <TableHead>
+          <TableRow>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                width: '10%',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Имя
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                width: '20%',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Фамилия
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                width: '20%',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Логин
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                width: '20%',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Организация
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                width: '20%',
+                verticalAlign: 'middle',
+                py: 2,
+              }}
+            >
+              Права
+            </TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody
           component='div'
           sx={{
@@ -164,18 +164,23 @@ const UserRoleList = memo(() => {
             },
           }}
         >
-          {(isLoading || isError) && <>
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          <UserRoleRowSkeleton />
-          </>}
+          {(isLoading || isError) && (
+            <>
+              <UserRoleRowSkeleton />
+              <UserRoleRowSkeleton />
+              <UserRoleRowSkeleton />
+              <UserRoleRowSkeleton />
+              <UserRoleRowSkeleton />
+            </>
+          )}
           {allUsers.map((item: GetUserResponseEntityType) => (
             <UserRoleRow key={item.login} {...item} />
           ))}
           <TableRow ref={lastRowRef}>
-            <StyledTableCell colSpan={4} sx={{ textAlign: 'center', height: 60 }}>
+            <StyledTableCell
+              colSpan={4}
+              sx={{ textAlign: 'center', height: 60 }}
+            >
               {isFetchingNextPage && <CircularProgress size={40} />}
             </StyledTableCell>
           </TableRow>

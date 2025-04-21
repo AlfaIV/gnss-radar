@@ -25,19 +25,13 @@ const useUserService = () => {
     [],
   )
 
-  const deleteUser = useCallback(
-    async (id: string): Promise<void> => {
-      await axiosInstance.patch(API_URLS.USER.DELETE_USER, {id})
-    },
-    [],
-  )
+  const deleteUser = useCallback(async (id: string): Promise<void> => {
+    await axiosInstance.patch(API_URLS.USER.DELETE_USER, { id })
+  }, [])
 
-  const restoreUser = useCallback(
-    async (id: string): Promise<void> => {
-      await axiosInstance.patch(API_URLS.USER.RESTORE_USER, {id})
-    },
-    [],
-  )
+  const restoreUser = useCallback(async (id: string): Promise<void> => {
+    await axiosInstance.patch(API_URLS.USER.RESTORE_USER, { id })
+  }, [])
 
   const getUserList = useCallback(
     async (
@@ -66,7 +60,7 @@ const useUserService = () => {
       //       login: 'UltraHog',
       //       role: 'SUPERVISOR'
       //     },
-          
+
       //   ]
       // }}
     },
@@ -100,7 +94,7 @@ const useUserService = () => {
       //       login: 'UltraHog',
       //       role: 'SUPERVISOR'
       //     },
-          
+
       //   ]
       // }}
     },
@@ -146,9 +140,17 @@ const useUserService = () => {
       givePermissions,
       deleteUser,
       getDeletedUserList,
-      restoreUser
+      restoreUser,
     }),
-    [resolveSignUp, givePermissions, getUserList, getSignUpRequestList, deleteUser, getDeletedUserList, restoreUser],
+    [
+      resolveSignUp,
+      givePermissions,
+      getUserList,
+      getSignUpRequestList,
+      deleteUser,
+      getDeletedUserList,
+      restoreUser,
+    ],
   )
 }
 

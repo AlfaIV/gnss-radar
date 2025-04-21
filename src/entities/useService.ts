@@ -11,7 +11,7 @@ const useService = () => {
   const userService = useUserService()
   const ephemerisService = useEphemerisService()
   const satellitesService = useSatellitesService()
-  const tasksService = useTasksService();
+  const tasksService = useTasksService()
 
   return useMemo(
     () => ({
@@ -19,9 +19,15 @@ const useService = () => {
       ...userService,
       ...ephemerisService,
       ...satellitesService,
-      ...tasksService
+      ...tasksService,
     }),
-    [authService, userService, ephemerisService, satellitesService, tasksService],
+    [
+      authService,
+      userService,
+      ephemerisService,
+      satellitesService,
+      tasksService,
+    ],
   )
 }
 

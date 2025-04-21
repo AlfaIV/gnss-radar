@@ -62,7 +62,6 @@ export const configuratePlotPolar = (satellites: SatellitesType[]): Data[] => {
   ]
 }
 
-
 export const configurateLayoutSpherical = (
   satellites: SatellitesType[],
 ): Partial<Layout> => {
@@ -80,10 +79,10 @@ export const configurateLayoutSpherical = (
         angle: 90,
         tickangle: 90,
         tickfont: { size: 10 },
-        title: { text: 'Угол места (°)' }
+        title: { text: 'Угол места (°)' },
       },
       angularaxis: {
-        showgrid: true, 
+        showgrid: true,
         gridcolor: '#ddd',
         gridwidth: 1,
         direction: 'clockwise',
@@ -95,7 +94,7 @@ export const configurateLayoutSpherical = (
         tickvals: [0, 90, 180, 270],
         ticktext: ['N', 'E', 'S', 'W'],
         tickfont: { size: 12 },
-        title: { text: 'Азимут (°)' }
+        title: { text: 'Азимут (°)' },
       },
     },
     showlegend: false,
@@ -106,7 +105,9 @@ export const configurateLayoutSpherical = (
   }
 }
 
-export const configuratePlotSpherical = (satellites: SatellitesType[]): Data[] => {
+export const configuratePlotSpherical = (
+  satellites: SatellitesType[],
+): Data[] => {
   return [
     {
       type: 'scatterpolar',

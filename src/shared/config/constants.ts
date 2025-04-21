@@ -28,14 +28,14 @@ export const API_URLS: Record<string, Record<string, string>> = {
     GET_TASKS: '/tasks/getTasks',
     DELETE_TASK: '/tasks/deleteTask',
     UPDATE_TASK: '/tasks/updateTask',
-  }
+  },
 }
 
 export const ROUTES: Record<string, string> = {
   SIGNUP: '/signup',
   LOGIN: '/login',
   STATE: '/state',
-  TASK: '/task'
+  TASK: '/task',
 }
 
 export const USER_DEFAULT_STATE = {
@@ -92,13 +92,13 @@ export const ALLOWED_FILE_TYPES = ['.sp3', '.eph', '.txt', '.bin', '.tle']
 export const MAX_FILE_SIZE = 100
 
 export const RADAR_TYPE_POLAR = {
-    label: 'Полярная система координат',
-    value: 'POLAR'
+  label: 'Полярная система координат',
+  value: 'POLAR',
 }
 
 export const RADAR_TYPE_SPHERE = {
-    label: 'Сферическая система координат',
-    value: 'SPHERE'
+  label: 'Сферическая система координат',
+  value: 'SPHERE',
 }
 
 export const RADAR_TYPE = [RADAR_TYPE_POLAR, RADAR_TYPE_SPHERE]

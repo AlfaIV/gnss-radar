@@ -6,5 +6,5 @@ export type SatellitesType = {
 }
 
 export type SatellitesResponseType = {
-  data: {satellites: SatellitesType[]}
+  data: { satellites: SatellitesType[] }
 }

@@ -28,7 +28,7 @@ const RadarDisplayPolar = () => {
 
       return getSatellites(abortControllerRef.current.signal)
     },
-    refetchInterval: 1000*60*10,
+    refetchInterval: 1000 * 60 * 10,
     staleTime: 0,
     select: (data) => data.data.satellites,
   })
@@ -58,7 +58,7 @@ const RadarDisplayPolar = () => {
         }}
         style={{
           height: '600px',
-          width: '600px'
+          width: '600px',
         }}
       />
       {(isLoading || isRefetching) && (
