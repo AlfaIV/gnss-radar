@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-import Measure from '~/pages/measure/measure'
 import Setting from '~/pages/setting/setting'
 import lazyLoad from '~/shared/lazyLoad'
 import { withSuspended } from '~/shared/components/Suspended/Suspended'
@@ -53,14 +52,14 @@ const router = createBrowserRouter([
             <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><StatePage /></Guard>
         ),
       },
-      {
-        path: '/measure',
-        element: (
-          <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}>
-            <Measure />
-          </Guard>
-        ),
-      },
+      // {
+      //   path: '/measure',
+      //   element: (
+      //     <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}>
+      //       <Measure />
+      //     </Guard>
+      //   ),
+      // },
       {
         path: '/task',
         element: (

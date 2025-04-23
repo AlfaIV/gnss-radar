@@ -53,6 +53,8 @@ const RadarDisplayPolar = () => {
       const newInitialRange: [number, number] = [0, maxRange]
       setInitialRange(newInitialRange)
       setCurrentRange(newInitialRange)
+      setAvailableGroups(satellitesData.filter(s => !!s.group).map(s => s.group))
+
     }
   }, [satellitesData])
 

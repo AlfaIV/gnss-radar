@@ -36,7 +36,6 @@ const RadarDisplay = memo(() => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     const newValue = event.target.value
     setCurrentRadar(newValue)
-    // Сохраняем в кэш
     localStorage.setItem(RADAR_TYPE_CACHE_KEY, newValue)
   }
 

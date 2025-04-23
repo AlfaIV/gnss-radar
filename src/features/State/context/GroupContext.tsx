@@ -28,6 +28,7 @@ export const GroupProvider = (props: HOCProps) => {
 
   const setAvailableGroups = (groups: string[]) => {
     const uniqueGroups = [...new Set(groups)]
+    
     setFilterGroups(uniqueGroups)
   }
 

@@ -55,6 +55,7 @@ const RadarDisplaySphere = () => {
       const newInitialRange: [number, number] = [90, 0]
       setInitialRange(newInitialRange)
       setCurrentRange(newInitialRange)
+      setAvailableGroups(satellitesData.filter(s => !!s.group).map(s => s.group))
     }
   }, [satellitesData])
 
