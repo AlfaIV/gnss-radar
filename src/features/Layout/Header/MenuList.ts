@@ -27,24 +27,24 @@ const menu: Array<MenuButtonProps> = [
     link: `/state`,
     role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
   },
-  {
-    menuText: 'Измерения',
-    logo: TimelineIcon,
-    link: `/measure`,
-    role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
-  },
+  // {
+  //   menuText: 'Измерения',
+  //   logo: TimelineIcon,
+  //   link: `/measure`,
+  //   role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
+  // },
   {
     menuText: 'Задания',
     logo: TaskIcon,
     link: `/task`,
     role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
   },
-  {
-    menuText: 'Настройки',
-    logo: SettingsApplicationsIcon,
-    link: `/settings`,
-    role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
-  },
+  // {
+  //   menuText: 'Настройки',
+  //   logo: SettingsApplicationsIcon,
+  //   link: `/settings`,
+  //   role: [ROLE_ADMIN.value, ROLE_SUPERVISOR.value, ROLE_USER.value],
+  // },
   {
     menuText: 'Администрирование',
     logo: SupervisorAccountIcon,

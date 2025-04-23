@@ -74,7 +74,7 @@ const UserList = memo((props: UserListProps) => {
     }
   }, [entry, hasNextPage, isFetchingNextPage, isFetchingNextPage])
 
-  const allUsers = data?.pages.flatMap((page) => page.data.users) || []
+  const allUsers = data?.pages.flatMap((page) => page.data.users).filter(u => !!u) || []  
 
   return (
     <Box
@@ -224,7 +224,7 @@ const UserList = memo((props: UserListProps) => {
               />
             </>
           )}
-          {allUsers.map((item: GetUserResponseEntityType) => (
+          {!!allUsers?.length && allUsers.map((item: GetUserResponseEntityType) => (
             <UserRow
               key={item.login}
               {...item}

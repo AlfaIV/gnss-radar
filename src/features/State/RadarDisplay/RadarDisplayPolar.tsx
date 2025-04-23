@@ -1,7 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Plot from 'react-plotly.js'
-import { Container, Alert, LinearProgress, Box, Collapse } from '@mui/material'
+import { 
+  Container, 
+  Alert, 
+  LinearProgress, 
+  Box, 
+  Collapse,
+  IconButton,
+  ButtonGroup
+} from '@mui/material'
+import ZoomInIcon from '@mui/icons-material/ZoomIn'
+import ZoomOutIcon from '@mui/icons-material/ZoomOut'
+import RestoreIcon from '@mui/icons-material/Restore'
 
 import useService from '~/entities/useService'
 import {
@@ -15,7 +26,9 @@ import { useGroupContext } from '../context/GroupContext'
 const RadarDisplayPolar = () => {
   const { getSatellites } = useService()
   const abortControllerRef = useRef<AbortController>()
-  const { selectedGroups, setAvailableGroups } = useGroupContext();
+  const { selectedGroups, setAvailableGroups } = useGroupContext()
+  const [currentRange, setCurrentRange] = useState<[number, number]>([0, 1000])
+  const [initialRange, setInitialRange] = useState<[number, number]>([0, 1000])
 
   const {
     data: satellitesData,
@@ -27,7 +40,6 @@ const RadarDisplayPolar = () => {
     queryFn: async () => {
       abortControllerRef.current?.abort()
       abortControllerRef.current = new AbortController()
-
       return getSatellites(abortControllerRef.current.signal)
     },
     refetchInterval: 1000 * 60 * 10,
@@ -36,25 +48,76 @@ const RadarDisplayPolar = () => {
   })
 
   useEffect(() => {
-    if(!!satellitesData) {
-        setAvailableGroups(satellitesData.map(s => s.group))
-    }
-    return () => {
-      abortControllerRef.current?.abort()
+    if (satellitesData?.length) {
+      const maxRange = Math.max(...satellitesData.map(s => s.range)) + 1000
+      const newInitialRange: [number, number] = [0, maxRange]
+      setInitialRange(newInitialRange)
+      setCurrentRange(newInitialRange)
     }
   }, [satellitesData])
 
+  const handleZoomIn = () => {
+    setCurrentRange(prev => [prev[0], prev[1] * 0.8])
+  }
+
+  const handleZoomOut = () => {
+    setCurrentRange(prev => [prev[0], prev[1] * 1.2])
+  }
+
+  const handleResetZoom = () => {
+    setCurrentRange(initialRange)
+  }
+
+  const filteredSatellites = (satellitesData as SatellitesType[])?.filter(
+    s => selectedGroups.length === 0 || selectedGroups.includes(s.group)
+  )
+
   return (
-    <>
+    <Box position="relative">
       <Collapse in={!!isError} unmountOnExit>
         <Container sx={{ padding: '20px' }}>
           <Alert severity='error'>Ошибка загрузки данных спутников</Alert>
         </Container>
       </Collapse>
+      
+      <Box
+        position="absolute"
+        top={16}
+        right={16}
+        zIndex={1}
+        bgcolor="background.paper"
+        borderRadius={1}
+        boxShadow={3}
+      >
+        <ButtonGroup orientation="vertical">
+          <IconButton 
+            onClick={handleZoomIn}
+            disabled={isLoading || isRefetching}
+            title="Увеличить"
+          >
+            <ZoomInIcon />
+          </IconButton>
+          <IconButton 
+            onClick={handleZoomOut}
+            disabled={isLoading || isRefetching}
+            title="Уменьшить"
+          >
+            <ZoomOutIcon />
+          </IconButton>
+          <IconButton 
+            onClick={handleResetZoom}
+            disabled={isLoading || isRefetching}
+            title="Сбросить масштаб"
+          >
+            <RestoreIcon />
+          </IconButton>
+        </ButtonGroup>
+      </Box>
+
       <Plot
-        data={configuratePlotPolar((satellitesData as SatellitesType[])?.filter(s => selectedGroups.length === 0 || selectedGroups.includes(s.group)))}
+        data={configuratePlotPolar(filteredSatellites)}
         layout={{
-          ...configurateLayoutPolar((satellitesData as SatellitesType[])?.filter(s => selectedGroups.length === 0 || selectedGroups.includes(s.group))),
+          ...configurateLayoutPolar(filteredSatellites, currentRange),
           autosize: true,
         }}
         config={{
@@ -66,12 +129,13 @@ const RadarDisplayPolar = () => {
           width: '600px',
         }}
       />
+      
       {(isLoading || isRefetching) && (
         <Box sx={{ width: '50%' }}>
           <LinearProgress color='success' />
         </Box>
       )}
-    </>
+    </Box>
   )
 }
 

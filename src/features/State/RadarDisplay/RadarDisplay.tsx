@@ -20,15 +20,24 @@ import RadarDisplayPolar from './RadarDisplayPolar'
 import RadarDisplaySphere from './RadarDisplaySphere'
 import { GroupProvider, useGroupContext } from '../context/GroupContext'
 
+const RADAR_TYPE_CACHE_KEY = 'radarTypeCache'
+
 const RadarDisplay = memo(() => {
-  const [currentRadar, setCurrentRadar] = useState<string>(
-    RADAR_TYPE_POLAR.value,
-  )
+  const [currentRadar, setCurrentRadar] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem(RADAR_TYPE_CACHE_KEY)
+      return cached || RADAR_TYPE_POLAR.value
+    }
+    return RADAR_TYPE_POLAR.value
+  })
 
   const { groups, setSelectedGroups, selectedGroups } = useGroupContext()
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setCurrentRadar(event.target.value)
+    const newValue = event.target.value
+    setCurrentRadar(newValue)
+    // Сохраняем в кэш
+    localStorage.setItem(RADAR_TYPE_CACHE_KEY, newValue)
   }
 
   return (

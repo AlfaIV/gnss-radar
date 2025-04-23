@@ -24,9 +24,10 @@ const AuthGuard = memo((props: HOCProps & RoleGuardProps) => {
       try {
         const response = await me()
 
-        setUser(response.data as UserType)
+        console.log(response.data);
+        
 
-        console.log(role.find((r) => r === response.data.role))
+        setUser(response.data as UserType)
 
         if (!role.find((r) => r === response.data.role)) {
           navigate('/login')

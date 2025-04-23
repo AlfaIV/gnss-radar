@@ -50,7 +50,7 @@ const router = createBrowserRouter([
       {
         path: '/state',
         element: (
-            <StatePage />
+            <Guard role={['USER', 'ADMIN', 'SUPERVISOR']}><StatePage /></Guard>
         ),
       },
       {

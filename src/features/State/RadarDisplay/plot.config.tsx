@@ -4,17 +4,18 @@ import { SatellitesType } from '~/shared/typings/radar/radar'
 
 export const configurateLayoutPolar = (
   satellites: SatellitesType[],
+  radialRange?: [number, number]
 ): Partial<Layout> => {
+  const autoRange = satellites?.length 
+    ? [0, Math.max(...satellites.map((s) => s.range)) + 1000]
+    : [0, 1000]
+
+    
   return {
     polar: {
       radialaxis: {
         visible: true,
-        range:
-          (!!satellites && [
-            0,
-            Math.max(...satellites.map((s) => s.range)) + 1000,
-          ]) ||
-          1000,
+        range: radialRange || autoRange,
         angle: 90,
         tickangle: 90,
         tickfont: { size: 10 },
@@ -64,6 +65,7 @@ export const configuratePlotPolar = (satellites: SatellitesType[]): Data[] => {
 
 export const configurateLayoutSpherical = (
   satellites: SatellitesType[],
+  radialRange?: [number, number]
 ): Partial<Layout> => {
   return {
     polar: {
@@ -74,7 +76,7 @@ export const configurateLayoutSpherical = (
         showgrid: true,
         gridcolor: '#ccc',
         gridwidth: 1,
-        range: [90, 0],
+        range: radialRange || [90, 0],
         dtick: 15,
         angle: 90,
         tickangle: 90,

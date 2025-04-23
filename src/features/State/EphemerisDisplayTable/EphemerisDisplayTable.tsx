@@ -62,8 +62,6 @@ const EphemerisDisplayTable = memo(() => {
     })
   }, [hasLoadedFile, setHasLoadedFile])
 
-  console.log(data?.data)
-
   return (
     <Box
       sx={{
