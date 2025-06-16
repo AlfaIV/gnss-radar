@@ -22,6 +22,7 @@ export const API_URLS: Record<string, Record<string, string>> = {
   },
   SATELLITES: {
     GET_SATELLITES: '/satellites/getSatellitesPosition',
+    GET_SATELLITES_INTERVALS: '/satellites/getSatellitesIntervals'
   },
   TASKS: {
     CREATE_TASK: '/tasks/createTask',
@@ -101,4 +102,9 @@ export const RADAR_TYPE_SPHERE = {
   value: 'SPHERE',
 }
 
-export const RADAR_TYPE = [RADAR_TYPE_POLAR, RADAR_TYPE_SPHERE]
+export const RADAR_TYPE_INTERVALS = {
+  label: 'Интервалы видимости',
+  value: 'INTERVALS',
+}
+
+export const RADAR_TYPE = [RADAR_TYPE_POLAR, RADAR_TYPE_SPHERE, RADAR_TYPE_INTERVALS]

@@ -12,6 +12,7 @@ import { memo, useState } from 'react'
 
 import {
   RADAR_TYPE,
+  RADAR_TYPE_INTERVALS,
   RADAR_TYPE_POLAR,
   RADAR_TYPE_SPHERE,
 } from '~/shared/config/constants'
@@ -19,6 +20,7 @@ import {
 import RadarDisplayPolar from './RadarDisplayPolar'
 import RadarDisplaySphere from './RadarDisplaySphere'
 import { GroupProvider, useGroupContext } from '../context/GroupContext'
+import IntervalsDisplay from './IntervalsDisplay'
 
 const RADAR_TYPE_CACHE_KEY = 'radarTypeCache'
 
@@ -131,6 +133,7 @@ const RadarDisplay = memo(() => {
         </Box>
         {currentRadar === RADAR_TYPE_POLAR.value && <RadarDisplayPolar />}
         {currentRadar === RADAR_TYPE_SPHERE.value && <RadarDisplaySphere />}
+        {currentRadar === RADAR_TYPE_INTERVALS.value && <IntervalsDisplay />}
       </Box>
       </>
   )

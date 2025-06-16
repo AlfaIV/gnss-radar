@@ -7,6 +7,21 @@ export type SatellitesType = {
   group: string
 }
 
+export type SatellitesInterval = {
+  startDatetime: string
+  endDatetime: string
+}
+
+export type SatellitesIntervalsType = {
+  name: string
+  group: string
+  intervals: SatellitesInterval[]
+}
+
+export type SatellitesIntervalsResponseType = {
+  data: { satellites: SatellitesIntervalsType[] }
+}
+
 export type SatellitesResponseType = {
   data: { satellites: SatellitesType[] }
 }
