@@ -22,7 +22,7 @@ const AuthGuard = memo((props: HOCProps & RoleGuardProps) => {
   useEffect(() => {
     ;(async () => {
       try {
-        const response = await me()      
+        const response = await me()
 
         setUser(response.data as UserType)
 

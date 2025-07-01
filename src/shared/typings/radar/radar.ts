@@ -1,4 +1,3 @@
-
 export type SatellitesType = {
   name: string
   azimuth: number
@@ -27,8 +26,8 @@ export type SatellitesResponseType = {
 }
 
 export interface GroupContextType {
-    groups: string[]
-    setAvailableGroups: (groups: string[]) => void
-    selectedGroups: string[]
-    setSelectedGroups: (groups: string[]) => void
+  groups: string[]
+  setAvailableGroups: (groups: string[]) => void
+  selectedGroups: string[]
+  setSelectedGroups: (groups: string[]) => void
 }

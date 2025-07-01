@@ -17,9 +17,10 @@ import {
   RADAR_TYPE_SPHERE,
 } from '~/shared/config/constants'
 
+import { GroupProvider, useGroupContext } from '../context/GroupContext'
+
 import RadarDisplayPolar from './RadarDisplayPolar'
 import RadarDisplaySphere from './RadarDisplaySphere'
-import { GroupProvider, useGroupContext } from '../context/GroupContext'
 import IntervalsDisplay from './IntervalsDisplay'
 
 const RADAR_TYPE_CACHE_KEY = 'radarTypeCache'
@@ -51,64 +52,66 @@ const RadarDisplay = memo(() => {
         flex={1}
       >
         <Box width='100%' justifyContent='center' display='flex'>
-        <FormControl fullWidth sx={{ width: '259.5px', height: '56px', px: 1}} size='medium'>
-          <InputLabel id='group-select-label'>Группы спутников</InputLabel>
-          <Select
-            multiple
-            labelId='group-select-label'
-            id='group-select'
-            label='Группы спутников'
-            value={selectedGroups}
-            onChange={(e) => setSelectedGroups(e.target.value as string[])}
-            renderValue={(selected) =>
-              selected.join(', ')
-            }
+          <FormControl
+            fullWidth
+            sx={{ width: '259.5px', height: '56px', px: 1 }}
+            size='medium'
           >
-            {!!groups.length && groups.map((group) => (
-              <MenuItem
-                key={`key__${group}`}
-                value={group}
-              >{group}</MenuItem>
-            ))}
-            {!groups.length && (
-              <>
-                <MenuItem disabled>
-                  <Skeleton
-                    width='100%'
-                    height={32}
-                    sx={{
-                      borderRadius: '4px',
-                      transform: 'none',
-                      my: 0.5,
-                    }}
-                  />
-                </MenuItem>
-                <MenuItem disabled>
-                  <Skeleton
-                    width='80%'
-                    height={32}
-                    sx={{
-                      borderRadius: '4px',
-                      transform: 'none',
-                      my: 0.5,
-                    }}
-                  />
-                </MenuItem>
-                <MenuItem disabled>
-                  <Skeleton
-                    width='90%'
-                    height={32}
-                    sx={{
-                      borderRadius: '4px',
-                      transform: 'none',
-                      my: 0.5,
-                    }}
-                  />
-                </MenuItem>
-              </>
-            )}
-          </Select>
-        </FormControl>
+            <InputLabel id='group-select-label'>Группы спутников</InputLabel>
+            <Select
+              multiple
+              labelId='group-select-label'
+              id='group-select'
+              label='Группы спутников'
+              value={selectedGroups}
+              onChange={(e) => setSelectedGroups(e.target.value as string[])}
+              renderValue={(selected) => selected.join(', ')}
+            >
+              {!!groups.length &&
+                groups.map((group) => (
+                  <MenuItem key={`key__${group}`} value={group}>
+                    {group}
+                  </MenuItem>
+                ))}
+              {!groups.length && (
+                <>
+                  <MenuItem disabled>
+                    <Skeleton
+                      width='100%'
+                      height={32}
+                      sx={{
+                        borderRadius: '4px',
+                        transform: 'none',
+                        my: 0.5,
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem disabled>
+                    <Skeleton
+                      width='80%'
+                      height={32}
+                      sx={{
+                        borderRadius: '4px',
+                        transform: 'none',
+                        my: 0.5,
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem disabled>
+                    <Skeleton
+                      width='90%'
+                      height={32}
+                      sx={{
+                        borderRadius: '4px',
+                        transform: 'none',
+                        my: 0.5,
+                      }}
+                    />
+                  </MenuItem>
+                </>
+              )}
+            </Select>
+          </FormControl>
           <FormControl
             fullWidth
             size='medium'
@@ -135,7 +138,7 @@ const RadarDisplay = memo(() => {
         {currentRadar === RADAR_TYPE_SPHERE.value && <RadarDisplaySphere />}
         {currentRadar === RADAR_TYPE_INTERVALS.value && <IntervalsDisplay />}
       </Box>
-      </>
+    </>
   )
 })
 

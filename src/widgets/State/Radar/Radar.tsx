@@ -5,7 +5,7 @@ const Radar = () => {
   return (
     <GroupProvider>
       <RadarDisplay />
-      </GroupProvider>
+    </GroupProvider>
   )
 }
 

@@ -1,5 +1,3 @@
-import useService from '~/entities/useService'
-
 export type UserStatusType = 'APPROVED' | 'DECLINED' | 'PENDING'
 export type UserRoleType = 'USER' | 'SUPERVISOR' | 'ADMIN'
 

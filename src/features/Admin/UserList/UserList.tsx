@@ -74,7 +74,8 @@ const UserList = memo((props: UserListProps) => {
     }
   }, [entry, hasNextPage, isFetchingNextPage, isFetchingNextPage])
 
-  const allUsers = data?.pages.flatMap((page) => page.data.users).filter(u => !!u) || []  
+  const allUsers =
+    data?.pages.flatMap((page) => page.data.users).filter((u) => !!u) || []
 
   return (
     <Box
@@ -224,13 +225,14 @@ const UserList = memo((props: UserListProps) => {
               />
             </>
           )}
-          {!!allUsers?.length && allUsers.map((item: GetUserResponseEntityType) => (
-            <UserRow
-              key={item.login}
-              {...item}
-              isDeletedUsers={isDeletedUsers}
-            />
-          ))}
+          {!!allUsers?.length &&
+            allUsers.map((item: GetUserResponseEntityType) => (
+              <UserRow
+                key={item.login}
+                {...item}
+                isDeletedUsers={isDeletedUsers}
+              />
+            ))}
           <TableRow ref={lastRowRef}>
             <StyledTableCell
               colSpan={4}

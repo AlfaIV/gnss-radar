@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import Plot from 'react-plotly.js'
-import { 
-  Container, 
-  Alert, 
-  LinearProgress, 
-  Box, 
+import {
+  Container,
+  Alert,
+  LinearProgress,
+  Box,
   Collapse,
   IconButton,
-  ButtonGroup
+  ButtonGroup,
 } from '@mui/material'
 import ZoomInIcon from '@mui/icons-material/ZoomIn'
 import ZoomOutIcon from '@mui/icons-material/ZoomOut'
@@ -20,8 +20,9 @@ import {
   SatellitesType,
 } from '~/shared/typings/radar/radar'
 
-import { configurateLayoutPolar, configuratePlotPolar } from './plot.config'
 import { useGroupContext } from '../context/GroupContext'
+
+import { configurateLayoutPolar, configuratePlotPolar } from './plot.config'
 
 const RadarDisplayPolar = () => {
   const { getSatellites } = useService()
@@ -49,21 +50,22 @@ const RadarDisplayPolar = () => {
 
   useEffect(() => {
     if (satellitesData?.length) {
-      const maxRange = Math.max(...satellitesData.map(s => s.range)) + 1000
+      const maxRange = Math.max(...satellitesData.map((s) => s.range)) + 1000
       const newInitialRange: [number, number] = [0, maxRange]
       setInitialRange(newInitialRange)
       setCurrentRange(newInitialRange)
-      setAvailableGroups(satellitesData.filter(s => !!s.group).map(s => s.group))
-
+      setAvailableGroups(
+        satellitesData.filter((s) => !!s.group).map((s) => s.group),
+      )
     }
   }, [satellitesData])
 
   const handleZoomIn = () => {
-    setCurrentRange(prev => [prev[0], prev[1] * 0.8])
+    setCurrentRange((prev) => [prev[0], prev[1] * 0.8])
   }
 
   const handleZoomOut = () => {
-    setCurrentRange(prev => [prev[0], prev[1] * 1.2])
+    setCurrentRange((prev) => [prev[0], prev[1] * 1.2])
   }
 
   const handleResetZoom = () => {
@@ -71,45 +73,45 @@ const RadarDisplayPolar = () => {
   }
 
   const filteredSatellites = (satellitesData as SatellitesType[])?.filter(
-    s => selectedGroups.length === 0 || selectedGroups.includes(s.group)
+    (s) => selectedGroups.length === 0 || selectedGroups.includes(s.group),
   )
 
   return (
-    <Box position="relative">
+    <Box position='relative'>
       <Collapse in={!!isError} unmountOnExit>
         <Container sx={{ padding: '20px' }}>
           <Alert severity='error'>Ошибка загрузки данных спутников</Alert>
         </Container>
       </Collapse>
-      
+
       <Box
-        position="absolute"
+        position='absolute'
         top={16}
         right={16}
         zIndex={1}
-        bgcolor="background.paper"
+        bgcolor='background.paper'
         borderRadius={1}
         boxShadow={3}
       >
-        <ButtonGroup orientation="vertical">
-          <IconButton 
+        <ButtonGroup orientation='vertical'>
+          <IconButton
             onClick={handleZoomIn}
             disabled={isLoading || isRefetching}
-            title="Увеличить"
+            title='Увеличить'
           >
             <ZoomInIcon />
           </IconButton>
-          <IconButton 
+          <IconButton
             onClick={handleZoomOut}
             disabled={isLoading || isRefetching}
-            title="Уменьшить"
+            title='Уменьшить'
           >
             <ZoomOutIcon />
           </IconButton>
-          <IconButton 
+          <IconButton
             onClick={handleResetZoom}
             disabled={isLoading || isRefetching}
-            title="Сбросить масштаб"
+            title='Сбросить масштаб'
           >
             <RestoreIcon />
           </IconButton>
@@ -131,7 +133,7 @@ const RadarDisplayPolar = () => {
           width: '600px',
         }}
       />
-      
+
       {(isLoading || isRefetching) && (
         <Box sx={{ width: '50%' }}>
           <LinearProgress color='success' />
